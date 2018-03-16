@@ -9,17 +9,22 @@ class STLTest {
 public:
     void AddStringEnd(const std::string &add_string_end);
     void InsertString(const std::string &insert_string);
-    void InputEnter();
-    void InputBackspace();
+    void DeleteForward();
+    void DeleteBackward();
     void DeleteEntireLine();
+    void MoveUp();
+    void MoveDown();
+    void MoveRight();
+    void MoveLeft();
+    void SearchWord(const std::string &search_word);
     void TakePlaceString(const std::string &search_word, const std::string &take_place);
     void ConfirmTakePlace(bool confirm_take_place);
-    void SearchWord(const std::string &search_word);
     std::string GetIthString(int ith);
     ScreenInfo GetPosition();
 private:
     std::vector<std::string> test_;
     ScreenInfo screen_info_;
+    const std::string &take_place_;
 };
 
 struct ScreenInfo {
