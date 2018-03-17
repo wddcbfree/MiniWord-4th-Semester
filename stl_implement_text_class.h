@@ -5,7 +5,14 @@
 #include <string>
 #include <vector>
 
-class STLTest {
+struct ScreenInfo {
+    int cursor_x;   //cursor position
+    int cursor_y;
+    int screen_x;   //screen left-up position
+    int screen_y;
+};
+
+class STLText {
 public:
     void AddStringEnd(const std::string &add_string_end);
     void InsertString(const std::string &insert_string);
@@ -19,19 +26,13 @@ public:
     void SearchWord(const std::string &search_word);
     void TakePlaceString(const std::string &search_word, const std::string &take_place);
     void ConfirmTakePlace(bool confirm_take_place);
+    int GetNumOfLines();
     std::string GetIthString(int ith);
     ScreenInfo GetPosition();
 private:
-    std::vector<std::string> test_;
+    std::vector<std::string> text_;
     ScreenInfo screen_info_;
-    const std::string &take_place_;
-};
-
-struct ScreenInfo {
-    int cursor_x;   //cursor position
-    int cursor_y;
-    int screen_x;   //screen left-up position
-    int screen_y;
+    std::string take_place_;
 };
 
 #endif // !STL_IMPLEMENT_TEXT_CLASS_
