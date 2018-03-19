@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <istream>
 #include <string>
 
 class FileProcess{
