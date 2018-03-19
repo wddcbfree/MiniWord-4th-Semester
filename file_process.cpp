@@ -8,7 +8,6 @@ std::string FileProcess::read(){
     if(FileProcess::file_self.is_open()){
         std::string data;
         getline(file_self,data);
-        std::cout<<"length = "<<file_self.tellg()<<std::endl;
         return data;
     }
     else{
