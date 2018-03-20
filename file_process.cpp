@@ -1,18 +1,18 @@
 #include "file_process.h"
 
-FileProcess::FileProcess(const std::string address){
+FileProcess::FileProcess(const std::string file_address){
+    address = file_address;
     file_self.open(address,std::ios::in);
 }
 
 std::string FileProcess::read(){
-    if(FileProcess::file_self.is_open()){
+    if(is_end() == 0){
         std::string data;
         getline(file_self,data);
-        std::cout<<"length = "<<file_self.tellg()<<std::endl;
-        return data;
+        return data+"\n";
     }
     else{
-        exit(0);
+        return "";
     }
 }
 
@@ -21,4 +21,21 @@ bool FileProcess::is_end(){
         return 1;
     else
         return 0;
+}
+
+void FileProcess::pre_save(){
+    file_self.close();
+    file_self.open(address,std::ios::trunc | std::ios::out);
+    file_self.seekg(std::ios::beg);
+    return;
+}
+
+void FileProcess::write(const std::string text){
+    file_self << text;
+    return;
+}
+
+void FileProcess::close(){
+    file_self.close();
+    return;
 }
