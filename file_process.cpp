@@ -1,8 +1,20 @@
 #include "file_process.h"
+bool FileProcess::create(const std::string file_address){
+    address = file_address;
+    file_self.open(address,std::ios::trunc | std::ios::out);
+    if(file_self.is_open()){
+        return true;
+    }
+    return false;
+}
 
-FileProcess::FileProcess(const std::string file_address){
+bool FileProcess::open(const std::string file_address){
     address = file_address;
     file_self.open(address,std::ios::in);
+    if(file_self.is_open()){
+        return true;
+    }
+    return false;
 }
 
 std::string FileProcess::read(){
@@ -12,22 +24,26 @@ std::string FileProcess::read(){
         return data+"\n";
     }
     else{
+        file_self.close();
         return "";
     }
 }
 
 bool FileProcess::is_end(){
     if(file_self.tellg() == -1)
-        return 1;
+        return true;
     else
-        return 0;
+        return false;
 }
 
-void FileProcess::pre_save(){
-    file_self.close();
+bool FileProcess::pre_write(){
     file_self.open(address,std::ios::trunc | std::ios::out);
-    file_self.seekg(std::ios::beg);
-    return;
+    if(file_self.is_open()){
+        file_self.seekg(std::ios::beg);
+        return true;
+    }
+    return false;
+    
 }
 
 void FileProcess::write(const std::string text){
