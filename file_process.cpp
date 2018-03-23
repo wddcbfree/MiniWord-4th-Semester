@@ -3,8 +3,10 @@ bool FileProcess::create(const std::string file_address){
     address = file_address;
     file_self.open(address,std::ios::trunc | std::ios::out);
     if(file_self.is_open()){
+        file_self.close();
         return true;
     }
+    file_self.close();
     return false;
 }
 

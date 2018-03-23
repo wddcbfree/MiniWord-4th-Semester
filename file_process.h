@@ -8,7 +8,7 @@
 class FileProcess{
 public:
     std::string read();//用于读取文件，每使用一次，读取一行（空行照样读取）
-    bool open(const std::string address);//打开文件流
+    bool open(const std::string address);//打开文件
     bool create(const std::string address);//创建文件
     bool is_end();//读取文件内容时，用于判断是否为文件结尾
     bool pre_write();//写入前使用
