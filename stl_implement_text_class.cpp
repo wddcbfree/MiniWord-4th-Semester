@@ -6,66 +6,92 @@ void STLText::AddStringEnd(const std::string & add_string_end) {
 }
 
 void STLText::InsertString(const std::string & insert_string) {
-    text_[screen_info_.screen_y + screen_info_.cursor_y - 2].insert(screen_info_.cursor_x - 1, insert_string);
+    text_[GetRowNum_()].insert(GetColumeNum_(), insert_string);
     return;
 }
 
 void STLText::DeleteForward() {
-    text_[screen_info_.screen_y + screen_info_.cursor_y - 2].erase(screen_info_.cursor_x - 1, 1);
+    if (GetColumeNum_() == 0) {
+        DeleteEntireLine();
+    }
+    else {
+        text_[GetColumeNum_()].erase(GetRowNum_(), 1);
+        MoveLeft();
+    }
     return;
 }
 
 void STLText::DeleteBackward() {
-    text_[screen_info_.screen_y + screen_info_.cursor_y - 2].erase(screen_info_.cursor_x, 1);
+    if (GetColumeNum_() == text_[GetRowNum_()].length()) {
+        MoveRight();
+        const std::string temp_next_line = text_[GetRowNum_()];
+        DeleteEntireLine();
+        MoveLeft();
+        text_[GetRowNum_()] += temp_next_line;
+    }
+    else {
+        text_[GetColumeNum_()].erase(GetRowNum_() + 1, 1);
+    }
     return;
 }
 
 void STLText::DeleteEntireLine() {
-    text_.erase(text_.begin() + screen_info_.screen_y + screen_info_.cursor_y - 2);
+    text_.erase(text_.begin() + GetRowNum_());
     return;
 }
 
 void STLText::MoveUp() {
-    if (screen_info_.screen_y + screen_info_.cursor_y - 2 != 0) {
+    if (GetRowNum_() != 0) {
         --screen_info_.screen_y;
     }
     return;
 }
 
 void STLText::MoveDown() {
-    if (screen_info_.screen_y + screen_info_.cursor_y - 2 != text_.end() - text_.begin()) {
+    if (GetRowNum_() != GetNumOfLines()) {
         ++screen_info_.screen_y;
     }
     return;
 }
 
 void STLText::MoveRight() {
-    if (screen_info_.cursor_x != text_[screen_info_.screen_y + screen_info_.cursor_y - 2].length()) {
+    if (GetColumeNum_() == text_[GetRowNum_()].length() && GetRowNum_() != GetNumOfLines()) {
+        ++screen_info_.cursor_y;
+        screen_info_.cursor_x = 1;
+    }
+    else {
         ++screen_info_.cursor_x;
     }
     return;
 }
 
 void STLText::MoveLeft() {
-    if (screen_info_.cursor_x != 1) {
+    if (GetColumeNum_() == 0 && GetRowNum_() != 0) {
+        --screen_info_.cursor_y;
+        screen_info_.cursor_x = static_cast<int>(text_[GetRowNum_()].length());
+    }
+    else {
         --screen_info_.cursor_x;
     }
 }
 
-void STLText::SearchWord(const std::string & search_word) {
-    auto temp_search_position = text_[screen_info_.screen_y + screen_info_.cursor_y - 2].find(search_word, screen_info_.cursor_x - 1);
+bool STLText::SearchWord(const std::string & search_word) {
+    //search the word from the current position
+    auto temp_search_position = text_[GetRowNum_()].find(search_word, screen_info_.cursor_x - 1);
     if (temp_search_position != std::string::npos) {
-        screen_info_.cursor_x = static_cast<int>(temp_search_position);
-        return;
+        screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x + 1;
+        return true;
     }
-    for (auto i = text_.begin() + screen_info_.screen_y + screen_info_.cursor_y - 1; i != text_.end(); ++i) {
+    //search the word from next line
+    for (auto i = text_.begin() + GetRowNum_() + 1; i != text_.end(); ++i) {
         temp_search_position = i->find(search_word);
         if (temp_search_position != std::string::npos) {
-            screen_info_.cursor_x = static_cast<int>(temp_search_position);
-            return;
+            screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x + 1;
+            screen_info_.cursor_y = i - text_.begin() + 1 - screen_info_.screen_y + 1;
+            return true;
         }
     }
-    return;
+    return false;
 }
 
 void STLText::TakePlaceString(const std::string & search_word, const std::string & take_place) {
@@ -82,6 +108,18 @@ void STLText::ConfirmTakePlace(bool confirm_take_place) {
     return;
 }
 
+void STLText::ResetScreenPosition() {
+    if (screen_info_.cursor_x > WINDOWS_WIDTH) {
+        screen_info_.screen_x += screen_info_.cursor_x - WINDOWS_WIDTH ;
+        screen_info_.cursor_x = WINDOWS_WIDTH;
+    }
+    if (screen_info_.cursor_y > WINDOWS_HIGHT) {
+        screen_info_.screen_x += screen_info_.cursor_y - WINDOWS_HIGHT;
+        screen_info_.cursor_y = WINDOWS_HIGHT;
+    }
+    return;
+}
+
 int STLText::GetNumOfLines() {
     return text_.end() - text_.begin();
 }
@@ -92,4 +130,12 @@ std::string STLText::GetIthString(int ith) {
 
 ScreenInfo STLText::GetPosition() {
     return screen_info_;
+}
+
+int STLText::GetColumeNum_() {
+    return screen_info_.screen_x + screen_info_.cursor_x - 2;
+}
+
+int STLText::GetRowNum_() {
+    return screen_info_.screen_y + screen_info_.cursor_y - 2;
 }

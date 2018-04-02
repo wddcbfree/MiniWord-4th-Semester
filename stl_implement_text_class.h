@@ -2,6 +2,9 @@
 #ifndef STL_IMPLEMENT_TEXT_CLASS_
 #define STL_IMPLEMENT_TEXT_CLASS_
 
+#define WINDOWS_HIGHT 80
+#define WINDOWS_WIDTH 150
+
 #include <string>
 #include <vector>
 
@@ -23,9 +26,10 @@ public:
     void MoveDown();
     void MoveRight();
     void MoveLeft();
-    void SearchWord(const std::string &search_word);
+    bool SearchWord(const std::string &search_word);
     void TakePlaceString(const std::string &search_word, const std::string &take_place);
     void ConfirmTakePlace(bool confirm_take_place);
+    void ResetScreenPosition();
     int GetNumOfLines();
     std::string GetIthString(int ith);
     ScreenInfo GetPosition();
@@ -33,6 +37,8 @@ private:
     std::vector<std::string> text_;
     ScreenInfo screen_info_;
     std::string take_place_;
+    int GetColumeNum_();
+    int GetRowNum_();
 };
 
 #endif // !STL_IMPLEMENT_TEXT_CLASS_
