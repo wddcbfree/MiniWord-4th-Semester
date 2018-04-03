@@ -1,16 +1,16 @@
 #include "stl_implement_text_class.h"
 
-void STLText::AddStringEnd(const std::string & add_string_end) {
+void Text::AddStringEnd(const std::string & add_string_end) {
     text_.push_back(add_string_end);
     return;
 }
 
-void STLText::InsertString(const std::string & insert_string) {
+void Text::InsertString(const std::string & insert_string) {
     text_[GetRowNum_()].insert(GetColumeNum_(), insert_string);
     return;
 }
 
-void STLText::DeleteForward() {
+void Text::DeleteForward() {
     if (GetColumeNum_() == 0) {
         DeleteEntireLine();
     }
@@ -21,7 +21,7 @@ void STLText::DeleteForward() {
     return;
 }
 
-void STLText::DeleteBackward() {
+void Text::DeleteBackward() {
     if (GetColumeNum_() == text_[GetRowNum_()].length()) {
         MoveRight();
         const std::string temp_next_line = text_[GetRowNum_()];
@@ -35,26 +35,26 @@ void STLText::DeleteBackward() {
     return;
 }
 
-void STLText::DeleteEntireLine() {
+void Text::DeleteEntireLine() {
     text_.erase(text_.begin() + GetRowNum_());
     return;
 }
 
-void STLText::MoveUp() {
+void Text::MoveUp() {
     if (GetRowNum_() != 0) {
         --screen_info_.screen_y;
     }
     return;
 }
 
-void STLText::MoveDown() {
+void Text::MoveDown() {
     if (GetRowNum_() != GetNumOfLines()) {
         ++screen_info_.screen_y;
     }
     return;
 }
 
-void STLText::MoveRight() {
+void Text::MoveRight() {
     if (GetColumeNum_() == text_[GetRowNum_()].length() && GetRowNum_() != GetNumOfLines()) {
         ++screen_info_.cursor_y;
         screen_info_.cursor_x = 1;
@@ -65,7 +65,7 @@ void STLText::MoveRight() {
     return;
 }
 
-void STLText::MoveLeft() {
+void Text::MoveLeft() {
     if (GetColumeNum_() == 0 && GetRowNum_() != 0) {
         --screen_info_.cursor_y;
         screen_info_.cursor_x = static_cast<int>(text_[GetRowNum_()].length());
@@ -75,7 +75,7 @@ void STLText::MoveLeft() {
     }
 }
 
-bool STLText::SearchWord(const std::string & search_word) {
+bool Text::SearchWord(const std::string & search_word) {
     //search the word from the current position
     auto temp_search_position = text_[GetRowNum_()].find(search_word, screen_info_.cursor_x - 1);
     if (temp_search_position != std::string::npos) {
@@ -94,13 +94,13 @@ bool STLText::SearchWord(const std::string & search_word) {
     return false;
 }
 
-void STLText::TakePlaceString(const std::string & search_word, const std::string & take_place) {
+void Text::TakePlaceString(const std::string & search_word, const std::string & take_place) {
     SearchWord(search_word);
     take_place_ = take_place;
     return;
 }
 
-void STLText::ConfirmTakePlace(bool confirm_take_place) {
+void Text::ConfirmTakePlace(bool confirm_take_place) {
     if (confirm_take_place) {
         InsertString(take_place_);
     }
@@ -108,34 +108,42 @@ void STLText::ConfirmTakePlace(bool confirm_take_place) {
     return;
 }
 
-void STLText::ResetScreenPosition() {
+void Text::FreshScreenPosition() {
     if (screen_info_.cursor_x > WINDOWS_WIDTH) {
         screen_info_.screen_x += screen_info_.cursor_x - WINDOWS_WIDTH ;
         screen_info_.cursor_x = WINDOWS_WIDTH;
+    }
+    if (screen_info_.cursor_x <= 0) {
+        screen_info_.screen_x += screen_info_.cursor_x - 1;
+        screen_info_.cursor_x = 1;
     }
     if (screen_info_.cursor_y > WINDOWS_HIGHT) {
         screen_info_.screen_x += screen_info_.cursor_y - WINDOWS_HIGHT;
         screen_info_.cursor_y = WINDOWS_HIGHT;
     }
+    if (screen_info_.cursor_y <= 0) {
+        screen_info_.screen_y += screen_info_.cursor_y - 1;
+        screen_info_.cursor_y = 1;
+    }
     return;
 }
 
-int STLText::GetNumOfLines() {
+int Text::GetNumOfLines() {
     return text_.end() - text_.begin();
 }
 
-std::string STLText::GetIthString(int ith) {
-    return text_[ith - 1];
+std::string Text::GetIthString(int i) {
+    return text_[i - 1];
 }
 
-ScreenInfo STLText::GetPosition() {
+ScreenInfo Text::GetPosition() {
     return screen_info_;
 }
 
-int STLText::GetColumeNum_() {
+int Text::GetColumeNum_() {
     return screen_info_.screen_x + screen_info_.cursor_x - 2;
 }
 
-int STLText::GetRowNum_() {
+int Text::GetRowNum_() {
     return screen_info_.screen_y + screen_info_.cursor_y - 2;
 }

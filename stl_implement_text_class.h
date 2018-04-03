@@ -15,7 +15,7 @@ struct ScreenInfo {
     int screen_y;
 };
 
-class STLText {
+class Text {
 public:
     void AddStringEnd(const std::string &add_string_end);
     void InsertString(const std::string &insert_string);
@@ -29,9 +29,9 @@ public:
     bool SearchWord(const std::string &search_word);
     void TakePlaceString(const std::string &search_word, const std::string &take_place);
     void ConfirmTakePlace(bool confirm_take_place);
-    void ResetScreenPosition();
+    void FreshScreenPosition();
     int GetNumOfLines();
-    std::string GetIthString(int ith);
+    std::string GetIthString(int i);
     ScreenInfo GetPosition();
 private:
     std::vector<std::string> text_;
