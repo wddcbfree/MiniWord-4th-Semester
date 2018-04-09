@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
+#include <string>
+#include <QTextStream>
+#include <QDataStream>
+#include <vector>
 
 class MainWindow : public QMainWindow
 {
@@ -9,12 +14,21 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-private:
-    void open();
-    void create();
 
+    std::vector<QString> data;
+
+    bool open();
+    void create();
+    void prewrite();
+    void write(QString line);
+    void save();
+    void saveas();
+
+private:
+    QString path;
     QAction *openAction;
     QAction *saveAction;
+    QAction *saveasAction;
     QAction *createAction;
 };
 
