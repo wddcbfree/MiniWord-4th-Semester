@@ -87,7 +87,7 @@ bool Text::SearchWord(const std::string & search_word) {
         temp_search_position = i->find(search_word);
         if (temp_search_position != std::string::npos) {
             screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x + 1;
-            screen_info_.cursor_y = i - text_.begin() + 1 - screen_info_.screen_y + 1;
+            screen_info_.cursor_y = static_cast<int>(i - text_.begin() + 1) - screen_info_.screen_y + 1;
             return true;
         }
     }
@@ -129,7 +129,7 @@ void Text::FreshScreenPosition() {
 }
 
 int Text::GetNumOfLines() {
-    return text_.end() - text_.begin();
+    return static_cast<int>(text_.end() - text_.begin());
 }
 
 std::string Text::GetIthString(int i) {
