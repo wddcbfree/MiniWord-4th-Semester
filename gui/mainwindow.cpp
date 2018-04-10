@@ -1,19 +1,30 @@
+#include <QDialog>
 #include <QAction>
+#include <QWidget>
 #include <QDebug>
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QToolBar>
-#include <QDialog>
-
+#include <QLineEdit>
+#include <QFile>
+#include <QSize>
+#include <string>
+#include <QTextStream>
+#include <QDataStream>
+#include <vector>
+#include <QPushButton>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QKeySequence>
 #include "mainwindow.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     setWindowTitle(tr("MiniWord"));
-
+    this->setFixedSize(800,600);
     openAction = new QAction(tr("打开..."), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing file"));
@@ -36,12 +47,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     info->addSection("hello");
 
+    //输入框部分
+    Input.setParent(this);
+    Input.setGeometry(0,560,800,21);
+    Input.show();
+    Input.setEchoMode(QLineEdit::Normal);
+    Input.setPlaceholderText("type...");
+    Input.setReadOnly(1);
 
    /* QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->setToolTip("hello");
     toolBar->addAction(openAction);
     */
-    statusBar() ;
+    statusBar();
 }
 
 MainWindow::~MainWindow()
@@ -60,7 +78,7 @@ bool MainWindow::open()//打开文件，若打开成功，将所有数据读取�
         qDebug()<<"open(): file open success!"<<endl;
         data.clear();
         while(!file.atEnd()){
-            data.push_back(file.readLine());
+            data.push_back(QString::fromLocal8Bit(file.readLine()));
         }
         for(int i = 0;i < data.size();++i){
             qDebug()<<data[i];
@@ -70,12 +88,19 @@ bool MainWindow::open()//打开文件，若打开成功，将所有数据读取�
     }
 }
 
+QString MainWindow::read(int row){
+    if(row >= data.size())
+        return "";
+    else
+        return data[row];
+}
+
 void MainWindow::prewrite(){
     data.clear();
 }
 
 void MainWindow::write(QString line){
-    data.push_back(line);
+    data.push_back(line.toLocal8Bit());
 }
 
 void MainWindow::save(){
@@ -93,11 +118,12 @@ void MainWindow::save(){
 }
 
 void MainWindow::saveas(){
-    QString filename = "new file.txt";
+    statusBar()->showMessage("保存中...");
+    QString FileName = "Name.text()";
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/Desktop",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
     QDir d;
     d.mkpath(dir);
-    QFile file2(dir+"/"+filename);
+    QFile file2(dir+"/"+FileName);
     file2.open(QIODevice::WriteOnly);
     QTextStream out(&file2);
     for(int i = 0;i < data.size();++i){
@@ -105,4 +131,13 @@ void MainWindow::saveas(){
     }
     file2.close();
     qDebug()<<"saveas: File save success!"<<endl;
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event){
+    switch (event->key()) {
+    case Qt::Key_1:
+        Input.setReadOnly(0);
+        Input.setPlaceholderText("typing...");
+        break;
+    }
 }

@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QDataStream>
 #include <vector>
+#include "dialog.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,17 +16,23 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    std::vector<QString> data;
-
     bool open();
+    QString read(int row);
     void create();
     void prewrite();
     void write(QString line);
     void save();
     void saveas();
 
+protected:
+    QKeyEvent *Key;
+    void keyReleaseEvent(QKeyEvent *);
 private:
     QString path;
+    std::vector<QString> data;
+
+    QLineEdit Input;
+
     QAction *openAction;
     QAction *saveAction;
     QAction *saveasAction;

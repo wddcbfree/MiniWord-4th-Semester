@@ -29,3 +29,6 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h
+
+FORMS += \
+    dialog.ui
