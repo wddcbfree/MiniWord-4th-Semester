@@ -14,8 +14,8 @@
 #include "stl_implement_text_class.h"
 
 #define LINE_WIDTH 700
-#define LINE_HIGHT 10
-#define TEXT_UPPER_BLANK 100
+#define LINE_HIGHT 12
+#define TEXT_UPPER_BLANK 25
 #define TEXT_LEFT_BLANK 50
 
 class MainWindow : public QMainWindow
