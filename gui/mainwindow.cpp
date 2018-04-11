@@ -74,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
     InputTips.show();
     InputTips.setText("test");
 
+    InitiateSceen();
+
     //状态栏
     statusBar();
 }
@@ -145,7 +147,7 @@ bool MainWindow::open()//打开文件，若打开成功，将所有数据读取�
             qDebug()<<data[i];
         }
         file.close();
-        InitiateSceen();
+        RefreshScreen(a);
         return true;
     }
 }
@@ -224,7 +226,7 @@ void MainWindow::InitiateSceen(){
 
 void MainWindow::RefreshScreen(Text text) {
     for (auto iter = screen_data_.begin(); iter != screen_data_.end(); ++iter) {
-        (**iter).setText(QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin())));
+        (**iter).setText("QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin()))");
     }
 }
 
