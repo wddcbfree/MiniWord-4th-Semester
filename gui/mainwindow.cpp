@@ -145,7 +145,7 @@ bool MainWindow::open()//打开文件，若打开成功，将所有数据读取�
             qDebug()<<data[i];
         }
         file.close();
-        //显示
+        InitiateSceen();
         return true;
     }
 }
@@ -217,6 +217,7 @@ void MainWindow::InitiateSceen(){
                             TEXT_UPPER_BLANK + LINE_HIGHT * i,
                             LINE_WIDTH,
                             LINE_HIGHT);
+        pLabel->show();
         screen_data_.append(pLabel);
     }
 }
