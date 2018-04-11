@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     saveasAction = new QAction(tr("另存为..."), this);
     saveasAction->setShortcuts(QKeySequence::SaveAs);
     saveasAction->setStatusTip(tr("Save as..."));
-    connect(saveasAction, &QAction::triggered, this, &MainWindow::pre_saveas);
+    connect(saveasAction, &QAction::triggered, this, &MainWindow::saveas);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
@@ -104,7 +104,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::precreate(){
-    statusBar()->showMessage("创建文件中...");
+
     InputTips.setText("请输入要创建的文件名(含扩展名)，按回车结束：");
     Input.setReadOnly(0);
     Input.setPlaceholderText("*.txt");
@@ -179,22 +179,11 @@ void MainWindow::save(){
     }
 }
 
-void MainWindow::pre_saveas(){
-    statusBar()->showMessage("保存中...");
-    InputTips.setText("请输入要保存的文件名(含扩展名)，按回车结束：");
-    Input.setReadOnly(0);
-    Input.setPlaceholderText("*.txt");
-    connect(&Input,&QLineEdit::returnPressed,this,&MainWindow::saveas);
-}
+
 
 void MainWindow::saveas(){
-    QString FileName = Input.text();
-    Input.clear();
-    Input.setReadOnly(1);
-    QString dir = QFileDialog::getExistingDirectory(this, tr("另存在..."),"/",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
-    QDir d;
-    d.mkpath(dir);
-    QFile file2(dir+"/"+FileName);
+    QString FileName = QFileDialog::getSaveFileName(this,tr("另存为..."),"*.txt");
+    QFile file2(FileName);
     file2.open(QIODevice::WriteOnly);
     QTextStream out(&file2);
     for(int i = 0; i < data.size(); ++i){
