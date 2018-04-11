@@ -181,8 +181,6 @@ void MainWindow::save(){
     }
 }
 
-
-
 void MainWindow::saveas(){
     QString FileName = QFileDialog::getSaveFileName(this,tr("另存为..."),"*.txt");
     QFile file2(FileName);
@@ -217,10 +215,6 @@ void MainWindow::RefreshScreen(Text text) {
     for (auto iter = screen_data_.begin(); iter != screen_data_.end(); ++iter) {
         (**iter).setText("QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin()))");
     }
-}
-
-void MainWindow::getInputText(){
-    InputText = Input.text();
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
