@@ -11,6 +11,7 @@
 #include <QVector>
 #include "dialog.h"
 #include "screen_cache.h"
+#include "stl_implement_text_class.h"
 
 #define LINE_WIDTH 700
 #define LINE_HIGHT 10
@@ -25,23 +26,31 @@ public:
     ~MainWindow();
 
     bool open();
-    QString read(int row);
+    //QString read(int row);
     void create();
     void prewrite();
     void write(QString line);
     void save();
+    void pre_saveas();
     void saveas();
 
     void RefreshScreen(ScreenCache screen_cache);
 
 protected:
-    QKeyEvent *Key;
     void keyReleaseEvent(QKeyEvent *);
+    void paintEvent(QPaintEvent *);
 private:
+    void getInputText();
+    void InitiateSceen();
+    ScreenCache b;
+    Text a;
+
+    QString InputText;
     QString path;
     std::vector<QString> data;
 
     QLineEdit Input;
+    QLabel InputTips;
 
     QAction *openAction;
     QAction *saveAction;

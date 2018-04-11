@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <QString>
 
 struct ScreenInfo {
     int cursor_x;   //cursor position
