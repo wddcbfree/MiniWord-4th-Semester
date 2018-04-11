@@ -139,14 +139,17 @@ bool MainWindow::open()//打开文件，若打开成功，将所有数据读取�
     }else{
         qDebug()<<"open(): file open success!"<<endl;
         data.clear();
+        a.ClearText();
         while(!file.atEnd()){
             data.push_back(file.readLine());
-            a.AddStringEnd(file.readLine().toStdString());
+            a.AddStringEnd(data.back().toStdString());
         }
         for(int i = 0;i < data.size();++i){
             qDebug()<<data[i];
+            qDebug() << QString::fromStdString(a.GetIthString(i)) << endl;
         }
         file.close();
+        a.RefreshScreenCache();
         RefreshScreen(a);
         return true;
     }
@@ -213,7 +216,8 @@ void MainWindow::InitiateSceen(){
 
 void MainWindow::RefreshScreen(Text text) {
     for (auto iter = screen_data_.begin(); iter != screen_data_.end(); ++iter) {
-        (**iter).setText("QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin()))");
+        (**iter).setText(QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin())));
+        (**iter).show();
     }
 }
 

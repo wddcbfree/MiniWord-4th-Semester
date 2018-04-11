@@ -19,6 +19,7 @@ struct ScreenInfo {
 class Text {
 public:
     void AddStringEnd(const std::string &add_string_end);
+    void ClearText();
     void InsertString(const std::string &insert_string);
     void DeleteForward();
     void DeleteBackward();

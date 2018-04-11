@@ -5,6 +5,11 @@ void Text::AddStringEnd(const std::string & add_string_end) {
     return;
 }
 
+void Text::ClearText() {
+    text_.clear();
+    return;
+}
+
 void Text::InsertString(const std::string & insert_string) {
     text_[GetRowNum_()].insert(GetColumeNum_(), insert_string);
     return;
