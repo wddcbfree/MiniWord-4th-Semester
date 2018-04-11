@@ -22,7 +22,7 @@
 #include <QString>
 #include <QCloseEvent>
 #include "mainwindow.h"
-#include "screen_cache.h"
+#include "stl_implement_text_class.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -222,9 +222,9 @@ void MainWindow::InitiateSceen(){
     }
 }
 
-void MainWindow::RefreshScreen(ScreenCache screen_cache) {
+void MainWindow::RefreshScreen(Text text) {
     for (auto iter = screen_data_.begin(); iter != screen_data_.end(); ++iter) {
-        (**iter).setText(QString::fromStdString(screen_cache.GetCacheIthLines(iter - screen_data_.begin())));
+        (**iter).setText(QString::fromStdString(text.GetIthCacheString(iter - screen_data_.begin())));
     }
 }
 

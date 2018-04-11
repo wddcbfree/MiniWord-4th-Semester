@@ -2,17 +2,18 @@
 #ifndef STL_IMPLEMENT_TEXT_CLASS_
 #define STL_IMPLEMENT_TEXT_CLASS_
 
-#define WINDOWS_HIGHT 40
-#define WINDOWS_WIDTH 150
+#define ROW_NUMBER 40
+#define COLUME_NUMBER 150
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 struct ScreenInfo {
-    int cursor_x;   //cursor position
-    int cursor_y;
-    int screen_x;   //screen left-up position
-    int screen_y;
+    int cursor_x = 0;   //cursor position
+    int cursor_y = 0;
+    int screen_x = 0;   //screen left-up position
+    int screen_y = 0;
 };
 
 class Text {
@@ -29,12 +30,15 @@ public:
     bool SearchWord(const std::string &search_word);
     void TakePlaceString(const std::string &search_word, const std::string &take_place);
     void ConfirmTakePlace(bool confirm_take_place);
-    void FreshScreenPosition();
+    void RefreshScreenPosition();
     int GetNumOfLines();
     std::string GetIthString(int i);
     ScreenInfo GetPosition();
+    void RefreshScreenCache();
+    std::string GetIthCacheString(int i);
 private:
     std::vector<std::string> text_;
+    std::vector<std::string> cache_;
     ScreenInfo screen_info_;
     std::string take_place_;
     int GetColumeNum_();

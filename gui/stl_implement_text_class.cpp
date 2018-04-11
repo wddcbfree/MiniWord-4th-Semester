@@ -57,7 +57,7 @@ void Text::MoveDown() {
 void Text::MoveRight() {
     if (GetColumeNum_() == text_[GetRowNum_()].length() && GetRowNum_() != GetNumOfLines()) {
         ++screen_info_.cursor_y;
-        screen_info_.cursor_x = 1;
+        screen_info_.cursor_x = 0;
     }
     else {
         ++screen_info_.cursor_x;
@@ -77,17 +77,17 @@ void Text::MoveLeft() {
 
 bool Text::SearchWord(const std::string & search_word) {
     //search the word from the current position
-    auto temp_search_position = text_[GetRowNum_()].find(search_word, screen_info_.cursor_x - 1);
+    auto temp_search_position = text_[GetRowNum_()].find(search_word, GetColumeNum_());
     if (temp_search_position != std::string::npos) {
-        screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x + 1;
+        screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x;
         return true;
     }
     //search the word from next line
-    for (auto i = text_.begin() + GetRowNum_() + 1; i != text_.end(); ++i) {
+    for (auto i = text_.begin() + GetRowNum_(); i != text_.end(); ++i) {
         temp_search_position = i->find(search_word);
         if (temp_search_position != std::string::npos) {
-            screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x + 1;
-            screen_info_.cursor_y = static_cast<int>(i - text_.begin() + 1) - screen_info_.screen_y + 1;
+            screen_info_.cursor_x = static_cast<int>(temp_search_position) - screen_info_.screen_x;
+            screen_info_.cursor_y = static_cast<int>(i - text_.begin()) - screen_info_.screen_y;
             return true;
         }
     }
@@ -108,22 +108,22 @@ void Text::ConfirmTakePlace(bool confirm_take_place) {
     return;
 }
 
-void Text::FreshScreenPosition() {
+void Text::RefreshScreenPosition() {
     if (screen_info_.cursor_x > COLUME_NUMBER) {
         screen_info_.screen_x += screen_info_.cursor_x - COLUME_NUMBER ;
         screen_info_.cursor_x = COLUME_NUMBER;
     }
     if (screen_info_.cursor_x <= 0) {
-        screen_info_.screen_x += screen_info_.cursor_x - 1;
-        screen_info_.cursor_x = 1;
+        screen_info_.screen_x += screen_info_.cursor_x;
+        screen_info_.cursor_x = 0;
     }
     if (screen_info_.cursor_y > ROW_NUMBER) {
         screen_info_.screen_x += screen_info_.cursor_y - ROW_NUMBER;
         screen_info_.cursor_y = ROW_NUMBER;
     }
     if (screen_info_.cursor_y <= 0) {
-        screen_info_.screen_y += screen_info_.cursor_y - 1;
-        screen_info_.cursor_y = 1;
+        screen_info_.screen_y += screen_info_.cursor_y;
+        screen_info_.cursor_y = 0;
     }
     return;
 }
@@ -133,17 +133,34 @@ int Text::GetNumOfLines() {
 }
 
 std::string Text::GetIthString(int i) {
-    return text_[i - 1];
+    return text_[i];
 }
 
 ScreenInfo Text::GetPosition() {
     return screen_info_;
 }
 
+void Text::RefreshScreenCache()
+{
+    cache_.clear();
+    for (int i = 0; i <= ROW_NUMBER; ++i) {
+        if (i + screen_info_.cursor_y < GetNumOfLines()) {
+            cache_.push_back(GetIthString(i + screen_info_.cursor_y).substr(GetColumeNum_(), COLUME_NUMBER));
+        } else {
+            cache_.push_back(std::string());
+        }
+    }
+}
+
+std::string Text::GetIthCacheString(int i)
+{
+    return cache_[i];
+}
+
 int Text::GetColumeNum_() {
-    return screen_info_.screen_x + screen_info_.cursor_x - 2;
+    return screen_info_.screen_x + screen_info_.cursor_x;
 }
 
 int Text::GetRowNum_() {
-    return screen_info_.screen_y + screen_info_.cursor_y - 2;
+    return screen_info_.screen_y + screen_info_.cursor_y;
 }

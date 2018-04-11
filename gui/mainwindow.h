@@ -11,7 +11,6 @@
 #include <QCloseEvent>
 #include <QVector>
 #include "dialog.h"
-#include "screen_cache.h"
 #include "stl_implement_text_class.h"
 
 #define LINE_WIDTH 700
@@ -36,7 +35,7 @@ public:
     void pre_saveas();
     void saveas();
 
-    void RefreshScreen(ScreenCache screen_cache);
+    void RefreshScreen(Text text);
 
 protected:
     void keyReleaseEvent(QKeyEvent *);
@@ -45,7 +44,6 @@ protected:
 private:
     void getInputText();
     void InitiateSceen();
-    ScreenCache b;
     Text a;
 
     QString InputText;

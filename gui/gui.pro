@@ -26,12 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    screen_cache.cpp \
     stl_implement_text_class.cpp
 
 HEADERS += \
         mainwindow.h \
-    screen_cache.h \
     stl_implement_text_class.h
 
 FORMS += \
