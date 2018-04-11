@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QDataStream>
 #include <vector>
+#include <QCloseEvent>
 #include <QVector>
 #include "dialog.h"
 #include "screen_cache.h"
@@ -27,6 +28,7 @@ public:
 
     bool open();
     //QString read(int row);
+    void precreate();
     void create();
     void prewrite();
     void write(QString line);
@@ -39,6 +41,7 @@ public:
 protected:
     void keyReleaseEvent(QKeyEvent *);
     void paintEvent(QPaintEvent *);
+    void closeEvent(QCloseEvent *event);
 private:
     void getInputText();
     void InitiateSceen();
@@ -52,10 +55,11 @@ private:
     QLineEdit Input;
     QLabel InputTips;
 
+    QAction *createAction;
     QAction *openAction;
     QAction *saveAction;
     QAction *saveasAction;
-    QAction *createAction;
+
 
     QVector<QLabel *> screen_data_;
 };

@@ -20,6 +20,7 @@
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QString>
+#include <QCloseEvent>
 #include "mainwindow.h"
 #include "screen_cache.h"
 using namespace std;
@@ -29,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(tr("MiniWord"));
     this->setFixedSize(800,600);
     //菜单栏
+    createAction = new QAction(tr("新文件"), this);
+    createAction->setShortcuts(QKeySequence::New);
+    createAction->setStatusTip(tr("Create a file"));
+    connect(createAction, &QAction::triggered, this, &MainWindow::precreate);
+
     openAction = new QAction(tr("打开..."), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing file"));
@@ -45,9 +51,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(saveasAction, &QAction::triggered, this, &MainWindow::pre_saveas);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
+    file->addAction(createAction);
+    file->addSection("");
     file->addAction(openAction);
     file->addAction(saveAction);
     file->addAction(saveasAction);
+    QMenu *edit = menuBar()->addMenu(tr("&编辑"));
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     info->addSection("hello");
 
@@ -69,8 +78,52 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar();
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("还有未保存的修改，确认退出？"));
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+    msgBox.setButtonText(QMessageBox::Save,"保存");
+    msgBox.setButtonText(QMessageBox::Discard,"不保存");
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::Save:
+        save();
+        qDebug() << "保存！";
+        break;
+    case QMessageBox::Discard:
+        qDebug() << "不保存!";
+        break;
+    }
+}
+
 MainWindow::~MainWindow()
 {
+
+}
+
+void MainWindow::precreate(){
+    statusBar()->showMessage("创建文件中...");
+    InputTips.setText("请输入要创建的文件名(含扩展名)，按回车结束：");
+    Input.setReadOnly(0);
+    Input.setPlaceholderText("*.txt");
+    connect(&Input,&QLineEdit::returnPressed,this,&MainWindow::create);
+}
+
+void MainWindow::create(){
+    QString FileName = Input.text();
+    Input.clear();
+    Input.setReadOnly(1);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("创建在..."),"/",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+    QDir d;
+    d.mkpath(dir);
+    path = dir+"/"+FileName;
+    statusBar()->showMessage("创建成功！");
+    InputTips.setText("");
+    Input.setReadOnly(1);
+    Input.setPlaceholderText("");
+    qDebug()<<"create: File create success!"<<endl;
 }
 
 bool MainWindow::open()//打开文件，若打开成功，将所有数据读取到容器 data 中（QString）
@@ -138,7 +191,7 @@ void MainWindow::saveas(){
     QString FileName = Input.text();
     Input.clear();
     Input.setReadOnly(1);
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/Desktop",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("另存在..."),"/",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
     QDir d;
     d.mkpath(dir);
     QFile file2(dir+"/"+FileName);
