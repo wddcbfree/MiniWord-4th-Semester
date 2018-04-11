@@ -5,7 +5,7 @@ void ScreenCache::RefreshCache(Text text) {
     ScreenInfo position = text.GetPosition();
     cache_.clear();
     for (int i = position.screen_y - 1; i < lines; ++i) {
-        cache_.push_back(text.GetIthString(i + 1).substr(position.screen_x - 1, WINDOWS_WIDTH));
+        cache_.push_back(text.GetIthString(i + 1).substr(position.screen_x - 1, COLUME_NUMBER));
     }
     return;
 }

@@ -18,7 +18,9 @@
 #include <QLabel>
 #include <QKeyEvent>
 #include <QKeySequence>
+#include <QString>
 #include "mainwindow.h"
+#include "screen_cache.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -54,6 +56,18 @@ MainWindow::MainWindow(QWidget *parent) :
     Input.setEchoMode(QLineEdit::Normal);
     Input.setPlaceholderText("type...");
     Input.setReadOnly(1);
+
+    for (int i = 0; i < ROW_NUMBER; ++i) {
+        QLabel *pLabel = new QLabel(this);
+        pLabel->setText(QString::number(i + 1));
+        pLabel->setStyleSheet("color: black");
+        pLabel->setGeometry(TEXT_LEFT_BLANK,
+                            TEXT_UPPER_BLANK + LINE_HIGHT * i,
+                            LINE_WIDTH,
+                            LINE_HIGHT);
+        screen_data_.append(pLabel);
+    }
+
 
    /* QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->setToolTip("hello");
@@ -108,7 +122,7 @@ void MainWindow::save(){
     if(file.open(QIODevice::WriteOnly)){
         qDebug() <<"save: File save success!"<<endl;
         QTextStream out(&file);
-        for(int i = 0;i < data.size();++i){
+        for(int i = 0; i < data.size(); ++i){
             out<<data[i];
         }
         file.close();
@@ -126,14 +140,20 @@ void MainWindow::saveas(){
     QFile file2(dir+"/"+FileName);
     file2.open(QIODevice::WriteOnly);
     QTextStream out(&file2);
-    for(int i = 0;i < data.size();++i){
+    for(int i = 0; i < data.size(); ++i){
         out<<data[i];
     }
     file2.close();
     qDebug()<<"saveas: File save success!"<<endl;
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent *event){
+void MainWindow::RefreshScreen(ScreenCache screen_cache) {
+    for (auto iter = screen_data_.begin(); iter != screen_data_.end(); ++iter) {
+        (**iter).setText(QString::fromStdString(screen_cache.GetCacheIthLines(iter - screen_data_.begin())));
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     switch (event->key()) {
     case Qt::Key_1:
         Input.setReadOnly(0);

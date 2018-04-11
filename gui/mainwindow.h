@@ -1,5 +1,6 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
+#ifndef MAINWINDOW_H_
+#define MAINWINDOW_H_
 
 #include <QMainWindow>
 #include <QFile>
@@ -7,7 +8,14 @@
 #include <QTextStream>
 #include <QDataStream>
 #include <vector>
+#include <QVector>
 #include "dialog.h"
+#include "screen_cache.h"
+
+#define LINE_WIDTH 700
+#define LINE_HIGHT 10
+#define TEXT_UPPER_BLANK 100
+#define TEXT_LEFT_BLANK 50
 
 class MainWindow : public QMainWindow
 {
@@ -24,6 +32,8 @@ public:
     void save();
     void saveas();
 
+    void RefreshScreen(ScreenCache screen_cache);
+
 protected:
     QKeyEvent *Key;
     void keyReleaseEvent(QKeyEvent *);
@@ -37,6 +47,8 @@ private:
     QAction *saveAction;
     QAction *saveasAction;
     QAction *createAction;
+
+    QVector<QLabel *> screen_data_;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_H_

@@ -2,8 +2,8 @@
 #ifndef STL_IMPLEMENT_TEXT_CLASS_
 #define STL_IMPLEMENT_TEXT_CLASS_
 
-#define WINDOWS_HIGHT 40
-#define WINDOWS_WIDTH 150
+#define ROW_NUMBER 40
+#define COLUME_NUMBER 150
 
 #include <string>
 #include <vector>
