@@ -145,8 +145,7 @@ ScreenInfo Text::GetPosition() {
     return screen_info_;
 }
 
-void Text::RefreshScreenCache()
-{
+void Text::RefreshScreenCache() {
     cache_.clear();
     for (int i = 0; i <= ROW_NUMBER; ++i) {
         if (i + screen_info_.cursor_y < GetNumOfLines()) {
@@ -157,8 +156,7 @@ void Text::RefreshScreenCache()
     }
 }
 
-std::string Text::GetIthCacheString(int i)
-{
+std::string Text::GetIthCacheString(int i) {
     return cache_[i];
 }
 
