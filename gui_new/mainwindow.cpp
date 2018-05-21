@@ -1,4 +1,4 @@
-7j  #include <QDialog>
+#include <QDialog>
 #include <QAction>
 #include <QWidget>
 #include <QDebug>
@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("MiniWord"));
-    this->setFixedSize(800,600);
+    this->setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
     //菜单栏
     createAction = new QAction(tr("新文件"), this);
@@ -38,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent)
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing file"));
     connect(openAction, &QAction::triggered, this, &MainWindow::open);
-
 
     saveAction = new QAction(tr("保存"), this);
     saveAction->setShortcuts(QKeySequence::Save);
@@ -59,10 +58,10 @@ MainWindow::MainWindow(QWidget *parent)
     QMenu *edit = menuBar()->addMenu(tr("&编辑"));
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     info->addSection("hello");
-/*
+
     //输入框部分
-    Input.setParent(this);
-    Input.setGeometry(0,560,800,21);
+    /*Input.setParent(this);
+    Input.setGeometry(INPUT_LEFT_BLANK,WINDOW_HEIGHT-2*LINE_HEIGHT,WINDOW_WIDTH-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Input.show();
     Input.setEchoMode(QLineEdit::Normal);
     Input.setPlaceholderText("type...");
@@ -70,12 +69,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     //输入提示
     InputTips.setParent(this);
-    InputTips.setGeometry(2,540,800-1*2,21);
+    InputTips.setGeometry(INPUT_LEFT_BLANK,WINDOW_HEIGHT-3*LINE_HEIGHT,WINDOW_WIDTH-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     InputTips.show();
     InputTips.setText("test");
 
-    InitiateSceen();
-*/
+ //   InitiateSceen();
+    */
     //状态栏
     statusBar();
 }
@@ -84,7 +83,49 @@ MainWindow::~MainWindow()
 {
 
 }
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(filepart->is_edited()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("还有未保存的修改，是否保存？"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+        msgBox.setButtonText(QMessageBox::Save,"保存");
+        msgBox.setButtonText(QMessageBox::Discard,"不保存");
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            save();
+            qDebug() << "保存！";
+            break;
+        case QMessageBox::Discard:
+            qDebug() << "不保存!";
+            break;
+        }
+    }
+    filepart->clearData();
+}
+
 void MainWindow::create(){
+    if(!filepart->is_edited()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("还有未保存的修改，是否保存？"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+        msgBox.setButtonText(QMessageBox::Save,"保存");
+        msgBox.setButtonText(QMessageBox::Discard,"不保存");
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            save();
+            qDebug() << "保存！";
+            break;
+        case QMessageBox::Discard:
+            qDebug() << "不保存!";
+            break;
+        }
+    }
     emit SendCreateSignal();
 }
 
@@ -99,7 +140,7 @@ void MainWindow::save(){
     if(filepart->is_open()){
         QString FilePath;
         if(filepart->is_create()){
-            FilePath = QFileDialog::getSaveFileName(this,tr("保存为..."));
+            FilePath = QFileDialog::getSaveFileName(this,tr("保存为..."),"新建文档.txt");
         }
         emit SendSavePath(FilePath);
         statusBar()->showMessage("保存成功！");
@@ -107,6 +148,6 @@ void MainWindow::save(){
 }
 
 void MainWindow::save_as(){
-    QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."));
+    QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."),"新建文档.txt");
     emit SendSaveAsPath(FilePath);
 }

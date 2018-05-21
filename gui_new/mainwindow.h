@@ -34,10 +34,13 @@
 #include "file_process.h"
 
 #define LINE_WIDTH 700
-#define LINE_HIGHT 12
+#define LINE_HEIGHT 21
 #define TEXT_UPPER_BLANK 40
 #define TEXT_LEFT_BLANK 50
-
+#define INPUT_LEFT_BLANK 5
+#define INPUT_DOWN_BLANK 1
+#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 800
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,6 +56,10 @@ signals:
     void SendOpenPath(QString path);
     void SendSavePath(QString path);
     void SendSaveAsPath(QString path);
+protected:
+    //void keyReleaseEvent(QKeyEvent *);
+    //void paintEvent(QPaintEvent *);
+    void closeEvent(QCloseEvent *event);
 private:
     FileProcess *filepart;
 

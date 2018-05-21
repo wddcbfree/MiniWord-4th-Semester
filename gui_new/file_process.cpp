@@ -52,7 +52,6 @@ void FileProcess::save_file(QString path){
     if(OpenSignal){
         if(CreateSignal){
             FilePath = path;
-            CreateSignal = false;
         }
         QFile file(FilePath);
         if(file.open(QIODevice::WriteOnly)){
@@ -67,6 +66,7 @@ void FileProcess::save_file(QString path){
         }
     }
     CreateSignal = false;
+    EditedSignal = false;
 }
 
 void FileProcess::save_as(QString path){
@@ -83,4 +83,5 @@ void FileProcess::save_as(QString path){
         qDebug() <<"save as: File save error!"<<endl;
     }
     CreateSignal = false;
+    EditedSignal = false;
 }
