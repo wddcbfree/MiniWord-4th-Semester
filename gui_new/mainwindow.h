@@ -3,10 +3,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFile>
 #include <string>
-#include <QTextStream>
-#include <QDataStream>
 #include <vector>
 #include <QCloseEvent>
 #include <QVector>
@@ -21,8 +18,6 @@
 #include <QToolBar>
 #include <QLineEdit>
 #include <QSize>
-#include <QTextStream>
-#include <QDataStream>
 #include <vector>
 #include <QPushButton>
 #include <QLabel>
@@ -35,9 +30,10 @@
 
 #define LINE_WIDTH 700
 #define LINE_HEIGHT 21
+#define LINE_GAP 4
 #define TEXT_UPPER_BLANK 40
 #define TEXT_LEFT_BLANK 50
-#define INPUT_LEFT_BLANK 5
+#define INPUT_LEFT_BLANK 1
 #define INPUT_DOWN_BLANK 1
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
@@ -57,27 +53,31 @@ signals:
     void SendSavePath(QString path);
     void SendSaveAsPath(QString path);
 protected:
-    //void keyReleaseEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
     //void paintEvent(QPaintEvent *);
     void closeEvent(QCloseEvent *event);
 private:
-    FileProcess *filepart;
-
     void create();
     void open();
     void save();
     void save_as();
 
+    void search();
+
+    void input_return_pressed();
+
     QAction *createAction;
     QAction *openAction;
     QAction *saveAction;
     QAction *saveasAction;
+    QAction *quitAction;
+
+    QAction *searchAction;
 
     QLineEdit Input;
     QLabel InputTips;
 
-    bool OpenSignal;
-    bool CreateSignal;
+    FileProcess *filepart;
 };
 
 #endif // MAINWINDOW_H
