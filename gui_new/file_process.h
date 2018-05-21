@@ -1,3 +1,4 @@
+#pragma once
 #ifndef FILE_PROCESS_H
 #define FILE_PROCESS_H
 #include <QObject>
@@ -13,11 +14,31 @@ class FileProcess : public QObject
 {
     Q_OBJECT
 public:
-    void new_file();
+    std::vector<std::string> get_data(){
+        return Data;
+    }
+    void set_data(std::vector<std::string> data){
+        Data.assign(data.begin(),data.end());
+    }
+    bool is_create(){
+        return CreateSignal;
+    }
+    bool is_open(){
+        return OpenSignal;
+    }
 public slots:
     void open_file(QString path);
+    void create_file();
+    void save_file(QString path);
+    void save_as(QString path);
+signals:
+    void ReturnFileName(QString name);
 private:
-    std::vector<std::string> data;
+    QMainWindow *parent;
+    bool CreateSignal = false;
+    bool OpenSignal = false;
+    QString FilePath;
+    std::vector<std::string> Data;
 };
 
 #endif // FILE_PROCESS_H

@@ -1,4 +1,4 @@
-#include <QDialog>
+7j  #include <QDialog>
 #include <QAction>
 #include <QWidget>
 #include <QDebug>
@@ -21,7 +21,6 @@
 #include <QString>
 #include <QCloseEvent>
 #include "mainwindow.h"
-#include "file_process.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,13 +28,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("MiniWord"));
     this->setFixedSize(800,600);
 
-
-
     //菜单栏
     createAction = new QAction(tr("新文件"), this);
     createAction->setShortcuts(QKeySequence::New);
     createAction->setStatusTip(tr("Create a file"));
-    //connect(createAction, &QAction::triggered, this, &MainWindow::precreate);
+    connect(createAction, &QAction::triggered, this, &MainWindow::create);
 
     openAction = new QAction(tr("打开..."), this);
     openAction->setShortcuts(QKeySequence::Open);
@@ -46,12 +43,12 @@ MainWindow::MainWindow(QWidget *parent)
     saveAction = new QAction(tr("保存"), this);
     saveAction->setShortcuts(QKeySequence::Save);
     saveAction->setStatusTip(tr("Save current file"));
-    //connect(saveAction, &QAction::triggered, this, &MainWindow::save);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::save);
 
     saveasAction = new QAction(tr("另存为..."), this);
     saveasAction->setShortcuts(QKeySequence::SaveAs);
     saveasAction->setStatusTip(tr("Save as..."));
-    //connect(saveasAction, &QAction::triggered, this, &MainWindow::saveas);
+    connect(saveasAction, &QAction::triggered, this, &MainWindow::save_as);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
@@ -87,9 +84,29 @@ MainWindow::~MainWindow()
 {
 
 }
+void MainWindow::create(){
+    emit SendCreateSignal();
+}
 
 void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
-    emit SendPath(FilePath);
+    emit SendOpenPath(FilePath);
+    statusBar()->showMessage("打开成功！");
+}
+
+void MainWindow::save(){
+    if(filepart->is_open()){
+        QString FilePath;
+        if(filepart->is_create()){
+            FilePath = QFileDialog::getSaveFileName(this,tr("保存为..."));
+        }
+        emit SendSavePath(FilePath);
+        statusBar()->showMessage("保存成功！");
+    }
+}
+
+void MainWindow::save_as(){
+    QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."));
+    emit SendSaveAsPath(FilePath);
 }

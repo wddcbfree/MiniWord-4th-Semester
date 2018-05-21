@@ -23,20 +23,64 @@
 #include <QString>
 #include <QCloseEvent>
 
+void FileProcess::create_file(){
+    qDebug()<<"create(): create new file!";
+    OpenSignal = true;
+    CreateSignal = true;
+}
+
 void FileProcess::open_file(QString path){
-    qDebug()<<"I'm here~"<<endl;
+    OpenSignal = true;
+    FilePath = path;
     QFile file(path);
     if(!file.open(QFile::ReadOnly|QFile::Text)){
-        qDebug()<<"open(): file open error!"<<endl;
+        qDebug()<<"open(): file open error!";
         file.close();
     }else{
-        qDebug()<<"open(): file open success!"<<endl;
-        data.clear();
+        qDebug()<<"open(): file open success!";
+        Data.clear();
         while(!file.atEnd()){
-            data.push_back(file.readLine().toStdString());
+            Data.push_back(file.readLine().toStdString());
         }
         //for(int i = 0;i < data.size();++i)
-          //  qDebug()<<data[i];
+          //  qDebug()<<QString::fromStdString(data[i]);
         file.close();
     }
+}
+
+void FileProcess::save_file(QString path){
+    if(OpenSignal){
+        if(CreateSignal){
+            FilePath = path;
+            CreateSignal = false;
+        }
+        QFile file(FilePath);
+        if(file.open(QIODevice::WriteOnly)){
+            qDebug() <<"save: File save success!";
+            QTextStream out(&file);
+            for(int i = 0; i < Data.size(); ++i){
+                out<<QString::fromStdString(Data[i]);
+            }
+            file.close();
+        }else{
+            qDebug() <<"save: File save error!";
+        }
+    }
+    CreateSignal = false;
+}
+
+void FileProcess::save_as(QString path){
+    FilePath = path;
+    QFile file(FilePath);
+    if(file.open(QIODevice::WriteOnly)){
+        qDebug() <<"save as: File save success!"<<endl;
+        QTextStream out(&file);
+        for(int i = 0; i < Data.size(); ++i){
+            out<<QString::fromStdString(Data[i]);
+        }
+        file.close();
+    }else{
+        qDebug() <<"save as: File save error!"<<endl;
+    }
+    CreateSignal = false;
 }
