@@ -17,7 +17,10 @@ public:
     std::vector<std::string> get_data(){
         return Data;
     }
-    void setData(std::string line){
+    void pre_set_data(){
+        Data.clear();
+    }
+    void set_data(std::string line){
         Data.push_back(line);
     }
     void clearData(){

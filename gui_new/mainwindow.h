@@ -73,6 +73,8 @@ private:
     QAction *quitAction;
 
     QAction *searchAction;
+    QAction *replaceAction;
+    QAction *selectAction;
 
     QLineEdit Input;
     QLabel InputTips;

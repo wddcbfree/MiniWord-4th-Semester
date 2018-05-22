@@ -59,6 +59,14 @@ MainWindow::MainWindow(QWidget *parent)
     searchAction->setStatusTip(tr("Search..."));
     connect(searchAction,&QAction::triggered,this,&MainWindow::search);
 
+    replaceAction = new QAction(tr("替换"),this);
+    replaceAction->setShortcuts(QKeySequence::Replace);
+    replaceAction->setStatusTip(tr("Replace"));
+    connect(replaceAction,&QAction::triggered,this,&MainWindow::search);
+
+    selectAction = new QAction(tr("选中块"),this);
+    selectAction->setStatusTip(tr("Select"));
+
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
     file->addSection("");
@@ -67,9 +75,11 @@ MainWindow::MainWindow(QWidget *parent)
     file->addAction(saveasAction);
     file->addSection("");
     file->addAction(quitAction);
-
     QMenu *edit = menuBar()->addMenu(tr("&编辑"));
     edit->addAction(searchAction);
+    edit->addAction(replaceAction);
+    edit->addSection("");
+    edit->addAction(selectAction);
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     //info->addAction(aboutRole);
 
@@ -190,16 +200,22 @@ void MainWindow::input_return_pressed(){
 }
 
 void MainWindow::search(){
-    QDialog SearchDialog;
-    SearchDialog.setFixedSize(200,4*LINE_HEIGHT);
+    QDialog SearchDialog(this);
+    SearchDialog.setSizeIncrement(410,4*LINE_HEIGHT);
     SearchDialog.setWindowTitle("查找");
-    QLineEdit SearchInput(&SearchDialog);
+    SearchDialog.setModal(0);
+    QLineEdit SearchInput(&SearchDialog),ReplaceInput(&SearchDialog);
     SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     SearchInput.setPlaceholderText("输入要查找的内容...");
-    //SearchInput.setText("hello");
-    /*QLabel Tips(&SearchDialog);
-    Tips.setGeometry(INPUT_LEFT_BLANK,0,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    Tips.setText("在此输入查找内容：");
-    */
+    ReplaceInput.setGeometry(210+INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    ReplaceInput.setPlaceholderText("替换为...");
+    QPushButton Search(&SearchDialog),SearchNext(&SearchDialog),Replace(&SearchDialog);
+    Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Search.setText("查找");
+    Search.setStyleSheet("color:black");
+    SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    SearchNext.setText("下一个");
+    Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Replace.setText("替换");
     SearchDialog.exec();
 }
