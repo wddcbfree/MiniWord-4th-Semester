@@ -2,14 +2,12 @@
 #ifndef STL_IMPLEMENT_TEXT_CLASS_
 #define STL_IMPLEMENT_TEXT_CLASS_
 
-#define ROW_NUMBER 40
-#define COLUME_NUMBER 150
-
 #include <cstring>
 #include <vector>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include "const_define.h"
 
 /*struct ScreenInfo {
     int cursor_x = 0;   //cursor position

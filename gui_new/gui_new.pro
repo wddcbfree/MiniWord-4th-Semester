@@ -27,9 +27,12 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     file_process.cpp \
-    memory_new.cpp
+    memory_new.cpp \
+    screen.cpp
 
 HEADERS += \
         mainwindow.h \
     file_process.h \
-    memory_new.h
+    memory_new.h \
+    screen.h \
+    const_define.h

@@ -1,25 +1,3 @@
-#include <QDialog>
-#include <QAction>
-#include <QWidget>
-#include <QDebug>
-#include <QFileDialog>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QStatusBar>
-#include <QToolBar>
-#include <QLineEdit>
-#include <QSize>
-#include <string>
-#include <QTextStream>
-#include <QDataStream>
-#include <vector>
-#include <QPushButton>
-#include <QLabel>
-#include <QPainter>
-#include <QKeyEvent>
-#include <QKeySequence>
-#include <QString>
-#include <QCloseEvent>
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -104,6 +82,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     //状态栏
     statusBar();
+
+    //dispaly
+    screen.InitiateScreen(this);
+    QTimer *display_timer = new QTimer(this);
+    connect(display_timer, SIGNAL(timeout()), this, SLOT(DisplayScreen()));
+    display_timer->start(REFLASH_TIME);
 }
 
 MainWindow::~MainWindow()
@@ -220,4 +204,8 @@ void MainWindow::search(){
     Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Replace.setText("替换");
     SearchDialog.exec();
+}
+
+void MainWindow::DisplayScreen() {
+    screen.DisplayScreen();
 }

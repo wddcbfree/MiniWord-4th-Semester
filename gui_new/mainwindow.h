@@ -26,18 +26,14 @@
 #include <QKeySequence>
 #include <QString>
 #include <QCloseEvent>
+#include <QTimer>
+#include <QDebug>
 #include "file_process.h"
 #include "memory_new.h"
+#include "screen.h"
 
-#define LINE_WIDTH 700
-#define LINE_HEIGHT 21
-#define LINE_GAP 4
-#define TEXT_UPPER_BLANK 40
-#define TEXT_LEFT_BLANK 50
-#define INPUT_LEFT_BLANK 1
-#define INPUT_DOWN_BLANK 1
-#define WINDOW_HEIGHT 600
-#define WINDOW_WIDTH 800
+class Screen;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -85,6 +81,10 @@ private:
 
     FileProcess *filepart;
     Text *Memory;
+
+    Screen screen;
+private slots:
+    void DisplayScreen();
 };
 
 #endif // MAINWINDOW_H

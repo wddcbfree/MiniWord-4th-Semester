@@ -1,13 +1,6 @@
 #include "file_process.h"
-#include <QDialog>
-#include <QWidget>
 #include <QDebug>
-#include <QFileDialog>
-#include <QFile>
-#include <string>
-#include <QTextStream>
-#include <QDataStream>
-#include <vector>
+
 
 void FileProcess::create_file(){
     qDebug()<<"create(): create new file!";
