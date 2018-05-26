@@ -8,13 +8,6 @@ int Text::GetCursorCol(){
 	return col;
 }
 
-int Text::GetEndRowNum(){
-	Link end = row_;
-	while(end->next)
-	    end = end->next;
-	return end->Row_Num;    
-}
-
 char Text::GetithElement(int i){
 	link dest = row_->content;
 	for(int j=1;j<=i;j++){
