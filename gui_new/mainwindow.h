@@ -63,18 +63,22 @@ private:
     void save_as();
 
     void search();
-
-    void input_return_pressed();
+    void select();
 
     QAction *createAction;
     QAction *openAction;
     QAction *saveAction;
     QAction *saveasAction;
     QAction *quitAction;
-
     QAction *searchAction;
     QAction *replaceAction;
     QAction *selectAction;
+
+    int row1,col1,row2,col2;
+    bool SelectTriggered = false;
+    bool Select1 = false;
+    bool Select2 = false;
+    bool Selected = false;
 
     QLineEdit Input;
     QLabel InputTips;

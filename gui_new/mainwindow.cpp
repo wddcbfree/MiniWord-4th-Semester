@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(saveasAction, &QAction::triggered, this, &MainWindow::save_as);
 
     quitAction = new QAction(tr("退出"),this);
-    quitAction->setShortcuts(QKeySequence::Quit);
+    quitAction->setShortcuts(QKeySequence::Close);
     quitAction->setStatusTip(tr("Quit"));
     connect(quitAction,&QAction::triggered,this,&MainWindow::close);
 
@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     selectAction = new QAction(tr("选中块"),this);
     selectAction->setStatusTip(tr("Select"));
+    selectAction->setDisabled(1);
+    connect(selectAction,&QAction::triggered,this,&MainWindow::select);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
@@ -66,11 +68,10 @@ MainWindow::MainWindow(QWidget *parent)
     Input.setGeometry(INPUT_LEFT_BLANK,WINDOW_HEIGHT-2*LINE_HEIGHT,WINDOW_WIDTH-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Input.show();
     Input.setEchoMode(QLineEdit::Normal);
-    Input.setPlaceholderText("type...");
-    Input.setReadOnly(1);
+    Input.setPlaceholderText("typing...");
+    Input.setReadOnly(0);
     Input.setAcceptDrops(true);
     Input.setClearButtonEnabled(true);
-    connect(&Input,&QLineEdit::returnPressed,this,&MainWindow::input_return_pressed);
 
     //输入提示
     InputTips.setParent(this);
@@ -82,12 +83,118 @@ MainWindow::MainWindow(QWidget *parent)
 
     //状态栏
     statusBar();
+    //工具栏
 
-    //dispaly
+    //显示
     screen.InitiateScreen(this);
     QTimer *display_timer = new QTimer(this);
     connect(display_timer, SIGNAL(timeout()), this, SLOT(DisplayScreen()));
     display_timer->start(REFLASH_TIME);
+}
+
+void MainWindow::select(){
+    qDebug()<<"Select triggered!";
+    selectAction->setDisabled(1);
+    Input.setReadOnly(1);
+    Input.setPlaceholderText(tr("请移动光标选择块的开头，按 Enter 键确认"));
+    SelectTriggered = true;
+}
+
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+    if(Select2){
+        if(event->key() == Qt::Key_Backspace){
+            qDebug()<<"Block Deleted!";
+            //Memory->BlockDelete(row1,col1,row2,col2);
+        }else if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C){
+            qDebug()<<"Block Copied!";
+            Selected = true;
+            statusBar()->showMessage(tr("块复制成功！"));
+        }
+        Input.setReadOnly(0);
+        Input.setPlaceholderText("typing...");
+        Select2 = false;
+    }
+    if(Input.text() == ""){
+        selectAction->setDisabled(0);
+        switch (event->key()) {
+        case Qt::Key_Up:
+            qDebug()<<"Cursor Up!";
+            break;
+        case Qt::Key_Down:
+            qDebug()<<"Cursor Down!";
+            break;
+        case Qt::Key_Left:
+            qDebug()<<"Cursor Left!";
+            break;
+        case Qt::Key_Right:
+            qDebug()<<"Cursor Right!";
+            break;
+        case Qt::Key_Return:
+            if(SelectTriggered){
+                if(Select1){
+                    qDebug()<<"End of Blcok Entered!";
+                    //Input.setReadOnly(0);
+                    Input.setPlaceholderText(tr("请完成对选中块的操作(删除、拷贝)"));
+                    //row2 = Memory->GetCursorRow();
+                    //col2 = Memory->GetCursorCol();
+                    //调用块操作接口
+                    SelectTriggered = false;
+                    Select1 = false;
+                    Select2 = true;
+                    break;
+                }else{
+                    qDebug()<<"Start of Block Entered!";
+                    Input.setPlaceholderText(tr("请移动光标选择块的结尾，按 Enter 键确认"));
+                    Select1 = true;
+                    //row1 = Memory->GetCursorRow();
+                    //col1 = Memory->GetCursorCol();
+                    break;
+                }
+            }
+            qDebug()<<"Add blank line!";
+            break;
+        //default:
+            //break;
+        }
+    }else{
+        selectAction->setDisabled(1);
+        switch (event->key()) {
+        case Qt::Key_Return:
+            qDebug()<<"return success!";
+            selectAction->setDisabled(0);
+            Input.clear();
+            break;
+        //default:
+            //break;
+        }
+    }
+
+}
+
+void MainWindow::search(){
+    QDialog SearchDialog(this);
+    SearchDialog.setSizeIncrement(410,4*LINE_HEIGHT);
+    SearchDialog.setWindowTitle("查找");
+    SearchDialog.setModal(0);
+    QLineEdit SearchInput(&SearchDialog),ReplaceInput(&SearchDialog);
+    SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    SearchInput.setPlaceholderText("输入要查找的内容...");
+    ReplaceInput.setGeometry(210+INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    ReplaceInput.setPlaceholderText("替换为...");
+    QPushButton Search(&SearchDialog),SearchNext(&SearchDialog),Replace(&SearchDialog);
+    Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Search.setText("查找");
+    Search.setStyleSheet("color:black");
+    SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    SearchNext.setText("下一个");
+    Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Replace.setText("替换");
+    SearchDialog.exec();
+}
+
+void MainWindow::DisplayScreen() {
+    screen.DisplayScreen();
 }
 
 MainWindow::~MainWindow()
@@ -119,7 +226,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 void MainWindow::create(){
-    if(!filepart->is_edited()){
+    if(filepart->is_edited()){
         QMessageBox msgBox;
         msgBox.setText(tr("还有未保存的修改，是否保存？"));
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
@@ -161,51 +268,4 @@ void MainWindow::save(){
 void MainWindow::save_as(){
     QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."),"新建文档.txt");
     emit SendSaveAsPath(FilePath);
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    switch (event->key()) {
-    case Qt::Key_1:
-        Input.setReadOnly(0);
-        Input.setPlaceholderText("typing...");
-        break;
-    //case Qt::Key_Delete:
-    //default:
-        //break;
-    }
-}
-
-void MainWindow::input_return_pressed(){
-    qDebug()<<"return success!";
-    Memory->InsertString(Input.text().toStdString());
-    Input.clear();
-    /*if(Input.size() == 0)
-        //插入空行
-    else
-        //插入现有数据，然后清空*/
-}
-
-void MainWindow::search(){
-    QDialog SearchDialog(this);
-    SearchDialog.setSizeIncrement(410,4*LINE_HEIGHT);
-    SearchDialog.setWindowTitle("查找");
-    SearchDialog.setModal(0);
-    QLineEdit SearchInput(&SearchDialog),ReplaceInput(&SearchDialog);
-    SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    SearchInput.setPlaceholderText("输入要查找的内容...");
-    ReplaceInput.setGeometry(210+INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    ReplaceInput.setPlaceholderText("替换为...");
-    QPushButton Search(&SearchDialog),SearchNext(&SearchDialog),Replace(&SearchDialog);
-    Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    Search.setText("查找");
-    Search.setStyleSheet("color:black");
-    SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    SearchNext.setText("下一个");
-    Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    Replace.setText("替换");
-    SearchDialog.exec();
-}
-
-void MainWindow::DisplayScreen() {
-    screen.DisplayScreen();
 }

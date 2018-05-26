@@ -6,7 +6,7 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
         pLabel->setText(QString::number(i + 1));
         pLabel->setStyleSheet("color: black");
         pLabel->setGeometry(TEXT_LEFT_BLANK,
-                            TEXT_UPPER_BLANK + (LINE_GAP + LINE_HEIGHT) * i,
+                            TEXT_UPPER_BLANK + (LINE_HEIGHT-LINE_GAP) * i,
                             LINE_WIDTH,
                             LINE_HEIGHT);
         pLabel->show();
