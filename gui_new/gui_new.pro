@@ -27,9 +27,9 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     file_process.cpp \
-    ../../MiniWord/gui_new/memory_new.cpp
+    memory_new.cpp
 
 HEADERS += \
         mainwindow.h \
     file_process.h \
-    ../../MiniWord/gui_new/memory_new.h
+    memory_new.h
