@@ -193,6 +193,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 
 void MainWindow::input_return_pressed(){
     qDebug()<<"return success!";
+    Memory->InsertString(Input.text().toStdString());
+    Input.clear();
     /*if(Input.size() == 0)
         //插入空行
     else

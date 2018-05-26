@@ -18,6 +18,7 @@ void FileProcess::create_file(){
 void FileProcess::open_file(QString path){
     OpenSignal = true;
     FilePath = path;
+    std::string temp;
     QFile file(path);
     if(!file.open(QFile::ReadOnly|QFile::Text)){
         qDebug()<<"open(): file open error!";
@@ -26,7 +27,9 @@ void FileProcess::open_file(QString path){
         qDebug()<<"open(): file open success!";
         Data.clear();
         while(!file.atEnd()){
-            Data.push_back(file.readLine().toStdString());
+            temp = file.readLine().toStdString();
+            Data.push_back(temp);
+            //Memory->AddStringEnd(temp);
         }
         //for(int i = 0;i < data.size();++i)
           //  qDebug()<<QString::fromStdString(data[i]);
@@ -35,6 +38,7 @@ void FileProcess::open_file(QString path){
 }
 
 void FileProcess::save_file(QString path){
+    std::string temp;
     if(OpenSignal){
         if(CreateSignal){
             FilePath = path;
@@ -57,6 +61,7 @@ void FileProcess::save_file(QString path){
 
 void FileProcess::save_as(QString path){
     FilePath = path;
+    std::string temp;
     QFile file(FilePath);
     if(file.open(QIODevice::WriteOnly)){
         qDebug() <<"save as: File save success!"<<endl;

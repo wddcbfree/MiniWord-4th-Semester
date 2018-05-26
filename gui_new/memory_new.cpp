@@ -1,4 +1,4 @@
-#include "stl_implement_text_class.h"
+#include "memory_new.h"
 
 int Text::GetCursorRow(){
 	return row;

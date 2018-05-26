@@ -27,6 +27,7 @@
 #include <QString>
 #include <QCloseEvent>
 #include "file_process.h"
+#include "memory_new.h"
 
 #define LINE_WIDTH 700
 #define LINE_HEIGHT 21
@@ -46,6 +47,9 @@ public:
 
     void init_file(FileProcess *file_part){
        filepart = file_part;
+    }
+    void init_memory(Text *memory){
+        Memory = memory;
     }
 signals:
     void SendCreateSignal();
@@ -80,6 +84,7 @@ private:
     QLabel InputTips;
 
     FileProcess *filepart;
+    Text *Memory;
 };
 
 #endif // MAINWINDOW_H

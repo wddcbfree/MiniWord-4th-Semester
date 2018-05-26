@@ -9,11 +9,15 @@
 #include <QDataStream>
 #include <vector>
 #include <QVector>
+#include "memory_new.h"
 
 class FileProcess : public QObject
 {
     Q_OBJECT
 public:
+    void init_memory(Text *memory){
+        Memory = memory;
+    }
     std::vector<std::string> get_data(){
         return Data;
     }
@@ -40,14 +44,14 @@ public slots:
     void create_file();
     void save_file(QString path);
     void save_as(QString path);
-//signals:
-    //void ReturnFileName(QString name);
 private:
     bool CreateSignal = false;
     bool OpenSignal = false;
     bool EditedSignal = false;
     QString FilePath;
     std::vector<std::string> Data;
+
+    Text *Memory;//数据结构部分
 };
 
 #endif // FILE_PROCESS_H
