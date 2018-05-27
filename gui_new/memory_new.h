@@ -31,6 +31,15 @@ struct Row{
 
 class Text {
 public:
+    Text(){
+	row = 0;
+	col = 0;
+	row_ = (Link )malloc(sizeof(Row));
+	row_->Row_Num = 0;
+	row_->pre = NULL;
+	row_->next = NULL;
+	row_->content = NULL;
+    }
     void AddStringEnd(const std::string &data);
     void InsertString(const std::string &insert_string);
     void DeleteForward();
