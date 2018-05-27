@@ -408,6 +408,7 @@ std::string Text::GetIthString(int i){
 		str += end->s[0]; 
 	    end = end->next;
 	}
+	return str;
 }
 
 bool Text::SearchWord(const std::string &search_word){
