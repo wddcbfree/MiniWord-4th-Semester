@@ -283,8 +283,8 @@ void MainWindow::create(){
             break;
         }
     }
-    emit SendCreateSignal();
     Memory->Clear();
+    emit SendCreateSignal();
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
@@ -293,6 +293,7 @@ void MainWindow::create(){
 void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
+    Memory->Clear();
     emit SendOpenPath(FilePath);
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);

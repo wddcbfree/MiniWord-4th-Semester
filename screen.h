@@ -17,9 +17,9 @@ struct SursorPosition{
 
 class Screen{
 public:
-    void InitiateScreen();
-    void LoadScreen();
-    void DisplayScreen();
+    void  InitiateScreen();
+    void  LoadScreen();
+    void  DisplayScreen();
 private:
     Qvector<Qstring> screen_text_;
     Qvector<Qlable *> screen_display_;

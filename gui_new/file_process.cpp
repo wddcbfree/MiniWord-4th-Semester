@@ -22,8 +22,9 @@ void FileProcess::open_file(QString path){
         while(!file.atEnd()){
             temp = file.readLine().toStdString();
             temp.pop_back();
-            if(temp == "\u0000")
+            if(temp == "\u0000") {
                 temp = "";
+            }
             Data.push_back(temp);
             Memory->AddStringEnd(temp);
         }
