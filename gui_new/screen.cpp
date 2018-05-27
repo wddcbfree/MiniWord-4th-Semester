@@ -6,7 +6,7 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
         pLabel->setText(QString::number(i + 1));
         pLabel->setStyleSheet("color: black");
         pLabel->setGeometry(TEXT_LEFT_BLANK,
-                            TEXT_UPPER_BLANK + (LINE_HEIGHT-LINE_GAP) * i,
+                            TEXT_UPPER_BLANK + (LINE_HEIGHT+LINE_GAP) * i,
                             LINE_WIDTH,
                             LINE_HEIGHT);
         pLabel->show();
@@ -22,7 +22,7 @@ void Screen::LoadScreen(Text text) {
     auto lines_number = text.GetNumOfLines();
     for (int i = 0; i < ROW_NUMBER; ++i) {
         if (i + screen_position_.row < lines_number) {
-            screen_data_.push_back(QString.fromStdString(text.GetIthString(i + screen_position_.row).substr(screen_position_.column, COLUME_NUMBER)));
+            screen_data_.push_back(QString::fromStdString(text.GetIthString(i + screen_position_.row).substr(screen_position_.column, COLUME_NUMBER)));
         }
         else {
             screen_data_.push_back(QString());
@@ -34,7 +34,7 @@ void Screen::LoadScreen(Text text) {
 void Screen::DisplayScreen() {
     cursor_display_count = (cursor_display_count + 1) % (DISPLAY_COUNT << 1);
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
-        if (cursor_display_count < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.raw) {
+        if (cursor_display_count < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
             QString temp_str = screen_data_[iter - screen_display_.begin()];
             temp_str.insert(relative_position_.column + 1, "</span>");
             temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");

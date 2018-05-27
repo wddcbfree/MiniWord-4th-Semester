@@ -115,22 +115,23 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         Select2 = false;
     }
     if(Input.text() == ""){
+        screen.LoadScreen(*Memory);
         selectAction->setDisabled(0);
         switch (event->key()) {
         case Qt::Key_Up:
             qDebug()<<"Cursor Up!";
-            //Memory->MoveUp();
+            Memory->MoveUp();
             break;
         case Qt::Key_Down:
             qDebug()<<"Cursor Down!";
-            //Memory->MoveDown();
+            Memory->MoveDown();
             break;
         case Qt::Key_Left:
             qDebug()<<"Cursor Left!";
-            //Memory->MoveLeft();
+            Memory->MoveLeft();
             break;
         case Qt::Key_Right:
-            //Memory->MoveRight();
+            Memory->MoveRight();
             qDebug()<<"Cursor Right!";
             break;
         case Qt::Key_Return:
@@ -159,11 +160,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             break;
         case Qt::Key_Backspace:
             qDebug()<<"Backspace!";
-            //删除操作
+            Memory->Backspace();
             break;
         case Qt::Key_Delete:
             qDebug()<<"Delete!";
-            //删除操作
+            Memory->Delete();
             break;
         //default:
             //break;
@@ -173,6 +174,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         switch (event->key()) {
         case Qt::Key_Return:
             qDebug()<<"return success!";
+            Memory->InsertString(Input.text().toStdString());
             selectAction->setDisabled(0);
             Input.clear();
             break;
@@ -263,6 +265,7 @@ void MainWindow::open(){
     qDebug()<<FilePath<<endl;
     emit SendOpenPath(FilePath);
     selectAction->setEnabled(1);
+    screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
 }
 

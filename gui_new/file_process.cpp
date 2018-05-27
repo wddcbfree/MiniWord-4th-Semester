@@ -23,9 +23,9 @@ void FileProcess::open_file(QString path){
             Memory->AddStringEnd(temp);
         }
         qDebug()<<"open: "<<Memory->GetNumOfLines()<<" lines";
-        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
-            qDebug()<<QString::fromStdString(Memory->GetIthString(i));
-        }
+        //for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+          //  qDebug()<<QString::fromStdString(Memory->GetIthString(i));
+        //}
         file.close();
     }
 }
@@ -61,7 +61,6 @@ void FileProcess::save_as(QString path){
     std::string temp;
     QFile file(FilePath);
     if(file.open(QIODevice::WriteOnly)){
-
         QTextStream out(&file);
         std::string temp;
         Data.clear();
