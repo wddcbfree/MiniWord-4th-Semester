@@ -18,7 +18,6 @@
 #include <QToolBar>
 #include <QLineEdit>
 #include <QSize>
-#include <vector>
 #include <QPushButton>
 #include <QLabel>
 #include <QPainter>
@@ -27,7 +26,6 @@
 #include <QString>
 #include <QCloseEvent>
 #include <QTimer>
-#include <QDebug>
 #include "file_process.h"
 #include "memory_new.h"
 #include "screen.h"
