@@ -100,7 +100,6 @@ void MainWindow::select(){
     SelectTriggered = true;
 }
 
-
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if(Select2){
         if(event->key() == Qt::Key_Backspace){
@@ -120,14 +119,18 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         switch (event->key()) {
         case Qt::Key_Up:
             qDebug()<<"Cursor Up!";
+            //Memory->MoveUp();
             break;
         case Qt::Key_Down:
             qDebug()<<"Cursor Down!";
+            //Memory->MoveDown();
             break;
         case Qt::Key_Left:
             qDebug()<<"Cursor Left!";
+            //Memory->MoveLeft();
             break;
         case Qt::Key_Right:
+            //Memory->MoveRight();
             qDebug()<<"Cursor Right!";
             break;
         case Qt::Key_Return:
@@ -153,6 +156,14 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                 }
             }
             qDebug()<<"Add blank line!";
+            break;
+        case Qt::Key_Backspace:
+            qDebug()<<"Backspace!";
+            //删除操作
+            break;
+        case Qt::Key_Delete:
+            qDebug()<<"Delete!";
+            //删除操作
             break;
         //default:
             //break;
@@ -251,6 +262,7 @@ void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
     emit SendOpenPath(FilePath);
+    selectAction->setEnabled(1);
     statusBar()->showMessage("打开成功！");
 }
 

@@ -2,10 +2,10 @@
 #ifndef SCREEN_
 #define SCREEN_
 
-#include <Qlabel>
+#include <QLabel>
 #include <string>
-#include <Qstring>
-#include <Qvector>
+#include <QString>
+#include <QVector>
 #include <QMainWindow>
 #include "memory_new.h"
 

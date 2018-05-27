@@ -2,7 +2,6 @@
 #include "file_process.h"
 #include "memory_new.h"
 #include <QApplication>
-#include <QObject>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

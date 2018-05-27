@@ -1,6 +1,4 @@
 #include "file_process.h"
-#include <QDebug>
-
 
 void FileProcess::create_file(){
     qDebug()<<"create(): create new file!";
@@ -22,28 +20,34 @@ void FileProcess::open_file(QString path){
         while(!file.atEnd()){
             temp = file.readLine().toStdString();
             Data.push_back(temp);
-            //Memory->AddStringEnd(temp);
+            Memory->AddStringEnd(temp);
         }
-        //for(int i = 0;i < data.size();++i)
-          //  qDebug()<<QString::fromStdString(data[i]);
+        qDebug()<<"open: "<<Memory->GetNumOfLines()<<" lines";
+        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+            qDebug()<<QString::fromStdString(Memory->GetIthString(i));
+        }
         file.close();
     }
 }
 
-void FileProcess::save_file(QString path){
-    std::string temp;
+void FileProcess::save_file(QString path){    
     if(OpenSignal){
         if(CreateSignal){
             FilePath = path;
         }
         QFile file(FilePath);
         if(file.open(QIODevice::WriteOnly)){
-            qDebug() <<"save: File save success!";
             QTextStream out(&file);
-            for(int i = 0; i < Data.size(); ++i){
-                out<<QString::fromStdString(Data[i]);
+            std::string temp;
+            Data.clear();
+            qDebug()<<"save: "<<Memory->GetNumOfLines()<<" lines";
+            for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+                temp = Memory->GetIthString(i);
+                Data.push_back(temp);
+                out<<QString::fromStdString(temp);
             }
             file.close();
+            qDebug() <<"save: File save success!";
         }else{
             qDebug() <<"save: File save error!";
         }
@@ -57,12 +61,18 @@ void FileProcess::save_as(QString path){
     std::string temp;
     QFile file(FilePath);
     if(file.open(QIODevice::WriteOnly)){
-        qDebug() <<"save as: File save success!"<<endl;
+
         QTextStream out(&file);
-        for(int i = 0; i < Data.size(); ++i){
-            out<<QString::fromStdString(Data[i]);
+        std::string temp;
+        Data.clear();
+        qDebug()<<"save_as: "<<Memory->GetNumOfLines()<<" lines";
+        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+            temp = Memory->GetIthString(i);
+            Data.push_back(temp);
+            out<<QString::fromStdString(temp);
         }
         file.close();
+        qDebug() <<"save as: File save success!";
     }else{
         qDebug() <<"save as: File save error!"<<endl;
     }

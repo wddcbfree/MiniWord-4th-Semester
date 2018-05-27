@@ -2,15 +2,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <string>
-#include <vector>
 #include <QCloseEvent>
-#include <QVector>
 #include <QDialog>
 #include <QAction>
 #include <QWidget>
-#include <QDebug>
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -18,16 +13,12 @@
 #include <QToolBar>
 #include <QLineEdit>
 #include <QSize>
-#include <vector>
 #include <QPushButton>
-#include <QLabel>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QKeySequence>
-#include <QString>
 #include <QCloseEvent>
 #include <QTimer>
-#include <QDebug>
 #include "file_process.h"
 #include "memory_new.h"
 #include "screen.h"

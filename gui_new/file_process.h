@@ -7,8 +7,8 @@
 #include <string>
 #include <QTextStream>
 #include <QDataStream>
-#include <vector>
 #include <QVector>
+#include <QDebug>
 #include "memory_new.h"
 
 class FileProcess : public QObject
