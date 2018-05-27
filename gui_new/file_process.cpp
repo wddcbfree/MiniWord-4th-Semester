@@ -4,10 +4,12 @@ void FileProcess::create_file(){
     qDebug()<<"create(): create new file!";
     OpenSignal = true;
     CreateSignal = true;
+    EditedSignal = false;
 }
 
 void FileProcess::open_file(QString path){
     OpenSignal = true;
+    EditedSignal = false;
     FilePath = path;
     std::string temp;
     QFile file(path);

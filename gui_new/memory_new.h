@@ -65,6 +65,7 @@ public:
     std::string GetIthCacheString(int i);
     std::string BlockCopy(int row1,int col1,int row2,int col2);
     void BlockDelete(int row1,int col1,int row2,int col2);
+    void Clear();
 private:
 	Link row_;
 	Link cache_;

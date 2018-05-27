@@ -39,6 +39,9 @@ public:
     bool is_edited(){
         return EditedSignal;
     }
+    void set_edited(bool is_not){
+        EditedSignal = is_not;
+    }
 public slots:
     void open_file(QString path);
     void create_file();

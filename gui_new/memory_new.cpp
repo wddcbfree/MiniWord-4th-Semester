@@ -449,6 +449,16 @@ void Text::ConfirmReplace(bool confirm_replace){
 }
 
 std::string Text::BlockCopy(int row1,int col1,int row2,int col2){
+	if(row1 > row2){
+		int temp = row2;
+		row2 = row1;
+		row1 = temp;
+	}
+	if(row1==row2 && col1 > col2){
+		int temp = col2;
+		col2 = col1;
+		col1 = temp;
+	}
 	std::string str;
 	Link record = row_;
 	for(int i=1;i<=row2-row1+1;i++){
@@ -488,6 +498,16 @@ std::string Text::BlockCopy(int row1,int col1,int row2,int col2){
 }
 
 void Text::BlockDelete(int row1,int col1,int row2,int col2){
+	if(row1 > row2){
+		int temp = row2;
+		row2 = row1;
+		row1 = temp;
+	}
+	if(row1==row2 && col1 > col2){
+		int temp = col2;
+		col2 = col1;
+		col1 = temp;
+	}
 	if(row1 == row2){
 		link temp1 = Locate(col1);
 		link temp2 = Locate(col2);
@@ -521,4 +541,14 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
 			}
 		}
 	}
+}
+
+void Text::Clear(){
+    row = 0;
+    col = 0;	
+    row_ = (Link )malloc(sizeof(Row));
+		row_->Row_Num = 0;
+		row_->pre = NULL;
+		row_->next = NULL;
+		row_->content = NULL;
 }

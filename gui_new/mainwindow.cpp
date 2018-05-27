@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     selectAction = new QAction(tr("选中块"),this);
     selectAction->setStatusTip(tr("Select"));
-    selectAction->setDisabled(1);
+
     connect(selectAction,&QAction::triggered,this,&MainWindow::select);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget *parent)
     edit->addAction(selectAction);
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     //info->addAction(aboutRole);
+
+    //菜单栏初始化
+    saveAction->setDisabled(1);
+    saveasAction->setDisabled(1);
+    selectAction->setDisabled(1);
 
     //输入框部分
     Input.setParent(this);
@@ -113,6 +118,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         Input.setReadOnly(0);
         Input.setPlaceholderText("typing...");
         Select2 = false;
+        screen.LoadScreen(*Memory);
     }
     if(Input.text() == ""){
         screen.LoadScreen(*Memory);
@@ -121,18 +127,22 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         case Qt::Key_Up:
             qDebug()<<"Cursor Up!";
             Memory->MoveUp();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Down:
             qDebug()<<"Cursor Down!";
             Memory->MoveDown();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Left:
             qDebug()<<"Cursor Left!";
             Memory->MoveLeft();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Right:
             Memory->MoveRight();
             qDebug()<<"Cursor Right!";
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Return:
             if(SelectTriggered){
@@ -146,6 +156,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     SelectTriggered = false;
                     Select1 = false;
                     Select2 = true;
+                    screen.LoadScreen(*Memory);
+                    filepart->set_edited(true);
                     break;
                 }else{
                     qDebug()<<"Start of Block Entered!";
@@ -153,18 +165,26 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     Select1 = true;
                     //row1 = Memory->GetCursorRow();
                     //col1 = Memory->GetCursorCol();
+                    screen.LoadScreen(*Memory);
                     break;
                 }
             }
             qDebug()<<"Add blank line!";
+            Memory->InsertString("");
+            filepart->set_edited(true);
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Backspace:
             qDebug()<<"Backspace!";
             Memory->Backspace();
+            filepart->set_edited(true);
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Delete:
             qDebug()<<"Delete!";
             Memory->Delete();
+            filepart->set_edited(true);
+            screen.LoadScreen(*Memory);
             break;
         //default:
             //break;
@@ -175,8 +195,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         case Qt::Key_Return:
             qDebug()<<"return success!";
             Memory->InsertString(Input.text().toStdString());
+            filepart->set_edited(true);
             selectAction->setDisabled(0);
             Input.clear();
+            screen.LoadScreen(*Memory);
             break;
         //default:
             //break;
@@ -227,15 +249,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            save();
             qDebug() << "保存！";
+            save();
             break;
         case QMessageBox::Discard:
             qDebug() << "不保存!";
             break;
+        default:
+            qDebug() << "关闭对话框！";
+            break;
         }
     }
-    filepart->clearData();
+
 }
 
 void MainWindow::create(){
@@ -258,12 +283,18 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    Memory->Clear();
+    saveAction->setEnabled(1);
+    saveasAction->setEnabled(1);
+    screen.LoadScreen(*Memory);
 }
 
 void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
     emit SendOpenPath(FilePath);
+    saveAction->setEnabled(1);
+    saveasAction->setEnabled(1);
     selectAction->setEnabled(1);
     screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
@@ -283,4 +314,5 @@ void MainWindow::save(){
 void MainWindow::save_as(){
     QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."),"新建文档.txt");
     emit SendSaveAsPath(FilePath);
+    statusBar()->showMessage("另存为成功！");
 }
