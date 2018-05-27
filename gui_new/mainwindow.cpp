@@ -113,6 +113,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         Input.setReadOnly(0);
         Input.setPlaceholderText("typing...");
         Select2 = false;
+        screen.LoadScreen(*Memory);
     }
     if(Input.text() == ""){
         screen.LoadScreen(*Memory);
@@ -121,18 +122,22 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         case Qt::Key_Up:
             qDebug()<<"Cursor Up!";
             Memory->MoveUp();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Down:
             qDebug()<<"Cursor Down!";
             Memory->MoveDown();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Left:
             qDebug()<<"Cursor Left!";
             Memory->MoveLeft();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Right:
             Memory->MoveRight();
             qDebug()<<"Cursor Right!";
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Return:
             if(SelectTriggered){
@@ -146,6 +151,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     SelectTriggered = false;
                     Select1 = false;
                     Select2 = true;
+                    screen.LoadScreen(*Memory);
                     break;
                 }else{
                     qDebug()<<"Start of Block Entered!";
@@ -153,18 +159,22 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     Select1 = true;
                     //row1 = Memory->GetCursorRow();
                     //col1 = Memory->GetCursorCol();
+                    screen.LoadScreen(*Memory);
                     break;
                 }
             }
             qDebug()<<"Add blank line!";
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Backspace:
             qDebug()<<"Backspace!";
             Memory->Backspace();
+            screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Delete:
             qDebug()<<"Delete!";
             Memory->Delete();
+            screen.LoadScreen(*Memory);
             break;
         //default:
             //break;
@@ -177,6 +187,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             Memory->InsertString(Input.text().toStdString());
             selectAction->setDisabled(0);
             Input.clear();
+            screen.LoadScreen(*Memory);
             break;
         //default:
             //break;
