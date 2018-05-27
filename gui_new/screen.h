@@ -9,9 +9,9 @@
 #include <QMainWindow>
 #include "memory_new.h"
 
-struct SursorPosition{
+struct CursorPosition{
     int column = 0;
-    int raw = 0;
+    int row = 0;
 };
 
 class Screen{
@@ -20,9 +20,10 @@ public:
     void LoadScreen(Text text);
     void DisplayScreen();
 private:
+    void RefreshScreenPosition(Text text);
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
-    struct SursorPosition relative_position_, screen_position_;
+    struct CursorPosition relative_position_, screen_position_;
     int cursor_display_count = 0;
 };
 

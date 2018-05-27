@@ -17,9 +17,20 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
 }
 
 void Screen::LoadScreen(Text text) {
-
+    RefreshScreenPosition(text);
+    screen_data_.clear();
+    auto lines_number = text.GetNumOfLines();
+    for (int i = 0; i < ROW_NUMBER; ++i) {
+        if (i + screen_position_.row < lines_number) {
+            screen_data_.push_back(QString.fromStdString(text.GetIthString(i + screen_position_.row).substr(screen_position_.column, COLUME_NUMBER)));
+        }
+        else {
+            screen_data_.push_back(QString());
+        }
+    }
     return;
 }
+
 void Screen::DisplayScreen() {
     cursor_display_count = (cursor_display_count + 1) % (DISPLAY_COUNT << 1);
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
@@ -34,6 +45,31 @@ void Screen::DisplayScreen() {
         }
         //(**iter).setText(QString::number(cursor_display_count + 1));
         (**iter).show();
+    }
+    return;
+}
+
+void Screen::RefreshScreenPosition(Text text) {
+    struct CursorPosition truth_position;
+    truth_position.column = text.GetCursorCol();
+    truth_position.row = text.GetCursorRow();
+    relative_position_.column = truth_position.column - screen_position_.column;
+    relative_position_.row = truth_position.row - screen_position_.row;
+    if (relative_position_.column >= COLUME_NUMBER) {
+        screen_position_.column += relative_position_.column - COLUME_NUMBER + 1;
+        relative_position_.column = COLUME_NUMBER - 1;
+    }
+    if (relative_position_.column < 0) {
+        screen_position_.column += relative_position_.column;
+        relative_position_.column = 0;
+    }
+    if (relative_position_.row >= ROW_NUMBER) {
+        screen_position_.row += relative_position_.row - ROW_NUMBER + 1;
+        relative_position_.row = ROW_NUMBER - 1;
+    }
+    if (relative_position_.row < 0) {
+        screen_position_.row += relative_position_.row;
+        relative_position_.row = 0;
     }
     return;
 }
