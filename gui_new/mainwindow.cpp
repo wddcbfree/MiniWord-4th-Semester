@@ -152,6 +152,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     Select1 = false;
                     Select2 = true;
                     screen.LoadScreen(*Memory);
+                    filepart->set_edited(true);
                     break;
                 }else{
                     qDebug()<<"Start of Block Entered!";
@@ -164,16 +165,20 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                 }
             }
             qDebug()<<"Add blank line!";
+            Memory->InsertString("");
+            filepart->set_edited(true);
             screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Backspace:
             qDebug()<<"Backspace!";
             Memory->Backspace();
+            filepart->set_edited(true);
             screen.LoadScreen(*Memory);
             break;
         case Qt::Key_Delete:
             qDebug()<<"Delete!";
             Memory->Delete();
+            filepart->set_edited(true);
             screen.LoadScreen(*Memory);
             break;
         //default:
@@ -185,6 +190,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         case Qt::Key_Return:
             qDebug()<<"return success!";
             Memory->InsertString(Input.text().toStdString());
+            filepart->set_edited(true);
             selectAction->setDisabled(0);
             Input.clear();
             screen.LoadScreen(*Memory);
@@ -238,15 +244,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            save();
             qDebug() << "保存！";
+            save();
             break;
         case QMessageBox::Discard:
             qDebug() << "不保存!";
             break;
+        default:
+            qDebug() << "关闭对话框！";
+            break;
         }
     }
-    filepart->clearData();
+
 }
 
 void MainWindow::create(){
@@ -269,6 +278,7 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    screen.LoadScreen(*Memory);
 }
 
 void MainWindow::open(){
