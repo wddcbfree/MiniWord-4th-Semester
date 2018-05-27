@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     selectAction = new QAction(tr("选中块"),this);
     selectAction->setStatusTip(tr("Select"));
-    selectAction->setDisabled(1);
+
     connect(selectAction,&QAction::triggered,this,&MainWindow::select);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget *parent)
     edit->addAction(selectAction);
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     //info->addAction(aboutRole);
+
+    //菜单栏初始化
+    saveAction->setDisabled(1);
+    saveasAction->setDisabled(1);
+    selectAction->setDisabled(1);
 
     //输入框部分
     Input.setParent(this);
@@ -278,6 +283,8 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    saveAction->setEnabled(1);
+    saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
 }
 
@@ -285,6 +292,8 @@ void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
     emit SendOpenPath(FilePath);
+    saveAction->setEnabled(1);
+    saveasAction->setEnabled(1);
     selectAction->setEnabled(1);
     screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
@@ -304,4 +313,5 @@ void MainWindow::save(){
 void MainWindow::save_as(){
     QString FilePath = QFileDialog::getSaveFileName(this,tr("另存为..."),"新建文档.txt");
     emit SendSaveAsPath(FilePath);
+    statusBar()->showMessage("另存为成功！");
 }
