@@ -25,7 +25,7 @@ void Screen::LoadScreen(Text text) {
             screen_data_.push_back(QString::fromStdString(text.GetIthString(i + screen_position_.row).substr(screen_position_.column, COLUME_NUMBER)));
         }
         else {
-            screen_data_.push_back(QString());
+            screen_data_.push_back(QString(" "));
         }
     }
     return;
@@ -38,10 +38,10 @@ void Screen::DisplayScreen() {
             QString temp_str = screen_data_[iter - screen_display_.begin()];
             temp_str.insert(relative_position_.column + 1, "</span>");
             temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
-            (**iter).setText(temp_str);
+            (**iter).setText("<span style=\"background-color:#FFFFFF\">" + temp_str + "</span>");
         }
         else {
-            (**iter).setText(screen_data_[iter - screen_display_.begin()]);
+            (**iter).setText("<span style=\"background-color:#FFFFFF\">" + screen_data_[iter - screen_display_.begin()] + "</span>");
         }
         //(**iter).setText(QString::number(cursor_display_count + 1));
         (**iter).show();
