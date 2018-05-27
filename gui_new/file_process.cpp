@@ -21,13 +21,16 @@ void FileProcess::open_file(QString path){
         Data.clear();
         while(!file.atEnd()){
             temp = file.readLine().toStdString();
+            temp.pop_back();
+            if(temp == "\u0000")
+                temp = "";
             Data.push_back(temp);
             Memory->AddStringEnd(temp);
         }
         qDebug()<<"open: "<<Memory->GetNumOfLines()<<" lines";
-        //for(int i = 0; i < Memory->GetNumOfLines(); ++i){
-          //  qDebug()<<QString::fromStdString(Memory->GetIthString(i));
-        //}
+        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+            qDebug()<<QString::fromStdString(Memory->GetIthString(i));
+        }
         file.close();
     }
 }
@@ -45,6 +48,7 @@ void FileProcess::save_file(QString path){
             qDebug()<<"save: "<<Memory->GetNumOfLines()<<" lines";
             for(int i = 0; i < Memory->GetNumOfLines(); ++i){
                 temp = Memory->GetIthString(i);
+                temp = temp+"\n";
                 Data.push_back(temp);
                 out<<QString::fromStdString(temp);
             }
@@ -69,6 +73,7 @@ void FileProcess::save_as(QString path){
         qDebug()<<"save_as: "<<Memory->GetNumOfLines()<<" lines";
         for(int i = 0; i < Memory->GetNumOfLines(); ++i){
             temp = Memory->GetIthString(i);
+            temp = temp+"\n";
             Data.push_back(temp);
             out<<QString::fromStdString(temp);
         }
