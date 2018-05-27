@@ -42,8 +42,8 @@ public:
     }
     void AddStringEnd(const std::string &data);
     void InsertString(const std::string &insert_string);
-    void DeleteForward();
-    void DeleteBackward();
+    void Backspace();
+    void Delete();
     void DeleteEntireLine();
     void MoveUp();
     void MoveDown();
