@@ -2,6 +2,7 @@
 
 void FileProcess::create_file(){
     qDebug()<<"create(): create new file!";
+    Memory->Clear();
     OpenSignal = true;
     CreateSignal = true;
     EditedSignal = false;
@@ -18,6 +19,7 @@ void FileProcess::open_file(QString path){
         file.close();
     }else{
         qDebug()<<"open(): file open success!";
+        Memory->Clear();
         Data.clear();
         while(!file.atEnd()){
             temp = file.readLine().toStdString();

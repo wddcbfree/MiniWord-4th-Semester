@@ -13,7 +13,7 @@
 #define WINDOW_WIDTH 800
 
 #define ROW_NUMBER 20
-#define COLUME_NUMBER 40
+#define COLUME_NUMBER 80
 
 #define REFLASH_TIME 20
 #define DISPLAY_COUNT 15

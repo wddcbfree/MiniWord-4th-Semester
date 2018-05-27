@@ -88,9 +88,6 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar();
     //工具栏
 
-    //滚动条
-    QScrollArea *scroll = new QScrollArea(this);
-
     //显示
     screen.InitiateScreen(this);
     QTimer *display_timer = new QTimer(this);
@@ -149,7 +146,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             if(SelectTriggered){
                 if(Select1){
                     qDebug()<<"End of Blcok Entered!";
-                    //Input.setReadOnly(0);
                     Input.setPlaceholderText(tr("请完成对选中块的操作(删除、拷贝)"));
                     //row2 = Memory->GetCursorRow();
                     //col2 = Memory->GetCursorCol();
@@ -283,7 +279,6 @@ void MainWindow::create(){
             break;
         }
     }
-    Memory->Clear();
     emit SendCreateSignal();
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
@@ -291,14 +286,30 @@ void MainWindow::create(){
 }
 
 void MainWindow::open(){
+    if(filepart->is_edited()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("还有未保存的修改，是否保存？"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+        msgBox.setButtonText(QMessageBox::Save,"保存");
+        msgBox.setButtonText(QMessageBox::Discard,"不保存");
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            save();
+            qDebug() << "保存！";
+            break;
+        case QMessageBox::Discard:
+            qDebug() << "不保存!";
+            break;
+        }
+    }
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
-    Memory->Clear();
     emit SendOpenPath(FilePath);
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     selectAction->setEnabled(1);
-    Memory->Clear();
     screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
 }
