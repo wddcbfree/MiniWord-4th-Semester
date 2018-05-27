@@ -542,3 +542,13 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
 		}
 	}
 }
+
+void Text::Clear(){
+    row = 0;
+    col = 0;	
+    row_ = (Link )malloc(sizeof(Row));
+		row_->Row_Num = 0;
+		row_->pre = NULL;
+		row_->next = NULL;
+		row_->content = NULL;
+}
