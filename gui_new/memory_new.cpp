@@ -1,4 +1,4 @@
-#include "memory_new.h"
+#include"memory_new.h"
 
 int Text::GetCursorRow(){
 	return row;
@@ -7,6 +7,7 @@ int Text::GetCursorRow(){
 int Text::GetCursorCol(){
 	return col;
 }
+
 
 char Text::GetithElement(int i){
 	link dest = row_->content;
@@ -37,11 +38,14 @@ void Text::AddStringEnd(const std::string &data){
 	Link temp, end = row_;
 	while(end->next)
 	    end = end->next;
-	end->next = (Link )malloc(sizeof(Row));
-	temp = end;
-	end = end->next;
-    end->pre = temp;
-	end->Row_Num = end->pre->Row_Num + 1;
+	if(end->content){
+	    end->next = (Link )malloc(sizeof(Row));
+	    temp = end;
+	    end = end->next;
+        end->pre = temp;
+	    end->Row_Num = end->pre->Row_Num + 1;
+	    end->next = NULL;
+	}
 	const char* cont = data.c_str();
 	end->content = (link )malloc(sizeof(block));
 	end->content->pre = NULL;
@@ -63,69 +67,137 @@ void Text::AddStringEnd(const std::string &data){
 }  
 
 void Text::InsertString(const std::string &insert_string){
-	const char* str = insert_string.c_str();
-	int size = 0;
-	link end = row_->content;
-	while(end){
-		size++;
-		end = end->next;
-	}    
-	if(insert_string.length() <= size-col){
-		link media = end;
-	    for(int j = 0;j < insert_string.length();j++){
-		    link medium = (link )malloc(sizeof(block));
-		    media->next = medium;
-		    medium->pre = media;
-		    medium->next = NULL;
-		    medium->num = media->num+1;
-		    medium->s[0] = GetithElement(size-insert_string.length());
-	        medium->s[1] = '\0';
-			media = medium; 
-	    }
-	    for(int j = col + insert_string.length(); j < size-insert_string.length();j++){
-	    	link ptr = Locate(j);
-	    	ptr->s[0] = GetithElement(j-insert_string.length());
+	if(insert_string.length() == 0){
+		Link temp = (Link )malloc(sizeof(Row));
+		temp->pre = row_;
+		temp->next = row_->next;
+		row_->next = temp;
+		temp->Row_Num = row_->Row_Num + 1;
+		link ptr = Locate(col);
+		if(ptr){
+		if(ptr->pre)
+		    ptr->pre->next = NULL;
+		ptr->pre = NULL;
+		temp->content = ptr;
+		link end = ptr;
+		while(end){
+			end->num -= col;
+			end = end->next;
 		}
-	    for(int j = 0;j < insert_string.length();j++){
-	        link ptr = Locate(j+col);
-	    	ptr->s[0] = str[j];
+		temp = temp->next;
+		while(temp){
+			temp->Row_Num++;
+			temp = temp->next;
+		}
+		if(col == 0)
+			row_->content = NULL;
+		}
+		else
+			temp->content = NULL;
+		row++;
+		col = 0;
+		row_ = row_->next;	
+	}
+	else{
+	    const char* str = insert_string.c_str();
+	    int size;
+	    link end;
+	    if(!row_->content){
+	        size=0;
+	        end = NULL;
+	    }
+	    else{
+	        size = 1;
+	        end = row_->content;
+	        while(end->next){
+		        size++;
+		        end = end->next;
+	        }
+            }
+	    if(insert_string.length() <= size-col){
+		    link media = end;
+	        for(int j = 0;j < insert_string.length();j++){
+		        link medium = (link )malloc(sizeof(block));
+		        media->next = medium;
+		        medium->pre = media;
+		        medium->next = NULL;
+		        medium->s[0] = GetithElement(size-insert_string.length()+j);
+	                medium->s[1] = '\0';
+			media = medium; 
+	        }
+	        std::string s;
+	        for(int j = col + insert_string.length(); j < size;j++)
+	            s += GetithElement(j-insert_string.length());
+	        for(int j = col + insert_string.length(); j < size;j++){
+	    	    link ptr = Locate(j);
+	    	    ptr->s[0] = s[j-col-insert_string.length()];
+		    }
+	        for(int j = 0;j < insert_string.length();j++){
+	            link ptr = Locate(j+col);
+	    	    ptr->s[0] = str[j];
+	        }
+        }
+        else{
+    	    link media = end;
+    	    link medium = (link )malloc(sizeof(block));
+    	    if(media){
+			    for(int j = size-col ;j < insert_string.length();j++){
+		            link medium = (link )malloc(sizeof(block));
+		            media->next = medium;
+		            medium->pre = media;
+		            medium->next = NULL;
+		            medium->num = media->num+1;
+		            medium->s[0] = str[j];
+	                medium->s[1] = '\0';
+			        media = medium;
+	            }
+	            std::string s;
+	            for(int j = col;j < size;j++)
+	                s += GetithElement(j);
+	            for(int j = col;j < size;j++){
+		            link medium = (link )malloc(sizeof(block));
+		            media->next = medium;
+		            medium->pre = media;
+		            medium->next = NULL;
+		            medium->num = media->num+1;
+		            medium->s[0] = s[j-col];
+	                medium->s[1] = '\0';
+			        media = medium; 
+	            }
+	            for(int j = col;j < size;j++){
+		            link ptr = Locate(j);
+	    	        ptr->s[0] = str[j-col];
+	            }
+		    }
+		    else{
+		        row_->content = medium;
+		        medium->num = 0;
+		        medium->pre = NULL;
+		        medium->next = NULL;
+		        medium->s[0] = insert_string[0];
+		        medium->s[1] = '\0';
+		        media = medium;
+		        for(int j=1;j<insert_string.length();j++){
+		    	    medium = (link )malloc(sizeof(block));
+		    	    media->next = medium;
+		            medium->num = media->num+1;
+		            medium->pre = media;
+		            medium->next = NULL;
+		            medium->s[0] = insert_string[j];
+	                medium->s[1] = '\0';
+			        media = medium;
+			    }
+		    }
 	    }
     }
-    else{
-    	link media = end;
-    	for(int j = size-col;j < insert_string.length();j++){
-		    link medium = (link )malloc(sizeof(block));
-		    media->next = medium;
-		    medium->pre = media;
-		    medium->next = NULL;
-		    medium->num = media->num+1;
-		    medium->s[0] = str[j];
-	        medium->s[1] = '\0';
-			media = medium; 
-	    }
-	    for(int j = col;j < size;j++){
-		    link medium = (link )malloc(sizeof(block));
-		    media->next = medium;
-		    medium->pre = media;
-		    medium->next = NULL;
-		    medium->num = media->num+1;
-		    medium->s[0] = GetithElement(j);
-	        medium->s[1] = '\0';
-			media = medium; 
-	    }
-	    for(int j = col;j < size;j++){
-		    link ptr = Locate(j);
-	    	ptr->s[0] = str[j-col];
-	    }
-	    
-	}
 }
 
-void Text::DeleteForward(){
+void Text::Backspace(){
 	if(col != 0){
 		link ptr1 = Locate(col);
 		link ptr2 = Locate(col-1);
-		ptr1->pre = ptr2;
+		if(ptr1)
+		    ptr1->pre = ptr2;
 		if(ptr2->pre)
 		    ptr2->pre->next = ptr1;
 		else
@@ -136,47 +208,58 @@ void Text::DeleteForward(){
 	    if(row != 0){
 		    Link temp = row_->pre;
 		    temp->next = row_->next;
-		    row_->next->pre = temp;
-		    int size=0;
+		    if(row_->next)
+		        row_->next->pre = temp;
 		    link end = temp->content;
-		    while(end){
-		        end = end->next;
-		        size++;
-		    }
-		    end->next = row_->content;
-		    row_->content->pre = end;
-		    link media = row_->content;
-		    while(media){
-			    media->num += size;
-			    media = media->next;
-		    }
-		    col = size;
-		    row--; 
-		    row_ = temp;
+		    if(!end){
+	            int size=0;
+	            temp->content = row_->content;
+	            col = 0;
+		        row--; 
+		        row_ = temp;
+	        }
+	        else{
+	            int size = 1;
+	            while(end->next){
+		            size++;
+		            end = end->next;
+	            }
+	            end->next = row_->content;
+		        if(row_->content)
+		            row_->content->pre = end;
+		        link media = row_->content;
+		        while(media){
+			        media->num += size;
+			        media = media->next;
+		        }
+		        col = size;
+		        row--; 
+		        row_ = temp;
+            }
 	    }
 	}
 }
 
-void Text::DeleteBackward(){
+void Text::Delete(){
 	link ptr = Locate(col);
 	if(ptr){
 		col++;
-		DeleteForward();
+		Backspace();
 	}
 	else{
 		if(row_->next){
 			row++;
 			row_ =row_->next;
 			col = 0;
-			DeleteForward();
+			Backspace();
 		}
 	}
 }
 
 void Text::DeleteEntireLine(){
-	if(row_->pre)
-	    row_->pre = row_->next;
-	if(row_->next){
+	if(row_->next && row_->pre){
+		row_->pre = row_->next;
+		row_->next->pre = row_->pre; 
 		row_ = row_->next;
 		row++;
 		int size=0;
@@ -186,11 +269,44 @@ void Text::DeleteEntireLine(){
 		    size++;
 		}
 		if(col > size)
-		    col = size;    
+		    col = size;
+		Link  temp = row_;
+		while(temp){
+			temp->Row_Num--;
+			temp = temp->next;
+		}
+		return;
 	}
-	else if(row_->pre)
-	        MoveUp();
-	else col = 0;	
+	if(!row_->next && !row_->pre){
+		col = 0;
+		row_->content = NULL;
+		return;
+	}
+	if(!row_->next && row_->pre){
+		row_->pre->next = NULL;
+		row_ = row_->pre;
+        row--;
+        int size=0;
+		link end = row_->content;
+		while(end){
+		    end = end->next;
+		    size++;
+		}
+		if(col > size)
+		    col = size;
+		return;
+	}
+	if(row_->next && !row_->pre){
+		row_ = row_->next;
+		row_->pre = NULL;
+		MoveDown();
+		Link temp = row_;
+		while(temp){
+			temp->Row_Num--;
+			temp = temp->next;
+		}
+		return;
+	}	
 }
 
 void Text::MoveUp(){
@@ -326,7 +442,7 @@ void Text::ReplaceString(const std::string &search_word, const std::string &repl
 void Text::ConfirmReplace(bool confirm_replace){
 	if(confirm_replace){
 	    for(int j=1;j<=replaced_length;j++)
-	        DeleteBackward();
+	        Delete();
 	    InsertString(replace_);
 	}	
 }
