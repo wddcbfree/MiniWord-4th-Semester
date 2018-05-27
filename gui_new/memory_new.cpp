@@ -197,7 +197,7 @@ void Text::Backspace(){
 		link ptr1 = Locate(col);
 		link ptr2 = Locate(col-1);
 		if(ptr1)
-		    ptr1->pre = ptr2;
+		    ptr1->pre = ptr2->pre;
 		if(ptr2->pre)
 		    ptr2->pre->next = ptr1;
 		else
