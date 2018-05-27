@@ -283,6 +283,7 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    Memory->Clear();
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
