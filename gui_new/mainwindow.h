@@ -17,6 +17,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QKeySequence>
+#include <QScrollArea>
 #include <QCloseEvent>
 #include <QTimer>
 #include "file_process.h"

@@ -28,7 +28,7 @@ void FileProcess::open_file(QString path){
             Memory->AddStringEnd(temp);
         }
         qDebug()<<"open: "<<Memory->GetNumOfLines()<<" lines";
-        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+        for(int i = 0; i <= Memory->GetNumOfLines(); ++i){
             qDebug()<<QString::fromStdString(Memory->GetIthString(i));
         }
         file.close();
@@ -46,7 +46,7 @@ void FileProcess::save_file(QString path){
             std::string temp;
             Data.clear();
             qDebug()<<"save: "<<Memory->GetNumOfLines()<<" lines";
-            for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+            for(int i = 0; i <= Memory->GetNumOfLines(); ++i){
                 temp = Memory->GetIthString(i);
                 temp = temp+"\n";
                 Data.push_back(temp);
@@ -71,7 +71,7 @@ void FileProcess::save_as(QString path){
         std::string temp;
         Data.clear();
         qDebug()<<"save_as: "<<Memory->GetNumOfLines()<<" lines";
-        for(int i = 0; i < Memory->GetNumOfLines(); ++i){
+        for(int i = 0; i <= Memory->GetNumOfLines(); ++i){
             temp = Memory->GetIthString(i);
             temp = temp+"\n";
             Data.push_back(temp);

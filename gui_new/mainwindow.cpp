@@ -84,11 +84,12 @@ MainWindow::MainWindow(QWidget *parent)
     InputTips.show();
     InputTips.setText("test");
 
- //   InitiateSceen();
-
     //状态栏
     statusBar();
     //工具栏
+
+    //滚动条
+    QScrollArea *scroll = new QScrollArea(this);
 
     //显示
     screen.InitiateScreen(this);
@@ -296,6 +297,7 @@ void MainWindow::open(){
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     selectAction->setEnabled(1);
+    Memory->Clear();
     screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
 }
