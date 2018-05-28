@@ -382,7 +382,7 @@ int Text::GetNumOfLines(){
 	    end = end->next;
 	    cnt++;
 	}
-	return cnt;
+	return cnt+1;
 } 
 
 std::string Text::GetIthString(int i){
