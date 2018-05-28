@@ -43,7 +43,7 @@ public:
         row_->next = NULL;
         row_->content = NULL;
     }
-    void AddStringEnd(const QString &data);
+    void AddStringEnd(const QString &data, bool is_first);
     void InsertString(const QString &insert_string);
     void Backspace();
     void Delete();
