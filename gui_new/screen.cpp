@@ -22,12 +22,7 @@ void Screen::LoadScreen(Text text) {
     auto lines_number = text.GetNumOfLines();
     for (int i = 0; i < ROW_NUMBER; ++i) {
         if (i + screen_position_.row < lines_number && screen_position_.column < text.GetIthString(i + screen_position_.row).length()) {
-            QString temp_text = QString::fromStdString(text.GetIthString(i + screen_position_.row).substr(screen_position_.column, COLUME_NUMBER));
-            /*
-            if (temp_text == "\u0000") {
-                temp_text = " ";
-            }
-            */
+            QString temp_text = text.GetIthString(i + screen_position_.row).mid(screen_position_.column, COLUME_NUMBER);
             screen_data_.push_back(temp_text);
         }
         else {
