@@ -35,16 +35,18 @@ int Text::CntElement(){
     return size;
 }
   
-void Text::AddStringEnd(const QString &data){
+void Text::AddStringEnd(const QString &data, bool is_first){
     Link temp, end = row_;
 	while(end->next)
 	    end = end->next;
-	end->next = (Link )malloc(sizeof(Row));
-	temp = end;
-	end = end->next;
+	if(!is_first){
+        end->next = (Link )malloc(sizeof(Row));
+        temp = end;
+        end = end->next;
         end->pre = temp;
-	end->Row_Num = end->pre->Row_Num + 1;
-	end->next = NULL;
+        end->Row_Num = end->pre->Row_Num + 1;
+        end->next = NULL;
+    }
 	if(!data.length()){
             end->content = NULL;
             return;
