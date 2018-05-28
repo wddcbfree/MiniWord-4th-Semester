@@ -23,9 +23,19 @@ void FileProcess::open_file(QString path){
         Data.clear();
         while(!file.atEnd()){
             temp = file.readLine();
+            qDebug()<<temp.mid(0,temp.length()-1);
             //temp.pop_back();
-            Data.push_back(temp);
-            Memory->AddStringEnd(temp);
+            if(temp == "\n"){
+                Data.push_back("");
+                Memory->AddStringEnd("");
+                //qDebug()<<"Dealt with blank line!";
+            }
+            else{
+                Data.push_back(temp.mid(0,temp.length()-1));
+                Memory->AddStringEnd(temp.mid(0,temp.length()-1));
+                //qDebug()<<"Dealt with a line!";
+            }
+
         }
         qDebug()<<"open: "<<Memory->GetNumOfLines()<<" lines";
         for(int i = 0; i < Memory->GetNumOfLines(); ++i){
