@@ -9,7 +9,7 @@ int Text::GetCursorCol(){
 }
 
 
-char Text::GetithElement(int i){
+QChar Text::GetithElement(int i){
 	link dest = row_->content;
 	for(int j=1;j<=i;j++){
 		dest = dest->next;
@@ -32,10 +32,11 @@ int Text::CntElement(){
 		size++;
 		end = end->next;
 	}
+    return size;
 }
   
-void Text::AddStringEnd(const std::string &data){
-	Link temp, end = row_;
+void Text::AddStringEnd(const QString &data){
+    Link temp, end = row_;
 	while(end->next)
 	    end = end->next;
 	if(end->content){
@@ -46,12 +47,11 @@ void Text::AddStringEnd(const std::string &data){
 	    end->Row_Num = end->pre->Row_Num + 1;
 	    end->next = NULL;
 	}
-	const char* cont = data.c_str();
 	end->content = (link )malloc(sizeof(block));
 	end->content->pre = NULL;
 	end->content->next = NULL;
 	end->content->num = 0;
-	end->content->s[0] = cont[0];
+    end->content->s[0] = data[0];
 	end->content->s[1] = '\0';
 	link media = end->content;
 	for(int i=1;i<data.length();i++){
@@ -60,13 +60,13 @@ void Text::AddStringEnd(const std::string &data){
 		medium->pre = media;
 		medium->next = NULL;
 		medium->num = media->num+1;
-		medium->s[0] = cont[i];
+        medium->s[0] = data[i];
 	    medium->s[1] = '\0';
 		media = medium; 
 	}     
 }  
 
-void Text::InsertString(const std::string &insert_string){
+void Text::InsertString(const QString &insert_string){
 	if(insert_string.length() == 0){
 		Link temp = (Link )malloc(sizeof(Row));
 		temp->pre = row_;
@@ -75,31 +75,31 @@ void Text::InsertString(const std::string &insert_string){
 		temp->Row_Num = row_->Row_Num + 1;
 		link ptr = Locate(col);
 		if(ptr){
-		if(ptr->pre)
-		    ptr->pre->next = NULL;
-		ptr->pre = NULL;
-		temp->content = ptr;
-		link end = ptr;
-		while(end){
-			end->num -= col;
-			end = end->next;
+            if(ptr->pre)
+                ptr->pre->next = NULL;
+            ptr->pre = NULL;
+            temp->content = ptr;
+            link end = ptr;
+            while(end){
+                end->num -= col;
+                end = end->next;
+            }
+            temp = temp->next;
+            while(temp){
+                temp->Row_Num++;
+                temp = temp->next;
+            }
+            if(col == 0)
+                row_->content = NULL;
 		}
-		temp = temp->next;
-		while(temp){
-			temp->Row_Num++;
-			temp = temp->next;
-		}
-		if(col == 0)
-			row_->content = NULL;
-		}
-		else
-			temp->content = NULL;
+        else{
+            temp->content = NULL;
+        }
 		row++;
 		col = 0;
 		row_ = row_->next;	
 	}
 	else{
-	    const char* str = insert_string.c_str();
 	    int size;
 	    link end;
 	    if(!row_->content){
@@ -113,7 +113,7 @@ void Text::InsertString(const std::string &insert_string){
 		        size++;
 		        end = end->next;
 	        }
-            }
+        }
 	    if(insert_string.length() <= size-col){
 		    link media = end;
 	        for(int j = 0;j < insert_string.length();j++){
@@ -122,10 +122,10 @@ void Text::InsertString(const std::string &insert_string){
 		        medium->pre = media;
 		        medium->next = NULL;
 		        medium->s[0] = GetithElement(size-insert_string.length()+j);
-	                medium->s[1] = '\0';
-			media = medium; 
+                medium->s[1] = '\0';
+                media = medium;
 	        }
-	        std::string s;
+            QString s;
 	        for(int j = col + insert_string.length(); j < size;j++)
 	            s += GetithElement(j-insert_string.length());
 	        for(int j = col + insert_string.length(); j < size;j++){
@@ -134,7 +134,7 @@ void Text::InsertString(const std::string &insert_string){
 		    }
 	        for(int j = 0;j < insert_string.length();j++){
 	            link ptr = Locate(j+col);
-	    	    ptr->s[0] = str[j];
+                ptr->s[0] = insert_string[j];
 	        }
         }
         else{
@@ -147,11 +147,11 @@ void Text::InsertString(const std::string &insert_string){
 		            medium->pre = media;
 		            medium->next = NULL;
 		            medium->num = media->num+1;
-		            medium->s[0] = str[j];
+                    medium->s[0] = insert_string[j];
 	                medium->s[1] = '\0';
 			        media = medium;
 	            }
-	            std::string s;
+                QString s;
 	            for(int j = col;j < size;j++)
 	                s += GetithElement(j);
 	            for(int j = col;j < size;j++){
@@ -166,7 +166,7 @@ void Text::InsertString(const std::string &insert_string){
 	            }
 	            for(int j = col;j < size;j++){
 		            link ptr = Locate(j);
-	    	        ptr->s[0] = str[j-col];
+                    ptr->s[0] = insert_string[j-col];
 	            }
 		    }
 		    else{
@@ -314,11 +314,13 @@ void Text::MoveUp(){
 	    row_ = row_->pre;
 	    row--;
 	    int size=0;
-		link end = row_->content;
-		while(end){
-		    end = end->next;
-		    size++;
-		}
+        if(row_){
+            link end = row_->content;
+            while(end){
+                end = end->next;
+                size++;
+            }
+        }
 	    if(col > size)
 	        col = size;
 	} 
@@ -382,11 +384,11 @@ int Text::GetNumOfLines(){
 	    end = end->next;
 	    cnt++;
 	}
-	return cnt+1;
-} 
+    return cnt+1;
+}
 
-std::string Text::GetIthString(int i){
-	std::string str;
+QString Text::GetIthString(int i){
+    QString str = "";
 	Link temp = row_;
 	if(row > i){
 		int cnt = row;
@@ -405,10 +407,10 @@ std::string Text::GetIthString(int i){
 	int size=0;
 	link end = temp->content;
 	while(end){
-		str += end->s[0]; 
+        str = str + end->s[0];
 	    end = end->next;
 	}
-	return str;
+    return str;
 }
 
 bool Text::SearchWord(const std::string &search_word){
@@ -444,11 +446,11 @@ void Text::ConfirmReplace(bool confirm_replace){
 	if(confirm_replace){
 	    for(int j=1;j<=replaced_length;j++)
 	        Delete();
-	    InsertString(replace_);
+        //InsertString(replace_);
 	}	
 }
 
-std::string Text::BlockCopy(int row1,int col1,int row2,int col2){
+QString Text::BlockCopy(int row1,int col1,int row2,int col2){
 	if(row1 > row2){
 		int temp = row2;
 		row2 = row1;
@@ -459,21 +461,21 @@ std::string Text::BlockCopy(int row1,int col1,int row2,int col2){
 		col2 = col1;
 		col1 = temp;
 	}
-	std::string str;
+    QString str = "";
 	Link record = row_;
 	for(int i=1;i<=row2-row1+1;i++){
 		if(i==1){
 			if(row1==row2){
 				link temp = Locate(col1);
 			    while(temp!=Locate(col2)){
-				    str += temp->s[0];
+                    str += temp->s[0];
 				    temp = temp->next;
 			    }
 			}
 			else{
 			    link temp = Locate(col1);
 			    while(temp){
-				    str += temp->s[0];
+                    str += temp->s[0];
 				    temp = temp->next;
 			    }
 			}
@@ -481,14 +483,14 @@ std::string Text::BlockCopy(int row1,int col1,int row2,int col2){
 		else if(i==row2-row1+1){
 			link media = record->content;
 			for(int i=0;i<col2;i++){
-				str += media->s[0];
+                str += media->s[0];
 				media = media->next;
 			}
 		}
 		else{
 			link media = record->content;
 			while(media){
-			    str += media->s[0];
+                str += media->s[0];
 				media = media->next;
 			}
 		}
@@ -545,10 +547,17 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
 
 void Text::Clear(){
     row = 0;
-    col = 0;	
+    col = 0;
+    while(row_->pre)
+        row_ = row_->pre;
+    while(row_){
+        Link end = row_->next;
+        free(row_);
+        row_ = end;
+    }
     row_ = (Link )malloc(sizeof(Row));
-		row_->Row_Num = 0;
-		row_->pre = NULL;
-		row_->next = NULL;
-		row_->content = NULL;
+    row_->Row_Num = 0;
+    row_->pre = NULL;
+    row_->next = NULL;
+    row_->content = NULL;
 }
