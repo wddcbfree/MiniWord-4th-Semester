@@ -257,7 +257,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
             break;
         }
     }
-
 }
 
 void MainWindow::create(){

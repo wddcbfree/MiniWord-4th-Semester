@@ -37,9 +37,9 @@ int Text::CntElement(){
   
 void Text::AddStringEnd(const QString &data, bool is_first){
     Link temp, end = row_;
-	while(end->next)
-	    end = end->next;
-	if(!is_first){
+    while(end->next)
+        end = end->next;
+    if(!is_first){
         end->next = (Link )malloc(sizeof(Row));
         temp = end;
         end = end->next;
@@ -47,26 +47,26 @@ void Text::AddStringEnd(const QString &data, bool is_first){
         end->Row_Num = end->pre->Row_Num + 1;
         end->next = NULL;
     }
-	if(!data.length()){
-            end->content = NULL;
-            return;
-        }
-	end->content = (link )malloc(sizeof(block));
-	end->content->pre = NULL;
-	end->content->next = NULL;
-	end->content->num = 0;
+    if(!data.length()){
+        end->content = NULL;
+        return;
+    }
+    end->content = (link )malloc(sizeof(block));
+    end->content->pre = NULL;
+    end->content->next = NULL;
+    end->content->num = 0;
     end->content->s[0] = data[0];
-	end->content->s[1] = '\0';
-	link media = end->content;
-	for(int i=1;i<data.length();i++){
-		link medium = (link )malloc(sizeof(block));
-		media->next = medium;
-		medium->pre = media;
-		medium->next = NULL;
-		medium->num = media->num+1;
+    end->content->s[1] = '\0';
+    link media = end->content;
+    for(int i=1;i<data.length();i++){
+        link medium = (link )malloc(sizeof(block));
+        media->next = medium;
+        medium->pre = media;
+        medium->next = NULL;
+        medium->num = media->num+1;
         medium->s[0] = data[i];
-	    medium->s[1] = '\0';
-		media = medium; 
+        medium->s[1] = '\0';
+        media = medium;
 	}     
 }  
 
