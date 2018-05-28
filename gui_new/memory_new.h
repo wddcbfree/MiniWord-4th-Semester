@@ -7,6 +7,9 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <QDebug>
+#include <QString>
+#include <QChar>
 #include "const_define.h"
 
 /*struct ScreenInfo {
@@ -20,7 +23,7 @@ typedef struct Row* Link;
 typedef struct block* link;
 struct block{ 
 	link pre,next;
-	char s[100];
+    QChar s[100];
 	int num;
 };
 struct Row{
@@ -32,16 +35,16 @@ struct Row{
 class Text {
 public:
     Text(){
-	row = 0;
-	col = 0;
-	row_ = (Link )malloc(sizeof(Row));
-	row_->Row_Num = 0;
-	row_->pre = NULL;
-	row_->next = NULL;
-	row_->content = NULL;
+        row = 0;
+        col = 0;
+        row_ = (Link )malloc(sizeof(Row));
+        row_->Row_Num = 0;
+        row_->pre = NULL;
+        row_->next = NULL;
+        row_->content = NULL;
     }
-    void AddStringEnd(const std::string &data);
-    void InsertString(const std::string &insert_string);
+    void AddStringEnd(const QString &data);
+    void InsertString(const QString &insert_string);
     void Backspace();
     void Delete();
     void DeleteEntireLine();
@@ -51,7 +54,7 @@ public:
     void MoveLeft();
     int GetCursorRow();
     int GetCursorCol();
-    char GetithElement(int i);
+    QChar GetithElement(int i);
     link Locate(int i);
     int CntElement();
     bool SearchWord(const std::string &search_word);
@@ -59,11 +62,11 @@ public:
     void ConfirmReplace(bool confirm_replace);
     void RefreshScreenPosition();
     int GetNumOfLines();
-    std::string GetIthString(int i);
+    QString GetIthString(int i);
     //ScreenInfo GetPosition();
     void RefreshScreenCache();
-    std::string GetIthCacheString(int i);
-    std::string BlockCopy(int row1,int col1,int row2,int col2);
+    QString GetIthCacheString(int i);
+    QString BlockCopy(int row1,int col1,int row2,int col2);
     void BlockDelete(int row1,int col1,int row2,int col2);
     void Clear();
 private:
