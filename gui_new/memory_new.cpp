@@ -39,14 +39,12 @@ void Text::AddStringEnd(const QString &data){
     Link temp, end = row_;
 	while(end->next)
 	    end = end->next;
-	if(end->content){
-	    end->next = (Link )malloc(sizeof(Row));
-	    temp = end;
-	    end = end->next;
-            end->pre = temp;
-	    end->Row_Num = end->pre->Row_Num + 1;
-	    end->next = NULL;
-	}
+	end->next = (Link )malloc(sizeof(Row));
+	temp = end;
+	end = end->next;
+        end->pre = temp;
+	end->Row_Num = end->pre->Row_Num + 1;
+	end->next = NULL;
 	if(!data.length()){
             end->content = NULL;
             return;
