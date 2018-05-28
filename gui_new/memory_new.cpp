@@ -412,7 +412,7 @@ QString Text::GetIthString(int i){
 	}
     return str;
 }
-
+/*
 bool Text::SearchWord(const std::string &search_word){
 	link temp = Locate(col);
 	int cnt = col;
@@ -441,7 +441,7 @@ void Text::ReplaceString(const std::string &search_word, const std::string &repl
 	replaced_length = search_word.length();
 	//if(!signal)	   
 } 
-
+*/
 void Text::ConfirmReplace(bool confirm_replace){
 	if(confirm_replace){
 	    for(int j=1;j<=replaced_length;j++)

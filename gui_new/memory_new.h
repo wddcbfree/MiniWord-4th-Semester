@@ -57,8 +57,8 @@ public:
     QChar GetithElement(int i);
     link Locate(int i);
     int CntElement();
-    bool SearchWord(const std::string &search_word);
-    void ReplaceString(const std::string &search_word, const std::string &replace);
+    //bool SearchWord(const std::string &search_word);
+    //void ReplaceString(const std::string &search_word, const std::string &replace);
     void ConfirmReplace(bool confirm_replace);
     void RefreshScreenPosition();
     int GetNumOfLines();

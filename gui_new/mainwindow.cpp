@@ -191,7 +191,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         switch (event->key()) {
         case Qt::Key_Return:
             qDebug()<<"return success!";
-            Memory->InsertString(Input.text().toStdString());
+            Memory->InsertString(Input.text());
             filepart->set_edited(true);
             selectAction->setDisabled(0);
             Input.clear();

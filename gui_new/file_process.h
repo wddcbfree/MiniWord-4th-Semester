@@ -18,13 +18,13 @@ public:
     void init_memory(Text *memory){
         Memory = memory;
     }
-    std::vector<std::string> get_data(){
+    QVector<QString> get_data(){
         return Data;
     }
     void pre_set_data(){
         Data.clear();
     }
-    void set_data(std::string line){
+    void set_data(QString line){
         Data.push_back(line);
     }
     void clearData(){
@@ -52,8 +52,8 @@ private:
     bool OpenSignal = false;
     bool EditedSignal = false;
     QString FilePath;
-    std::vector<std::string> Data;
-
+    //std::vector<std::string> Data;
+    QVector<QString> Data;
     Text *Memory;//数据结构部分
 };
 
