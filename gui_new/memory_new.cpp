@@ -76,6 +76,8 @@ void Text::InsertString(const QString &insert_string){
 		temp->pre = row_;
 		temp->next = row_->next;
 		row_->next = temp;
+		if(temp->next)
+                    temp->next->pre = temp;
 		temp->Row_Num = row_->Row_Num + 1;
 		link ptr = Locate(col);
 		if(ptr){
