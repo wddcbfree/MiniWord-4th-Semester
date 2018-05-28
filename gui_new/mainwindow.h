@@ -45,6 +45,7 @@ signals:
     void SendSavePath(QString path);
     void SendSaveAsPath(QString path);
 protected:
+    void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
     //void paintEvent(QPaintEvent *);
     void closeEvent(QCloseEvent *event);
@@ -53,7 +54,6 @@ private:
     void open();
     void save();
     void save_as();
-
     void search();
     void select();
 
@@ -66,10 +66,9 @@ private:
     QAction *replaceAction;
     QAction *selectAction;
 
-    int row1,col1,row2,col2;
+    int row_ = -1,col_ = -1,row1 = -1,col1 = -1,row2 = -1,col2 = -1;
+
     bool SelectTriggered = false;
-    bool Select1 = false;
-    bool Select2 = false;
     bool Selected = false;
 
     QLineEdit Input;
@@ -77,7 +76,6 @@ private:
 
     FileProcess *filepart;
     Text *Memory;
-
     Screen screen;
 private slots:
     void DisplayScreen();

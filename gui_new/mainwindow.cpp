@@ -103,105 +103,141 @@ void MainWindow::select(){
     SelectTriggered = true;
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    if(Select2){
-        if(event->key() == Qt::Key_Backspace){
-            qDebug()<<"Block Deleted!";
-            //Memory->BlockDelete(row1,col1,row2,col2);
-        }else if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C){
-            qDebug()<<"Block Copied!";
-            Selected = true;
-            statusBar()->showMessage(tr("块复制成功！"));
-        }
-        Input.setReadOnly(0);
-        Input.setPlaceholderText("typing...");
-        Select2 = false;
+void MainWindow::keyPressEvent(QKeyEvent *event){
+    if(event->key() == Qt::Key_Alt){
+        qDebug()<<"SelectTriggered!";
+        SelectTriggered = true;
+        col_ = Memory->GetCursorCol();
+        row_ = Memory->GetCursorRow();
+        statusBar()->showMessage("进入块选择模式");
         screen.LoadScreen(*Memory);
     }
-    if(Input.text() == ""){
-        screen.LoadScreen(*Memory);
-        selectAction->setDisabled(0);
-        switch (event->key()) {
-        case Qt::Key_Up:
-            qDebug()<<"Cursor Up!";
-            Memory->MoveUp();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+    if(Selected){
+        if(event->key() == Qt::Key_Backspace){
+            //Memory->BlockDelete(row_,col_,Memory->GetCursorRow(),Memory->GetCursorRow());
+            qDebug()<<"Block Deleted!";
+        }
+        if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C){
+            col1 = col_;row1 = row_;
+            col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
+            statusBar()->showMessage("块复制成功！");
+            //取消高亮
             screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Down:
-            qDebug()<<"Cursor Down!";
-            Memory->MoveDown();
+            qDebug()<<"Block Copied!";
+        }
+        if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V){
+            //Memory->BlockDelete(row_,col_,Memory->GetCursorRow(),Memory->GetCursorRow());
+            //Memory->BlockCopy(row1,col1,row2,col2);
+            //取消高亮
             screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Left:
-            qDebug()<<"Cursor Left!";
-            Memory->MoveLeft();
-            screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Right:
-            Memory->MoveRight();
-            qDebug()<<"Cursor Right!";
-            screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Return:
-            if(SelectTriggered){
-                if(Select1){
-                    qDebug()<<"End of Blcok Entered!";
-                    Input.setPlaceholderText(tr("请完成对选中块的操作(删除、拷贝)"));
-                    //row2 = Memory->GetCursorRow();
-                    //col2 = Memory->GetCursorCol();
-                    //调用块操作接口
-                    SelectTriggered = false;
-                    Select1 = false;
-                    Select2 = true;
+            qDebug()<<"Block Pasted!";
+        }
+        col_ = -1,row_ = -1;
+        Selected = false;
+    }else{
+        if(SelectTriggered){//开始块选择
+            switch (event->key()) {
+            case Qt::Key_Up:
+                qDebug()<<"Selected Cursor Up!";
+                Memory->MoveUp();
+                //高亮
+                screen.LoadScreen(*Memory);
+                break;
+            case Qt::Key_Down:
+                qDebug()<<"Selected Cursor Down!";
+                Memory->MoveDown();
+                //高亮
+                screen.LoadScreen(*Memory);
+                break;
+            case Qt::Key_Left:
+                qDebug()<<"Selected Cursor Left!";
+                Memory->MoveLeft();
+                //高亮
+                screen.LoadScreen(*Memory);
+                break;
+            case Qt::Key_Right:
+                Memory->MoveRight();
+                qDebug()<<"Selected Cursor Right!";
+                screen.LoadScreen(*Memory);
+                break;
+            case Qt::Key_Alt://块选择结束
+                qDebug()<<"Block Selected!";
+                SelectTriggered = false;
+                Selected = true;
+                break;
+            default:
+                qDebug()<<"Cancel Block Select!";
+                SelectTriggered = false;
+                row_ = -1,col_ = -1;
+                //取消高亮
+                break;
+            }
+        }else{
+            if(Input.text() == ""){
+                screen.LoadScreen(*Memory);
+                selectAction->setDisabled(0);
+                switch (event->key()) {
+                case Qt::Key_Up:
+                    qDebug()<<"Cursor Up!";
+                    Memory->MoveUp();
                     screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Down:
+                    qDebug()<<"Cursor Down!";
+                    Memory->MoveDown();
+                    screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Left:
+                    qDebug()<<"Cursor Left!";
+                    Memory->MoveLeft();
+                    screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Right:
+                    Memory->MoveRight();
+                    qDebug()<<"Cursor Right!";
+                    screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Return:
+                    qDebug()<<"Add blank line!";
+                    Memory->InsertString("");
                     filepart->set_edited(true);
-                    break;
-                }else{
-                    qDebug()<<"Start of Block Entered!";
-                    Input.setPlaceholderText(tr("请移动光标选择块的结尾，按 Enter 键确认"));
-                    Select1 = true;
-                    //row1 = Memory->GetCursorRow();
-                    //col1 = Memory->GetCursorCol();
                     screen.LoadScreen(*Memory);
                     break;
+                case Qt::Key_Backspace:
+                    qDebug()<<"Backspace!";
+                    Memory->Backspace();
+                    filepart->set_edited(true);
+                    screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Delete:
+                    qDebug()<<"Delete!";
+                    Memory->Delete();
+                    filepart->set_edited(true);
+                    screen.LoadScreen(*Memory);
+                    break;
+                //default:
+                    //break;
+                }
+            }else{
+                selectAction->setDisabled(1);
+                switch (event->key()) {
+                case Qt::Key_Return:
+                    qDebug()<<"return success!";
+                    Memory->InsertString(Input.text());
+                    filepart->set_edited(true);
+                    selectAction->setDisabled(0);
+                    Input.clear();
+                    screen.LoadScreen(*Memory);
+                    break;
+                //default:
+                    //break;
                 }
             }
-            qDebug()<<"Add blank line!";
-            Memory->InsertString("");
-            filepart->set_edited(true);
-            screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Backspace:
-            qDebug()<<"Backspace!";
-            Memory->Backspace();
-            filepart->set_edited(true);
-            screen.LoadScreen(*Memory);
-            break;
-        case Qt::Key_Delete:
-            qDebug()<<"Delete!";
-            Memory->Delete();
-            filepart->set_edited(true);
-            screen.LoadScreen(*Memory);
-            break;
-        //default:
-            //break;
-        }
-    }else{
-        selectAction->setDisabled(1);
-        switch (event->key()) {
-        case Qt::Key_Return:
-            qDebug()<<"return success!";
-            Memory->InsertString(Input.text());
-            filepart->set_edited(true);
-            selectAction->setDisabled(0);
-            Input.clear();
-            screen.LoadScreen(*Memory);
-            break;
-        //default:
-            //break;
         }
     }
-
 }
 
 void MainWindow::search(){
