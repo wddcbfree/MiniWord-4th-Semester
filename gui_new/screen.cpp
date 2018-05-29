@@ -1,4 +1,6 @@
 #include "screen.h"
+#include <algorithm>
+#include <QDebug>
 
 void Screen::InitiateScreen(QMainWindow *qmainwindow) {
     for (int i = 0; i < ROW_NUMBER; ++i) {
@@ -41,9 +43,9 @@ void Screen::DisplayScreen() {
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
         QString temp_str = screen_data_[iter - screen_display_.begin()];
         if (highlight_mode_) {
-            if (highlight_start_.row == highlight_end_.row) {
+            if (highlight_start_.row == highlight_end_.row && highlight_start_.row - screen_position_.row == iter - screen_display_.begin()) {
                 temp_str.insert(highlight_end_.column - screen_position_.column + 1, "</span>");
-                temp_str.insert(highlight_start_.column - screen_position_.column, "<span style=\"background-color:#B1D8FE\">");
+                temp_str.insert(highlight_start_.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
             }
         }
         else {
@@ -52,7 +54,8 @@ void Screen::DisplayScreen() {
                 temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
             }
         }
-        (**iter).setText("<span style=\"background-color:#FFFFFF\"><pre>" + temp_str + " </pre></span>");
+        //qDebug() << temp_str;
+        (**iter).setText("<span style=\"background-color:#ffffff\"><pre>" + temp_str + " </pre></span>");
         (**iter).show();
     }
     return;
@@ -110,6 +113,9 @@ void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_en
     highlight_start_.column = col_start;
     highlight_end_.row = row_end;
     highlight_end_.column = col_end;
+    if (highlight_start_.row > highlight_end_.row || (highlight_start_.row == highlight_end_.row && highlight_start_.column > highlight_end_.column)) {
+        std::swap(highlight_start_, highlight_end_);
+    }
     return;
 }
 void Screen::CursorMode() {
