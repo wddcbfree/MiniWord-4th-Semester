@@ -98,8 +98,6 @@ MainWindow::MainWindow(QWidget *parent)
     display_timer->start(REFLASH_TIME);
 }
 
-
-
 void MainWindow::keyPressEvent(QKeyEvent *event){
     if(!Selected){
         if(event->key() == Qt::Key_Alt){
@@ -110,7 +108,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             statusBar()->showMessage("进入块选择模式");
             screen.LoadScreen(*Memory);
         }
-
     }
 }
 
@@ -126,6 +123,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         Selected = false;
         copyAction->setDisabled(1);
         pasteAction->setEnabled(1);
+        screen.CursorMode();
         screen.LoadScreen(*Memory);
         return;
     }else{
@@ -135,36 +133,40 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                 qDebug()<<"Selected Cursor Up!";
                 Memory->MoveUp();
                 //高亮
+                screen.HighlightMode(row_,col_,Memory->GetCursorRow(),Memory->GetCursorCol());
                 screen.LoadScreen(*Memory);
                 break;
             case Qt::Key_Down:
                 qDebug()<<"Selected Cursor Down!";
                 Memory->MoveDown();
                 //高亮
+                screen.HighlightMode(row_,col_,Memory->GetCursorRow(),Memory->GetCursorCol());
                 screen.LoadScreen(*Memory);
                 break;
             case Qt::Key_Left:
                 qDebug()<<"Selected Cursor Left!";
                 Memory->MoveLeft();
                 //高亮
+                screen.HighlightMode(row_,col_,Memory->GetCursorRow(),Memory->GetCursorCol());
                 screen.LoadScreen(*Memory);
                 break;
             case Qt::Key_Right:
-                Memory->MoveRight();
                 qDebug()<<"Selected Cursor Right!";
+                Memory->MoveRight();
+                screen.HighlightMode(row_,col_,Memory->GetCursorRow(),Memory->GetCursorCol());
                 screen.LoadScreen(*Memory);
                 break;
             case Qt::Key_Alt://块选择结束
                 qDebug()<<"Block Selected!";
-                //Input.setDisabled(1);
+                screen.HighlightMode(row_,col_,Memory->GetCursorRow(),Memory->GetCursorCol());
                 SelectTriggered = false;
                 copyAction->setEnabled(1);
                 Selected = true;
                 break;
             default:
                 qDebug()<<"Cancel Block Select!";
+                screen.CursorMode();
                 SelectTriggered = false;
-                row_ = -1,col_ = -1;
                 //取消高亮
                 break;
             }
