@@ -506,29 +506,34 @@ QString Text::BlockCopy(int row1,int col1,int row2,int col2){
 }
 
 void Text::BlockDelete(int row1,int col1,int row2,int col2){
+    qDebug() << row1 << row2 << col1 <<col2;
 	if(row1 > row2){
 		int temp = row2;
 		row2 = row1;
 		row1 = temp;
 	}
-	if(row1==row2 && col1 > col2){
-		int temp = col2;
-		col2 = col1;
-		col1 = temp;
-	}
+    if(row1==row2 && col1 > col2){
+        int temp = col2;
+        col2 = col1;
+        col1 = temp;
+    }
 	if(row1 == row2){
 		link temp1 = Locate(col1);
 		link temp2 = Locate(col2);
+        qDebug() << row1 << row2 << col1 <<col2;
 		if(temp1->pre)
 		    temp1->pre->next = temp2;
+        else
+            row_->content = temp2;
 		if(temp2){
 		    temp2->pre = temp1->pre;
 		    link ptr = temp2;
 		    while(ptr){
-		    	ptr->num -= col2-col1;
+                ptr->num -= (col2-col1);
 		    	ptr = ptr->next;
 			}
 		}
+        col = col1;
 	}
 	else{
 		Link record = row_;
