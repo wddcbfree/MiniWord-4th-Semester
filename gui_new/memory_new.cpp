@@ -456,53 +456,84 @@ void Text::ConfirmReplace(bool confirm_replace){
 	}	
 }
 
-QString Text::BlockCopy(int row1,int col1,int row2,int col2){
-	if(row1 > row2){
-		int temp = row2;
-		row2 = row1;
-		row1 = temp;
-	}
-	if(row1==row2 && col1 > col2){
-		int temp = col2;
-		col2 = col1;
-		col1 = temp;
-	}
-    QString str = "";
-	Link record = row_;
-	for(int i=1;i<=row2-row1+1;i++){
-		if(i==1){
-			if(row1==row2){
-				link temp = Locate(col1);
-			    while(temp!=Locate(col2)){
-                    str += temp->s[0];
-				    temp = temp->next;
-			    }
-			}
-			else{
-			    link temp = Locate(col1);
-			    while(temp){
-                    str += temp->s[0];
-				    temp = temp->next;
-			    }
-			}
-		}
-		else if(i==row2-row1+1){
-			link media = record->content;
-			for(int i=0;i<col2;i++){
-                str += media->s[0];
-				media = media->next;
-			}
-		}
-		else{
-			link media = record->content;
-			while(media){
-                str += media->s[0];
-				media = media->next;
-			}
-		}
-		record = record->next;
-	}
-	return str;
+void Text::BlockCopy(int row1,int col1,int row2,int col2){
+    if(row1 > row2){
+        int temp = row2;
+        row2 = row1;
+        row1 = temp;
+        int temp2 = col2;
+        col2 = col1;
+        col1 = temp2;
+    }
+    if(row1==row2 && col1 > col2){
+        int temp = col2;
+        col2 = col1;
+        col1 = temp;
+    }
+    Link record = row_;
+    if(record->Row_Num > row1){
+        for(int i=1;i<=record->Row_Num-row1;i++)
+            record = record->next;
+    }
+    else{
+        for(int i=1;i<=record->Row_Num-row1;i++)
+            record = record->pre;
+    }
+    row1_b = record;
+    link temp = record->content;
+    for(int i=0;i<col1;i++)
+        temp = temp->next;
+    temp1_b = temp;
+
+    record = row_;
+    if(record->Row_Num > row2){
+        for(int i=1;i<=record->Row_Num-row2;i++)
+            record = record->next;
+    }
+    else{
+        for(int i=1;i<=record->Row_Num-row2;i++)
+            record = record->pre;
+    }
+    row2_b = record;
+    temp = record->content;
+    for(int i=0;i<col2;i++)
+        temp = temp->next;
+    temp2_b = temp;
+}
+
+void Text::BlockPaste(){
+    QString s = "";
+    link ptr = temp1_b;
+    while(ptr){
+        s += ptr->s[0];
+        ptr = ptr->next;
+    }
+    InsertString(s);
+    for(int i=0;i<s.length();i++)
+        MoveRight();
+    //if(s.length())
+        //MoveRight();
+    int flag=1;
+    if(!s.length())
+        flag = 0;
+    Link end = row1_b;
+    for(int i=1;i<=row2_b->Row_Num-row1_b->Row_Num;i++){
+        s = "";
+        if(flag)
+            InsertString("");
+        end = end->next;
+        ptr = end->content;
+        while(ptr){
+            s += ptr->s[0];
+            ptr = ptr->next;
+        }
+        InsertString(s);
+        for(int i=0;i<s.length();i++)
+            MoveRight();
+        if(!s.length())
+            flag = 0;
+        else flag = 1;
+    }
 }
 
 void Text::BlockDelete(int row1,int col1,int row2,int col2){
