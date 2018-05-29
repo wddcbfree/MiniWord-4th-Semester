@@ -117,8 +117,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if(Selected){
         if(event->key() == Qt::Key_Backspace){
-            //Memory->BlockDelete(row_,col_,Memory->GetCursorRow(),Memory->GetCursorRow());
-            qDebug()<<"Block Deleted!";
+            filepart->EditedSignal = true;
+            qDebug()<<"Block Deleted! "<< row_<< ","<< col_<<"  "<< Memory->GetCursorRow()<<","<<Memory->GetCursorCol();
+            int temp_col = Memory->GetCursorCol(),temp_row = Memory->GetCursorRow();
+            Memory->BlockDelete(row_,col_,temp_row,temp_col);
         }
         if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C){
             col1 = col_;row1 = row_;
@@ -128,15 +130,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             screen.LoadScreen(*Memory);
             qDebug()<<"Block Copied!";
         }
-        if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V){
-            //Memory->BlockDelete(row_,col_,Memory->GetCursorRow(),Memory->GetCursorRow());
-            //Memory->BlockCopy(row1,col1,row2,col2);
-            //取消高亮
-            screen.LoadScreen(*Memory);
-            qDebug()<<"Block Pasted!";
-        }
         col_ = -1,row_ = -1;
         Selected = false;
+        screen.LoadScreen(*Memory);
     }else{
         if(SelectTriggered){//开始块选择
             switch (event->key()) {
@@ -254,6 +250,7 @@ void MainWindow::search(){
     Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Search.setText("查找");
     Search.setStyleSheet("color:black");
+    //connect(&SearchDialog,&Search)
     SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     SearchNext.setText("下一个");
     Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
