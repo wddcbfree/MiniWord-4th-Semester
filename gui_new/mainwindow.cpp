@@ -117,7 +117,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if(Selected){
         if(event->key() == Qt::Key_Backspace){
-            filepart->EditedSignal = true;
+            filepart->set_edited(true);
             qDebug()<<"Block Deleted! "<< row_<< ","<< col_<<"  "<< Memory->GetCursorRow()<<","<<Memory->GetCursorCol();
             int temp_col = Memory->GetCursorCol(),temp_row = Memory->GetCursorRow();
             Memory->BlockDelete(row_,col_,temp_row,temp_col);
