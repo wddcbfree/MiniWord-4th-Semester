@@ -37,12 +37,20 @@ void Screen::LoadScreen(Text text) {
 }
 
 void Screen::DisplayScreen() {
-    cursor_display_count = (cursor_display_count + 1) % (DISPLAY_COUNT << 1);
+    cursor_display_count_ = (cursor_display_count_ + 1) % (DISPLAY_COUNT << 1);
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
         QString temp_str = screen_data_[iter - screen_display_.begin()];
-        if (cursor_display_count < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
-            temp_str.insert(relative_position_.column + 1, "</span>");
-            temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
+        if (highlight_mode_) {
+            if (highlight_start_.row == highlight_end_.row) {
+                temp_str.insert(highlight_end_.column - screen_position_.column + 1, "</span>");
+                temp_str.insert(highlight_start_.column - screen_position_.column, "<span style=\"background-color:#B1D8FE\">");
+            }
+        }
+        else {
+            if (cursor_display_count_ < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
+                temp_str.insert(relative_position_.column + 1, "</span>");
+                temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
+            }
         }
         (**iter).setText("<span style=\"background-color:#FFFFFF\"><pre>" + temp_str + " </pre></span>");
         (**iter).show();
@@ -51,7 +59,7 @@ void Screen::DisplayScreen() {
 }
 
 void Screen::RefreshScreenPosition(Text text) {
-    cursor_display_count = 0;
+    cursor_display_count_ = 0;
     struct CursorPosition truth_position;
     truth_position.column = text.GetCursorCol();
     truth_position.row = text.GetCursorRow();
@@ -94,4 +102,17 @@ int Screen::GetLetterNumber(QString str) {
     }
     number += static_cast<int>(COLUME_NUMBER - length);
     return number;
+}
+
+void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_end) {
+    highlight_mode_ = true;
+    highlight_start_.row = row_start;
+    highlight_start_.column = col_start;
+    highlight_end_.row = row_end;
+    highlight_end_.column = col_end;
+    return;
+}
+void Screen::CursorMode() {
+    highlight_mode_ = false;
+    return;
 }
