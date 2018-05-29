@@ -21,6 +21,7 @@ public:
     void DisplayScreen();
 private:
     void RefreshScreenPosition(Text text);
+    int GetLetterNumber(QString str);
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
     struct CursorPosition relative_position_, screen_position_;
