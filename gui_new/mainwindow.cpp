@@ -44,9 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     copyAction = new QAction("块拷贝",this);
     connect(copyAction,&QAction::triggered,this,&MainWindow::block_copy);
+    copyAction->setDisabled(1);
 
     pasteAction = new QAction("块粘贴",this);
     connect(pasteAction,&QAction::triggered,this,&MainWindow::block_paste);
+    pasteAction->setDisabled(1);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
@@ -120,17 +122,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             int temp_col = Memory->GetCursorCol(),temp_row = Memory->GetCursorRow();
             Memory->BlockDelete(row_,col_,temp_row,temp_col);
         }
-        if(event->key() == Qt::Key_C){
-            col1 = col_;row1 = row_;
-            col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
-            Memory->BlockCopy(row1,col1,row2,col2);
-            statusBar()->showMessage("块复制成功！");
-            //取消高亮
-            screen.LoadScreen(*Memory);
-            qDebug()<<"Block Copied!";
-        }
         col_ = -1,row_ = -1;
         Selected = false;
+        copyAction->setDisabled(1);
+        pasteAction->setEnabled(1);
         screen.LoadScreen(*Memory);
         return;
     }else{
@@ -163,6 +158,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                 qDebug()<<"Block Selected!";
                 //Input.setDisabled(1);
                 SelectTriggered = false;
+                copyAction->setEnabled(1);
                 Selected = true;
                 break;
             default:
