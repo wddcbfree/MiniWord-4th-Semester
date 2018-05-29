@@ -538,9 +538,9 @@ void Text::BlockPaste(){
 
 void Text::BlockDelete(int row1,int col1,int row2,int col2){
 	if(row1 > row2){
-		int temp = row2;
-		row2 = row1;
-		row1 = temp;
+        int temp = row2;
+        row2 = row1;
+        row1 = temp;
         int temp2 = col2;
         col2 = col1;
         col1 = temp2;
@@ -550,14 +550,15 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
         col2 = col1;
         col1 = temp;
     }
+    qDebug()<<"Block Deleting: "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
 	if(row1 == row2){
-		link temp1 = Locate(col1);
-		link temp2 = Locate(col2);
-		if(temp1->pre)
-		    temp1->pre->next = temp2;
+            link temp1 = Locate(col1);
+            link temp2 = Locate(col2);
+            if(temp1->pre)
+                temp1->pre->next = temp2;
         else
             row_->content = temp2;
-		if(temp2){
+        if(temp2){
 		    temp2->pre = temp1->pre;
 		    link ptr = temp2;
 		    while(ptr){
@@ -581,11 +582,10 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
             link temp2 = record->content;
             for(int i=0;i<col2;i++)
                 temp2 = temp2->next;
-            if(!temp1){
-                if(!col1){
-                    row_->content = temp2;
-                    if(temp2)
-                        temp2->pre = NULL;
+             if(!col1){
+                row_->content = temp2;
+                if(temp2)
+                    temp2->pre = NULL;
                 }
                 else{
                     temp1 = Locate(col1-1);
@@ -593,12 +593,6 @@ void Text::BlockDelete(int row1,int col1,int row2,int col2){
                     if(temp2)
                         temp2->pre = temp1;
                 }
-            }
-            else{
-                temp1->next = temp2;
-                if(temp2)
-                    temp2->pre = temp1;
-            }
             row_->next = record->next;
             if(record->next)
                 record->next->pre = row_;

@@ -55,7 +55,21 @@ private:
     void save();
     void save_as();
     void search();
-    void select();
+
+    void block_copy(){
+        col1 = col_;row1 = row_;
+        col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
+        qDebug()<<"Block Copied! "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
+        Memory->BlockCopy(row1,col1,row2,col2);
+        statusBar()->showMessage("块复制成功！");
+        //取消高亮
+        screen.LoadScreen(*Memory);
+    }
+    void block_paste(){
+        Memory->BlockPaste();
+        screen.LoadScreen(*Memory);
+        qDebug()<<"Block Pasted!";
+    }
 
     QAction *createAction;
     QAction *openAction;
@@ -64,7 +78,8 @@ private:
     QAction *quitAction;
     QAction *searchAction;
     QAction *replaceAction;
-    QAction *selectAction;
+    QAction *copyAction;
+    QAction *pasteAction;
 
     int row_ = -1,col_ = -1,row1 = -1,col1 = -1,row2 = -1,col2 = -1;
 

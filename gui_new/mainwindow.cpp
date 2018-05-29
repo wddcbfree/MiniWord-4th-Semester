@@ -42,10 +42,11 @@ MainWindow::MainWindow(QWidget *parent)
     replaceAction->setStatusTip(tr("Replace"));
     connect(replaceAction,&QAction::triggered,this,&MainWindow::search);
 
-    selectAction = new QAction(tr("选中块"),this);
-    selectAction->setStatusTip(tr("Select"));
+    copyAction = new QAction("块拷贝",this);
+    connect(copyAction,&QAction::triggered,this,&MainWindow::block_copy);
 
-    connect(selectAction,&QAction::triggered,this,&MainWindow::select);
+    pasteAction = new QAction("块粘贴",this);
+    connect(pasteAction,&QAction::triggered,this,&MainWindow::block_paste);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
     file->addAction(createAction);
@@ -59,14 +60,14 @@ MainWindow::MainWindow(QWidget *parent)
     edit->addAction(searchAction);
     edit->addAction(replaceAction);
     edit->addSection("");
-    edit->addAction(selectAction);
+    edit->addAction(copyAction);
+    edit->addAction(pasteAction);
     QMenu *info = menuBar()->addMenu(tr("&关于"));
     //info->addAction(aboutRole);
 
     //菜单栏初始化
     saveAction->setDisabled(1);
     saveasAction->setDisabled(1);
-    selectAction->setDisabled(1);
 
     //输入框部分
     Input.setParent(this);
@@ -95,22 +96,19 @@ MainWindow::MainWindow(QWidget *parent)
     display_timer->start(REFLASH_TIME);
 }
 
-void MainWindow::select(){
-    qDebug()<<"Select triggered!";
-    selectAction->setDisabled(1);
-    Input.setReadOnly(1);
-    Input.setPlaceholderText(tr("请移动光标选择块的开头，按 Enter 键确认"));
-    SelectTriggered = true;
-}
+
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
-    if(event->key() == Qt::Key_Alt){
-        qDebug()<<"SelectTriggered!";
-        SelectTriggered = true;
-        col_ = Memory->GetCursorCol();
-        row_ = Memory->GetCursorRow();
-        statusBar()->showMessage("进入块选择模式");
-        screen.LoadScreen(*Memory);
+    if(!Selected){
+        if(event->key() == Qt::Key_Alt){
+            qDebug()<<"SelectTriggered!";
+            SelectTriggered = true;
+            col_ = Memory->GetCursorCol();
+            row_ = Memory->GetCursorRow();
+            statusBar()->showMessage("进入块选择模式");
+            screen.LoadScreen(*Memory);
+        }
+
     }
 }
 
@@ -122,9 +120,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             int temp_col = Memory->GetCursorCol(),temp_row = Memory->GetCursorRow();
             Memory->BlockDelete(row_,col_,temp_row,temp_col);
         }
-        if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C){
+        if(event->key() == Qt::Key_C){
             col1 = col_;row1 = row_;
             col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
+            Memory->BlockCopy(row1,col1,row2,col2);
             statusBar()->showMessage("块复制成功！");
             //取消高亮
             screen.LoadScreen(*Memory);
@@ -133,6 +132,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         col_ = -1,row_ = -1;
         Selected = false;
         screen.LoadScreen(*Memory);
+        return;
     }else{
         if(SelectTriggered){//开始块选择
             switch (event->key()) {
@@ -161,6 +161,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                 break;
             case Qt::Key_Alt://块选择结束
                 qDebug()<<"Block Selected!";
+                //Input.setDisabled(1);
                 SelectTriggered = false;
                 Selected = true;
                 break;
@@ -174,7 +175,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         }else{
             if(Input.text() == ""){
                 screen.LoadScreen(*Memory);
-                selectAction->setDisabled(0);
                 switch (event->key()) {
                 case Qt::Key_Up:
                     qDebug()<<"Cursor Up!";
@@ -202,15 +202,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     filepart->set_edited(true);
                     screen.LoadScreen(*Memory);
                     break;
-                case Qt::Key_Backspace:
-                    qDebug()<<"Backspace!";
-                    Memory->Backspace();
-                    filepart->set_edited(true);
-                    screen.LoadScreen(*Memory);
-                    break;
                 case Qt::Key_Delete:
                     qDebug()<<"Delete!";
                     Memory->Delete();
+                    filepart->set_edited(true);
+                    screen.LoadScreen(*Memory);
+                    break;
+                case Qt::Key_Backspace:
+                    qDebug()<<"Backspace!";
+                    Memory->Backspace();
                     filepart->set_edited(true);
                     screen.LoadScreen(*Memory);
                     break;
@@ -218,13 +218,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     //break;
                 }
             }else{
-                selectAction->setDisabled(1);
                 switch (event->key()) {
                 case Qt::Key_Return:
                     qDebug()<<"return success!";
                     Memory->InsertString(Input.text());
                     filepart->set_edited(true);
-                    selectAction->setDisabled(0);
                     Input.clear();
                     screen.LoadScreen(*Memory);
                     break;
@@ -341,7 +339,6 @@ void MainWindow::open(){
     emit SendOpenPath(FilePath);
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
-    selectAction->setEnabled(1);
     screen.LoadScreen(*Memory);
     statusBar()->showMessage("打开成功！");
 }
