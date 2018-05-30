@@ -35,12 +35,12 @@ MainWindow::MainWindow(QWidget *parent)
     searchAction = new QAction(tr("Search..."), this);
     searchAction->setShortcuts(QKeySequence::Find);
     searchAction->setStatusTip(tr("Search..."));
-    connect(searchAction,&QAction::triggered,this,&MainWindow::search);
+    connect(searchAction,&QAction::triggered,this,&MainWindow::search_init);
 
     replaceAction = new QAction(tr("Replace"), this);
     replaceAction->setShortcuts(QKeySequence::Replace);
     replaceAction->setStatusTip(tr("Replace"));
-    connect(replaceAction,&QAction::triggered,this,&MainWindow::search);
+    connect(replaceAction,&QAction::triggered,this,&MainWindow::search_init);
 
     copyAction = new QAction("Block copy", this);
     connect(copyAction,&QAction::triggered,this,&MainWindow::block_copy);
