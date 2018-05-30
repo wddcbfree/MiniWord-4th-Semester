@@ -64,7 +64,7 @@ protected:
         col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
         qDebug()<<"Block Copied! "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
         Memory->BlockCopy(row1,col1,row2,col2);
-        statusBar()->showMessage("Block save success!");
+        statusBar()->showMessage("Block Copy Success!");
         screen.CursorMode();
         screen.LoadScreen(*Memory);
     }
