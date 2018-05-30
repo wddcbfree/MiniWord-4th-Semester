@@ -460,37 +460,7 @@ QString Text::GetIthString(int i) {
     }
     return str;
 }
-/*
-bool Text::SearchWord(const std::string &search_word){
-        link temp = Locate(col);
-        int cnt = col;
-        while(temp){
-                link ptr = temp;
-                bool flag = 1;
-                for(int j=0;j<search_word.length() & flag;j++){
-                        if(!ptr || ptr->s[0] != search_word[j])
-                            flag = 0;
-                        ptr = ptr->next;
-                }
-                if(flag){
-                        break;
-                        col = cnt;
-                        return 1;
-                }
-                temp = temp->next;
-                cnt++;
-        }
-        return 0;
-}
-void Text::ReplaceString(const std::string &search_word, const std::string
-&replace){ bool signal = SearchWord(search_word); replace_ = replace;
-        replaced_length = search_word.length();
-        //if(!signal)
-}
-*/
-
 bool Text::SearchWord(const QString &search_word) {
-    qDebug()<<search_word[0];
     col_f = col;
     row_f = row;
     link temp = f_Locate(col_f);
@@ -500,16 +470,13 @@ bool Text::SearchWord(const QString &search_word) {
         if (row_f == GetNumOfLines() - 1 && !temp)
             return 0;
     }
-    qDebug()<<temp->s[0];
     bool flag = 1;
     while (temp) {
-        qDebug()<<temp->s[0];
         int record1 = col_f;
         int record2 = row_f;
         link ptr = temp;
         flag = 1;
         for (int j = 0; j < search_word.length() & flag; j++) {
-            qDebug()<<"loop"<<ptr->s[0];
             if (ptr->s[0] != search_word[j])
                 flag = 0;
             f_MoveRight();
@@ -522,7 +489,6 @@ bool Text::SearchWord(const QString &search_word) {
             }
         }
         if (flag) {
-            qDebug()<<record1<<record2;
             col = record1;
             row = record2;
             Link record = row_;
@@ -535,6 +501,7 @@ bool Text::SearchWord(const QString &search_word) {
                 for (i = 1; i <= row - cnt; i++)
                     record = record->next;
             row_ = record;
+            replaced_length = search_word.length();
             return 1;
         }
         col_f = record1;
@@ -551,12 +518,24 @@ bool Text::SearchWord(const QString &search_word) {
     return 0;
 }
 
-void Text::ConfirmReplace(bool confirm_replace) {
-    if (confirm_replace) {
-        for (int j = 1; j <= replaced_length; j++)
+void Text::ReplaceString(const QString &replace_){
+    int cnt = replaced_length;
+    while(cnt>0){
+        qDebug()<<cnt;
+        link temp = Locate(col);
+        if(temp){
             Delete();
-        // InsertString(replace_);
+        }
+        else{
+            while(!temp){
+                Delete();
+                temp = Locate(col);
+            }
+            Delete();
+        }
+        cnt--;
     }
+    InsertString(replace_);
 }
 
 void Text::BlockCopy(int row1, int col1, int row2, int col2) {
