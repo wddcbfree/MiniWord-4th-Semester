@@ -50,7 +50,7 @@ void Screen::DisplayScreen() {
         }
         else {
             if (cursor_display_count_ < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
-                temp_str.insert(relative_position_.column + 1, "</span>");
+                temp_str.insert(relative_position_.column, "</span>");
                 temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
             }
         }
