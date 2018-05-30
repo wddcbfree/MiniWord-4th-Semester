@@ -62,6 +62,7 @@ private:
         qDebug()<<"Block Copied! "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
         Memory->BlockCopy(row1,col1,row2,col2);
         statusBar()->showMessage("块复制成功！");
+        screen.CursorMode();
         //取消高亮
         screen.LoadScreen(*Memory);
     }

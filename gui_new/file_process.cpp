@@ -10,6 +10,7 @@ void FileProcess::create_file(){
 
 void FileProcess::open_file(QString path){
     OpenSignal = true;
+    CreateSignal = false;
     EditedSignal = false;
     FilePath = path;
     QString temp;

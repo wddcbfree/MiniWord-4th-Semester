@@ -44,10 +44,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     copyAction = new QAction("块拷贝",this);
     connect(copyAction,&QAction::triggered,this,&MainWindow::block_copy);
+    copyAction->setShortcut(tr("Ctrl+U"));
     copyAction->setDisabled(1);
 
     pasteAction = new QAction("块粘贴",this);
     connect(pasteAction,&QAction::triggered,this,&MainWindow::block_paste);
+    pasteAction->setShortcut(tr("Ctrl+I"));
     pasteAction->setDisabled(1);
 
     QMenu *file = menuBar()->addMenu(tr("&文件"));
@@ -76,16 +78,11 @@ MainWindow::MainWindow(QWidget *parent)
     Input.setGeometry(INPUT_LEFT_BLANK,WINDOW_HEIGHT-2*LINE_HEIGHT,WINDOW_WIDTH-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Input.show();
     Input.setEchoMode(QLineEdit::Normal);
-    Input.setPlaceholderText("typing...");
+    Input.setDisabled(1);
+    Input.setPlaceholderText("请打开或新建文件");
     Input.setReadOnly(0);
     Input.setAcceptDrops(true);
     Input.setClearButtonEnabled(true);
-
-    //输入提示
-    InputTips.setParent(this);
-    InputTips.setGeometry(INPUT_LEFT_BLANK,WINDOW_HEIGHT-3*LINE_HEIGHT,WINDOW_WIDTH-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    InputTips.show();
-    InputTips.setText("test");
 
     //状态栏
     statusBar();
@@ -113,17 +110,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if(Selected){
-        if(event->key() == Qt::Key_Backspace){
+        switch (event->key()) {
+        case Qt::Key_Backspace:
             filepart->set_edited(true);
             qDebug()<<"Block Deleted! "<< row_<< ","<< col_<<"  "<< Memory->GetCursorRow()<<","<<Memory->GetCursorCol();
             int temp_col = Memory->GetCursorCol(),temp_row = Memory->GetCursorRow();
             Memory->BlockDelete(row_,col_,temp_row,temp_col);
+            screen.CursorMode();
+            break;
         }
-        col_ = -1,row_ = -1;
         Selected = false;
         copyAction->setDisabled(1);
         pasteAction->setEnabled(1);
-        screen.CursorMode();
+
         screen.LoadScreen(*Memory);
         return;
     }else{
@@ -216,12 +215,14 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
                     //break;
                 }
             }else{
+                statusBar()->showMessage("编辑中...");
                 switch (event->key()) {
                 case Qt::Key_Return:
                     qDebug()<<"return success!";
                     Memory->InsertString(Input.text());
                     filepart->set_edited(true);
                     Input.clear();
+                    statusBar()->showMessage("");
                     screen.LoadScreen(*Memory);
                     break;
                 //default:
@@ -265,7 +266,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(filepart->is_edited()){
+    if(filepart->is_create()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("还有未保存的修改，是否保存？"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+        msgBox.setButtonText(QMessageBox::Save,"保存");
+        msgBox.setButtonText(QMessageBox::Discard,"不保存");
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            qDebug() << "保存！";
+            save_as();
+            break;
+        case QMessageBox::Discard:
+            qDebug() << "不保存!";
+            break;
+        default:
+            qDebug() << "关闭对话框！";
+            break;
+        }
+    }
+    else if(filepart->is_edited()){
         QMessageBox msgBox;
         msgBox.setText(tr("还有未保存的修改，是否保存？"));
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
@@ -308,6 +330,9 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    Input.setEnabled(1);
+    Input.setFocus();
+    Input.setPlaceholderText("typing...");
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
@@ -335,6 +360,9 @@ void MainWindow::open(){
     QString FilePath = QFileDialog::getOpenFileName(this,tr("打开..."));
     qDebug()<<FilePath<<endl;
     emit SendOpenPath(FilePath);
+    Input.setEnabled(1);
+    Input.setFocus();
+    Input.setPlaceholderText("typing...");
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
