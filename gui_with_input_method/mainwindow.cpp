@@ -128,6 +128,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             screen.LoadScreen(*Memory);
             break;
         }
+    }else{
+        switch (event->key()) {
+        case Qt::Key_Alt:
+            qDebug()<<"SelectContinueTriggered!";
+            SelectTriggered = true;
+            Selected = false;
+            statusBar()->showMessage("Block Selecting");
+            screen.LoadScreen(*Memory);
+            break;
+        }
     }
 }
 
