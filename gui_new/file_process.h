@@ -11,8 +11,7 @@
 #include <QDebug>
 #include "memory_new.h"
 
-class FileProcess : public QObject
-{
+class FileProcess : public QObject {
     Q_OBJECT
 public:
     void init_memory(Text *memory) {

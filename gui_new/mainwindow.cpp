@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-{
+    : QMainWindow(parent) {
     setWindowTitle(tr("MiniWord"));
     this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -262,13 +261,11 @@ void MainWindow::DisplayScreen() {
     screen.DisplayScreen();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
 
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
+void MainWindow::closeEvent(QCloseEvent *event) {
     if (filepart->is_create()) {
         QMessageBox msgBox;
         msgBox.setText(tr("There are unsaved changes, save?"));

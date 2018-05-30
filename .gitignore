@@ -19,3 +19,4 @@
 /gui_new/release
 /gui_new/x64/Debug
 *.sln
+/build-gui_new_with_input_method-Desktop_Qt_5_9_3_MinGW_32bit-Debug

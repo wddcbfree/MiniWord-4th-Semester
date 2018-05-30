@@ -40,19 +40,23 @@ void Screen::LoadScreen(Text text) {
 
 void Screen::DisplayScreen() {
     cursor_display_count_ = (cursor_display_count_ + 1) % (DISPLAY_COUNT << 1);
+    auto start = AdjustHighlishtCursor(highlight_start_);
+    auto end = AdjustHighlishtCursor(highlight_end_);
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
-        QString temp_str = screen_data_[iter - screen_display_.begin()];
+        auto temp_str = screen_data_[iter - screen_display_.begin()];
         if (highlight_mode_) {
             if (highlight_start_.row == highlight_end_.row && highlight_start_.row - screen_position_.row == iter - screen_display_.begin()) {
                 temp_str.insert(highlight_end_.column - screen_position_.column, "</span>");
                 temp_str.insert(highlight_start_.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
+            }
+            else {
+
             }
         }
         else {
             if (cursor_display_count_ < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
                 temp_str.insert(relative_position_.column + 1, "</span>");
                 temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
-                qDebug() << temp_str;
             }
         }
         //qDebug() << temp_str;
@@ -106,6 +110,24 @@ int Screen::GetLetterNumber(QString str) {
     }
     number += static_cast<int>(COLUME_NUMBER - length);
     return number;
+}
+
+CursorPosition Screen::AdjustHighlishtCursor(CursorPosition) {
+    if (highlight_start_.row < screen_position_.row) {
+        highlight_start_.row = screen_position_.row;
+        highlight_start_.column = screen_position_.column;
+    }
+    if (highlight_start_.column < screen_position_.column) {
+        highlight_start_.column = screen_position_.column;
+    }
+    if (highlight_end_.row > screen_position_.row + ROW_NUMBER) {
+        highlight_end_.row = screen_position_.row + ROW_NUMBER;
+        highlight_end_.column = screen_data_.back().length();
+    }
+    if (highlight_end_.column > screen_position_.column + screen_data_[highlight_end_.row - screen_position_.row].length()) {
+        highlight_end_.column = screen_position_.column + screen_data_[highlight_end_.row - screen_position_.row].length();
+    }
+    return CursorPosition();
 }
 
 void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_end) {

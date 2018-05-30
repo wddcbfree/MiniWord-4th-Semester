@@ -24,6 +24,7 @@ public:
 private:
     void RefreshScreenPosition(Text text);
     int GetLetterNumber(QString str);
+    struct CursorPosition AdjustHighlishtCursor(struct CursorPosition);
     bool highlight_mode_ = false;
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
