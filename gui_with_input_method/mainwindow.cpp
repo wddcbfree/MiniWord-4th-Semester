@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&Search,&QPushButton::clicked,this,&MainWindow::search);
     SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     SearchNext.setText("Next");
-    connect(&SearchNext,&QPushButton::clicked,this,&MainWindow::search);
+    connect(&SearchNext,&QPushButton::clicked,this,&MainWindow::search_next);
     Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Replace.setText("Replace");
     SearchTips.setGeometry(210+INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
@@ -280,9 +280,27 @@ void MainWindow::search(){
     screen.LoadScreen(*Memory);
     if(result){
         qDebug()<<"Search Success!";
-        SearchTips.setText("Search Success!");
+        QString temp = "Row: "+QString::number(Memory->GetCursorRow())+",Col: "+QString::number(Memory->GetCursorCol());
+        SearchTips.setText(temp);
     }else{
         qDebug()<<"Not Found!";
+        SearchTips.setText("Not Found!");
+    }
+}
+
+void MainWindow::search_next(){
+    Memory->MoveRight();
+    bool result = Memory->SearchWord(SearchInput.text());
+    screen.LoadScreen(*Memory);
+    qDebug()<<"Seached: "<<SearchInput.text();
+    screen.LoadScreen(*Memory);
+    if(result){
+        qDebug()<<"Search Success!";
+        QString temp = "Row: "+QString::number(Memory->GetCursorRow())+",Col: "+QString::number(Memory->GetCursorCol());
+        SearchTips.setText(temp);
+    }else{
+        qDebug()<<"Not Found!";
+        Memory->MoveLeft();
         SearchTips.setText("Not Found!");
     }
 }

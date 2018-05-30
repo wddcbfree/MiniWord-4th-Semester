@@ -58,6 +58,7 @@ private:
     void save_as();
     void search_init();
     void search();
+    void search_next();
 
     void block_copy(){
         col1 = col_;row1 = row_;
