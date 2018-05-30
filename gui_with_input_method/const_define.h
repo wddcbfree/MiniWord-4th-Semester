@@ -4,7 +4,7 @@
 
 #define LINE_WIDTH 780
 #define LINE_HEIGHT 23
-#define LINE_GAP 0
+#define LINE_GAP 1
 #define TEXT_UPPER_BLANK 30
 #define TEXT_LEFT_BLANK 15
 #define INPUT_LEFT_BLANK 1

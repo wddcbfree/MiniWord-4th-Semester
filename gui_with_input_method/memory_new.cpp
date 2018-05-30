@@ -638,8 +638,6 @@ void Text::BlockPaste() {
         }
         InsertString(s);
         qDebug() << s;
-        for (int i = 0; i < s.length(); i++)
-            MoveRight();
         // if(s.length())
         // MoveRight();
         int flag = 1;
@@ -657,8 +655,6 @@ void Text::BlockPaste() {
                 ptr = ptr->next;
             }
             InsertString(s);
-            for (int i = 0; i < s.length(); i++)
-                MoveRight();
             if (!s.length())
                 flag = 0;
             else

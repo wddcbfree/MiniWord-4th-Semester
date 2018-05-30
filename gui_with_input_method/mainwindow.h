@@ -51,7 +51,7 @@ protected:
     void closeEvent(QCloseEvent *event);
     void inputMethodEvent(QInputMethodEvent *);
     void wheelEvent(QWheelEvent *event);
-    void create();
+    //void create();
     void open();
     void save();
     void save_as();
@@ -104,6 +104,7 @@ protected:
     Screen screen;
 private slots:
     void DisplayScreen();
+    void create();
 };
 
 #endif // MAINWINDOW_H

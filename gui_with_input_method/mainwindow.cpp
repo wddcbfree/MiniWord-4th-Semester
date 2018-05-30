@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
     //菜单栏
-    createAction = new QAction(tr("New file"), this);
+    createAction = new QAction(tr("New"), this);
     createAction->setShortcuts(QKeySequence::New);
     createAction->setStatusTip(tr("Create a file"));
     connect(createAction, &QAction::triggered, this, &MainWindow::create);
@@ -105,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent)
     QTimer *display_timer = new QTimer(this);
     connect(display_timer, SIGNAL(timeout()), this, SLOT(DisplayScreen()));
     display_timer->start(REFLASH_TIME);
+
+    QTimer::singleShot(3,this,SLOT(create()));
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event){
@@ -131,7 +133,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             screen.LoadScreen(*Memory);
             break;
         default:
-            if(event->text() != "" && event->text() != "\u007F" && event->text() != "\r"){
+            if(event->text() != "" && event->text() != "\u007F" && event->text() != "\r" && event->text() != "\b"){
                 Memory->InsertString(event->text());
                 qDebug()<<"Input English:"<<event->text();
             }
@@ -152,6 +154,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+
     switch (event->key()) {
     case Qt::Key_Up:
         if(SelectTriggered){
@@ -395,6 +398,7 @@ void MainWindow::create(){
         }
     }
     emit SendCreateSignal();
+    statusBar()->showMessage("New File");
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
     screen.LoadScreen(*Memory);
@@ -427,8 +431,8 @@ void MainWindow::open(){
     emit SendOpenPath(FilePath);
     saveAction->setEnabled(1);
     saveasAction->setEnabled(1);
-    screen.LoadScreen(*Memory);
     statusBar()->showMessage("Open Success!");
+    screen.LoadScreen(*Memory);    
 }
 
 void MainWindow::save(){
