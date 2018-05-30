@@ -23,7 +23,7 @@ public:
 private:
     void RefreshScreenPosition(Text text);
     int GetLetterNumber(QString str);
-    struct CursorPosition AdjustHighlishtCursor(const struct CursorPosition);
+    struct CursorPosition AdjustHighlightCursor(const struct CursorPosition);
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
     struct CursorPosition relative_position_;

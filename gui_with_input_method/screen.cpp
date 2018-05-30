@@ -39,8 +39,8 @@ void Screen::LoadScreen(Text text) {
 
 void Screen::DisplayScreen() {
     cursor_display_count_ = (cursor_display_count_ + 1) % (DISPLAY_COUNT << 1);
-    const auto start = AdjustHighlishtCursor(highlight_start_);
-    const auto end = AdjustHighlishtCursor(highlight_end_);
+    const auto start = AdjustHighlightCursor(highlight_start_);
+    const auto end = AdjustHighlightCursor(highlight_end_);
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
         auto temp_str = screen_data_[iter - screen_display_.begin()];
         const int cur_row_num = iter - screen_display_.begin();
@@ -122,7 +122,7 @@ int Screen::GetLetterNumber(QString str) {
     return number;
 }
 
-CursorPosition Screen::AdjustHighlishtCursor(const CursorPosition original) {
+CursorPosition Screen::AdjustHighlightCursor(const CursorPosition original) {
     auto fixed_cursor = original;
     if (fixed_cursor.row < screen_position_.row) {
         fixed_cursor.row = screen_position_.row;
