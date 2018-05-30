@@ -56,6 +56,7 @@ private:
     void open();
     void save();
     void save_as();
+    void search_init();
     void search();
 
     void block_copy(){
@@ -63,9 +64,8 @@ private:
         col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
         qDebug()<<"Block Copied! "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
         Memory->BlockCopy(row1,col1,row2,col2);
-        statusBar()->showMessage("块复制成功！");
+        statusBar()->showMessage("Block save success!");
         screen.CursorMode();
-        //取消高亮
         screen.LoadScreen(*Memory);
     }
     void block_paste(){
@@ -90,6 +90,14 @@ private:
     bool Selected = false;
 
     //QLineEdit Input;
+    QDialog SearchDialog;
+    QLineEdit SearchInput;
+    QLineEdit ReplaceInput;
+    QPushButton Search;
+    QPushButton SearchNext;
+    QPushButton Replace;
+    QLabel SearchTips;
+
 
     FileProcess *filepart;
     Text *Memory;

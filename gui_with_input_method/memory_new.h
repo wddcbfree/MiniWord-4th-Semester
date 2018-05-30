@@ -21,15 +21,15 @@
 
 typedef struct Row* Link;
 typedef struct block* link;
-struct block{ 
-	link pre,next;
+struct block{
+    link pre,next;
     QChar s[100];
-	int num;
+    int num;
 };
 struct Row{
-	Link pre,next;
-	int Row_Num;
-	link content;
+    Link pre,next;
+    int Row_Num;
+    link content;
 };
 
 class Text {
@@ -57,7 +57,7 @@ public:
     QChar GetithElement(int i);
     link Locate(int i);
     int CntElement();
-    //bool SearchWord(const std::string &search_word);
+    bool SearchWord(const QString &search_word);
     //void ReplaceString(const std::string &search_word, const std::string &replace);
     void ConfirmReplace(bool confirm_replace);
     void RefreshScreenPosition();
@@ -69,10 +69,12 @@ public:
     void BlockCopy(int row1,int col1,int row2,int col2);
     void BlockPaste();
     void BlockDelete(int row1,int col1,int row2,int col2);
+    link f_Locate(int i);
+    void f_MoveRight();
     void Clear();
 private:
-	Link row_;
-	Link cache_;
+    Link row_;
+    Link cache_;
     int col;
     int row;
     //ScreenInfo screen_info_;
@@ -82,6 +84,8 @@ private:
     Link row2_b;
     link temp1_b;
     link temp2_b;
+    int row_f;
+    int col_f;
 };
 
-#endif 
+#endif
