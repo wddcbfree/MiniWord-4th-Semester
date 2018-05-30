@@ -50,8 +50,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *);
     void closeEvent(QCloseEvent *event);
     void inputMethodEvent(QInputMethodEvent *);
-    //bool event(QEvent *event);
-private:
+    void wheelEvent(QWheelEvent *event);
     void create();
     void open();
     void save();

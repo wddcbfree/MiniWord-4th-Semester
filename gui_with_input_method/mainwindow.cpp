@@ -107,6 +107,18 @@ MainWindow::MainWindow(QWidget *parent)
     display_timer->start(REFLASH_TIME);
 }
 
+void MainWindow::wheelEvent(QWheelEvent *event){
+    if(event->delta() >0){
+        //up
+        Memory->MoveUp();
+        screen.LoadScreen(*Memory);
+    }else{
+        //down
+        Memory->MoveDown();
+        screen.LoadScreen(*Memory);
+    }
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event){
     if(!Selected){
         switch (event->key()) {
