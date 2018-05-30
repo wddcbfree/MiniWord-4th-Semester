@@ -4,7 +4,7 @@
 
 #define LINE_WIDTH 780
 #define LINE_HEIGHT 23
-#define LINE_GAP 1
+#define LINE_GAP 0
 #define TEXT_UPPER_BLANK 30
 #define TEXT_LEFT_BLANK 15
 #define INPUT_LEFT_BLANK 1
@@ -12,12 +12,16 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
 
-#define ROW_NUMBER 22
+#define ROW_NUMBER 24
 #define COLUME_NUMBER 76
 
 #define FONT_SIZE 12
 
 #define REFLASH_TIME 20
 #define DISPLAY_COUNT 15
+
+#define CURSOR_MODE 0
+#define HIGHLIGHT_MODE 1
+#define SCROLL_MODE 2
 
 #endif // CONST_DEFINE_H

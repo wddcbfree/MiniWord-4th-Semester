@@ -8,7 +8,7 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
         QFont ft;
         ft.setPointSize(FONT_SIZE);
         pLabel->setFont(ft);
-        pLabel->setText(QString::number(i + 1));
+        pLabel->setText("");
         pLabel->setStyleSheet("color: black");
         pLabel->setGeometry(TEXT_LEFT_BLANK,
             TEXT_UPPER_BLANK + (LINE_HEIGHT + LINE_GAP) * i,
@@ -16,7 +16,7 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
             LINE_HEIGHT);
         pLabel->show();
         screen_display_.append(pLabel);
-        screen_data_.push_back(QString::number(i + 1));
+        screen_data_.push_back("");
     }
     return;
 }
@@ -45,7 +45,7 @@ void Screen::DisplayScreen() {
     for (auto iter = screen_display_.begin(); iter != screen_display_.end(); ++iter) {
         auto temp_str = screen_data_[iter - screen_display_.begin()];
         const int cur_row_num = iter - screen_display_.begin();
-        if (highlight_mode_) {
+        if (display_mode_ == HIGHLIGHT_MODE) {
             if (start.row == end.row && start.row - screen_position_.row == cur_row_num) {
                 temp_str.insert(end.column - screen_position_.column, "</span>");
                 temp_str.insert(start.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
@@ -64,7 +64,7 @@ void Screen::DisplayScreen() {
                 }
             }
         }
-        else {
+       if (display_mode_ == CURSOR_MODE) {
             if (cursor_display_count_ < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
                 temp_str.insert(relative_position_.column + 1, "</span>");
                 temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
@@ -145,7 +145,7 @@ CursorPosition Screen::AdjustHighlishtCursor(const CursorPosition original) {
 }
 
 void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_end) {
-    highlight_mode_ = true;
+    display_mode_ = HIGHLIGHT_MODE;
     highlight_start_.row = row_start;
     highlight_start_.column = col_start;
     highlight_end_.row = row_end;
@@ -156,6 +156,6 @@ void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_en
     return;
 }
 void Screen::CursorMode() {
-    highlight_mode_ = false;
+    display_mode_ = CURSOR_MODE;
     return;
 }

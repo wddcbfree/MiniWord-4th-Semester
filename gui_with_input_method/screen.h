@@ -24,13 +24,13 @@ private:
     void RefreshScreenPosition(Text text);
     int GetLetterNumber(QString str);
     struct CursorPosition AdjustHighlishtCursor(const struct CursorPosition);
-    bool highlight_mode_ = false;
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
     struct CursorPosition relative_position_;
     struct CursorPosition screen_position_;
     struct CursorPosition highlight_start_;
     struct CursorPosition highlight_end_;
+    int display_mode_ = CURSOR_MODE;
     int cursor_display_count_ = 0;
 };
 
