@@ -14,6 +14,7 @@
 #include <QLineEdit>
 #include <QSize>
 #include <QPushButton>
+#include <QInputMethod>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QKeySequence>
@@ -49,6 +50,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *);
     void closeEvent(QCloseEvent *event);
     void inputMethodEvent(QInputMethodEvent *);
+    //bool event(QEvent *event);
 private:
     void create();
     void open();

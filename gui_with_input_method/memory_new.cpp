@@ -66,6 +66,7 @@ void Text::AddStringEnd(const QString &data, bool is_first) {
 }
 
 void Text::InsertString(const QString &insert_string) {
+    QString temp_string = insert_string;
   if (insert_string.length() == 0) {
     Link temp = (Link)malloc(sizeof(Row));
     temp->pre = row_;
@@ -186,6 +187,7 @@ void Text::InsertString(const QString &insert_string) {
       }
     }
   }
+  qDebug()<<"Inserted:"<<temp_string;
 }
 
 void Text::Backspace() {

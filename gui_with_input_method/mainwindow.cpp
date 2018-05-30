@@ -73,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent)
     saveAction->setDisabled(1);
     saveasAction->setDisabled(1);
 
+    QWidget::setAttribute(Qt::WA_InputMethodEnabled,true);
+
     //状态栏
     statusBar();
     //显示
@@ -81,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(display_timer, SIGNAL(timeout()), this, SLOT(DisplayScreen()));
     display_timer->start(REFLASH_TIME);
 }
+
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
     if(!Selected){
@@ -94,9 +97,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             screen.LoadScreen(*Memory);
             break;
         default:
-            if(event->modifiers() != (Qt::ControlModifier)  && event->text().length() != 0){
+            if(event->text() != ""){
                 Memory->InsertString(event->text());
-                qDebug()<<event->text();
+                qDebug()<<"Input English:"<<event->text();
             }
             screen.LoadScreen(*Memory);
             break;
@@ -216,6 +219,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         SelectTriggered = false;
         copyAction->setEnabled(1);
         Selected = true;
+
     //default:
 
         //break;
@@ -223,8 +227,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void MainWindow::inputMethodEvent(QInputMethodEvent *e){
-    if(e->commitString() != "")
-        qDebug()<<e->commitString();
+    if(e->commitString() != ""){
+        qDebug()<<"from InputMethod:"<<e->commitString();
+        Memory->InsertString(e->commitString());
+        screen.LoadScreen(*Memory);
+    }
 }
 
 void MainWindow::search(){
