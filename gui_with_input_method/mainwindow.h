@@ -58,6 +58,7 @@ protected:
     void search_init();
     void search();
     void search_next();
+    void replace();
 
     void block_copy(){
         col1 = col_;row1 = row_;
