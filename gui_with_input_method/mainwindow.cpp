@@ -277,6 +277,7 @@ void MainWindow::search(){
     bool result = Memory->SearchWord(SearchInput.text());
     screen.LoadScreen(*Memory);
     qDebug()<<"Seached: "<<SearchInput.text();
+    screen.LoadScreen(*Memory);
     if(result){
         qDebug()<<"Search Success!";
         SearchTips.setText("Search Success!");

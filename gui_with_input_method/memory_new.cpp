@@ -490,6 +490,7 @@ void Text::ReplaceString(const std::string &search_word, const std::string
 */
 
 bool Text::SearchWord(const QString &search_word) {
+    qDebug()<<search_word[0];
     col_f = col;
     row_f = row;
     link temp = f_Locate(col_f);
@@ -499,12 +500,16 @@ bool Text::SearchWord(const QString &search_word) {
         if (row_f == GetNumOfLines() - 1 && !temp)
             return 0;
     }
+    qDebug()<<temp->s[0];
     bool flag = 1;
     while (temp) {
+        qDebug()<<temp->s[0];
         int record1 = col_f;
         int record2 = row_f;
         link ptr = temp;
+        flag = 1;
         for (int j = 0; j < search_word.length() & flag; j++) {
+            qDebug()<<"loop"<<ptr->s[0];
             if (ptr->s[0] != search_word[j])
                 flag = 0;
             f_MoveRight();
@@ -517,9 +522,19 @@ bool Text::SearchWord(const QString &search_word) {
             }
         }
         if (flag) {
-            break;
+            qDebug()<<record1<<record2;
             col = record1;
             row = record2;
+            Link record = row_;
+            int i;
+            int cnt = row_->Row_Num;
+            if (record->Row_Num > row)
+                for (i = 1; i <= cnt - row; i++)
+                    record = record->pre;
+            else
+                for (i = 1; i <= row - cnt; i++)
+                    record = record->next;
+            row_ = record;
             return 1;
         }
         col_f = record1;
