@@ -42,15 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
     replaceAction->setStatusTip(tr("Replace"));
     connect(replaceAction,&QAction::triggered,this,&MainWindow::search_init);
 
-    copyAction = new QAction("Block copy", this);
+    copyAction = new QAction("Block Copy", this);
     connect(copyAction,&QAction::triggered,this,&MainWindow::block_copy);
     copyAction->setShortcut(QKeySequence::Copy);
-    copyAction->setDisabled(1);
 
-    pasteAction = new QAction("Block paste", this);
+    pasteAction = new QAction("Block Paste", this);
     connect(pasteAction,&QAction::triggered,this,&MainWindow::block_paste);
     pasteAction->setShortcut(QKeySequence::Paste);
-    pasteAction->setDisabled(1);
 
     QMenu *file = menuBar()->addMenu(tr("&File"));
     file->addAction(createAction);
@@ -277,6 +275,7 @@ void MainWindow::search_init(){
 
 void MainWindow::search(){
     bool result = Memory->SearchWord(SearchInput.text());
+    screen.LoadScreen(*Memory);
     qDebug()<<"Seached: "<<SearchInput.text();
     if(result){
         qDebug()<<"Search Success!";
