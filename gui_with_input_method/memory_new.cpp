@@ -521,7 +521,6 @@ bool Text::SearchWord(const QString &search_word) {
 void Text::ReplaceString(const QString &replace_){
     int cnt = replaced_length;
     while(cnt>0){
-        qDebug()<<cnt;
         link temp = Locate(col);
         if(temp){
             Delete();
@@ -562,15 +561,12 @@ void Text::BlockCopy(int row1, int col1, int row2, int col2) {
         for (i = 1; i <= row1 - cnt; i++)
             record = record->next;
     row1_b = record;
-    //qDebug() << row1_b->Row_Num;
     link temp = record->content;
-    //qDebug() << col1;
     for (int i = 0; i < col1; i++) {
         temp = temp->next;
         qDebug() << i;
     }
     temp1_b = temp;
-    //qDebug() << temp1_b->num;
 
     record = row_;
     cnt = row_->Row_Num;
@@ -585,8 +581,6 @@ void Text::BlockCopy(int row1, int col1, int row2, int col2) {
     for (int i = 0; i < col2; i++)
         temp = temp->next;
     temp2_b = temp;
-    //qDebug()<<temp1_b->s[0];
-    //qDebug()<<temp2_b->num;
 }
 
 void Text::BlockPaste() {
@@ -616,9 +610,6 @@ void Text::BlockPaste() {
             ptr = ptr->next;
         }
         InsertString(s);
-        qDebug() << s;
-        // if(s.length())
-        // MoveRight();
         int flag = 1;
         if (!s.length())
             flag = 0;
