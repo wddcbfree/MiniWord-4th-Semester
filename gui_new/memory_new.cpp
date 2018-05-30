@@ -463,65 +463,110 @@ void Text::BlockCopy(int row1, int col1, int row2, int col2) {
     for ( i = 1; i <= cnt - row1; i++)
       record = record->pre;
   else
-    for ( i = 1; i <= cnt - row1; i++)
+    for ( i = 1; i <= row1 - cnt; i++)
       record = record->next;
   row1_b = record;
   qDebug()<<row1_b->Row_Num;
   link temp = record->content;
-  for (int i = 0; i < col1; i++)
+  qDebug()<<col1;
+  for (int i = 0; i < col1; i++){
     temp = temp->next;
+    qDebug()<<i;
+  }
   temp1_b = temp;
+  qDebug()<<temp1_b->num;
 
   record = row_;
-  if (record->Row_Num > row2) {
-    for (int i = 1; i <= record->Row_Num - row2; i++)
+  cnt = row_->Row_Num;
+  if (record->Row_Num > row2)
+    for ( i = 1; i <= cnt - row2; i++)
       record = record->pre;
-  } else {
-    for (int i = 1; i <= record->Row_Num - row2; i++)
+  else
+    for ( i = 1; i <= row2 - cnt; i++)
       record = record->next;
-  }
   row2_b = record;
   temp = record->content;
   for (int i = 0; i < col2; i++)
     temp = temp->next;
   temp2_b = temp;
-  qDebug()<<temp1_b->s[0] << temp1_b->next->s[0];
+  //qDebug()<<temp1_b->s[0];
+  //qDebug()<<temp2_b->num;
 }
 
 void Text::BlockPaste() {
   QString s = "";
   link ptr = temp1_b;
-  while (ptr) {
-    s += ptr->s[0];
-    ptr = ptr->next;
+  if(row1_b == row2_b){
+      int value1 = temp1_b->num;
+      int value2 = 0;
+      if(!temp2_b){
+          link f_ptr = ptr;
+          while(f_ptr != temp2_b){
+              f_ptr = f_ptr->next;
+              value2++;
+          }
+      }
+      else
+          value2 = temp2_b->num - value1;
+      for(int i = value2;i>0;i--){
+        s += ptr->s[0];
+        ptr = ptr->next;
+      }
+      InsertString(s);
   }
-  InsertString(s);
-  qDebug()<<s;
-  for (int i = 0; i < s.length(); i++)
-    MoveRight();
+  else{
+      while(ptr){
+          s += ptr->s[0];
+          ptr = ptr->next;
+      }
+      InsertString(s);
+      qDebug()<<s;
+      for (int i = 0; i < s.length(); i++)
+          MoveRight();
   // if(s.length())
   // MoveRight();
-  int flag = 1;
-  if (!s.length())
-    flag = 0;
-  Link end = row1_b;
-  for (int i = 1; i <= row2_b->Row_Num - row1_b->Row_Num; i++) {
-    s = "";
-    if (flag)
-      InsertString("");
-    end = end->next;
-    ptr = end->content;
-    while (ptr) {
-      s += ptr->s[0];
-      ptr = ptr->next;
-    }
-    InsertString(s);
-    for (int i = 0; i < s.length(); i++)
-      MoveRight();
-    if (!s.length())
-      flag = 0;
-    else
-      flag = 1;
+      int flag = 1;
+      if (!s.length())
+         flag = 0;
+      Link end = row1_b;
+      for (int i = 1; i < row2_b->Row_Num - row1_b->Row_Num; i++) {
+          s = "";
+          if (flag)
+              InsertString("");
+          end = end->next;
+          ptr = end->content;
+          while (ptr) {
+              s += ptr->s[0];
+              ptr = ptr->next;
+          }
+          InsertString(s);
+          for (int i = 0; i < s.length(); i++)
+              MoveRight();
+          if (!s.length())
+              flag = 0;
+          else
+              flag = 1;
+      }
+      end = row2_b;
+      s = "";
+      if(flag)
+          InsertString(s);
+      ptr = end->content;
+      int value = 0;
+      if(!temp2_b){
+          link f_ptr = ptr;
+          while(f_ptr != temp2_b){
+              f_ptr = f_ptr->next;
+              value++;
+          }
+      }
+      else
+          value = temp2_b->num;
+      for(int i = value;i>0;i--){
+        s += ptr->s[0];
+        ptr = ptr->next;
+      }
+      InsertString(s);
   }
 }
 
