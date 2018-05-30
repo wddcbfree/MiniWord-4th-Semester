@@ -1,6 +1,5 @@
 #include "screen.h"
 #include <algorithm>
-#include <QDebug>
 
 void Screen::InitiateScreen(QMainWindow *qmainwindow) {
     for (int i = 0; i < ROW_NUMBER; ++i) {
