@@ -135,6 +135,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         default:
             if(event->text() != "" && event->text() != "\u007F" && event->text() != "\r" && event->text() != "\b"){
                 Memory->InsertString(event->text());
+                statusBar()->showMessage("Typing...");
                 qDebug()<<"Input English:"<<event->text();
             }
             screen.LoadScreen(*Memory);
