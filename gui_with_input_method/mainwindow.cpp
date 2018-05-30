@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     Search.setParent(&SearchDialog);
     SearchNext.setParent(&SearchDialog);
     SearchTips.setParent(&SearchDialog);
-    SearchDialog.setSizeIncrement(410,6*LINE_HEIGHT);
+    SearchDialog.setFixedSize(410,3*(LINE_HEIGHT+LINE_GAP));
     SearchDialog.setWindowTitle("Search");
     SearchDialog.setModal(0);
     SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
@@ -89,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&SearchNext,&QPushButton::clicked,this,&MainWindow::search_next);
     Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     Replace.setText("Replace");
+    connect(&Replace,&QPushButton::clicked,this,&MainWindow::replace);
     SearchTips.setGeometry(210+INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
 
 
@@ -292,7 +293,7 @@ void MainWindow::search_init(){
 void MainWindow::search(){
     bool result = Memory->SearchWord(SearchInput.text());
     screen.LoadScreen(*Memory);
-    qDebug()<<"Seached: "<<SearchInput.text();
+    qDebug()<<"Searched: "<<SearchInput.text();
     screen.LoadScreen(*Memory);
     if(result){
         qDebug()<<"Search Success!";
@@ -318,6 +319,22 @@ void MainWindow::search_next(){
         qDebug()<<"Not Found!";
         Memory->MoveLeft();
         SearchTips.setText("Not Found!");
+    }
+}
+
+void MainWindow::replace(){
+    if(ReplaceInput.text() != ""){
+        bool result = Memory->SearchWord(SearchInput.text());
+        qDebug()<<"Searched: "<<SearchInput.text();
+        screen.LoadScreen(*Memory);
+        if(result){
+            //Memory->ReplaceString(ReplaceInput.text());
+            qDebug()<<"Replace to "<<ReplaceInput.text();
+            SearchTips.setText("Replace Success");
+        }else{
+            qDebug()<<"Not Found!";
+            SearchTips.setText("Not Found");
+        }
     }
 }
 
