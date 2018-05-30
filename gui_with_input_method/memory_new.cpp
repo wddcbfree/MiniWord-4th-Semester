@@ -525,6 +525,16 @@ bool Text::SearchWord(const QString &search_word) {
             qDebug()<<record1<<record2;
             col = record1;
             row = record2;
+            Link record = row_;
+            int i;
+            int cnt = row_->Row_Num;
+            if (record->Row_Num > row)
+                for (i = 1; i <= cnt - row; i++)
+                    record = record->pre;
+            else
+                for (i = 1; i <= row - cnt; i++)
+                    record = record->next;
+            row_ = record;
             return 1;
         }
         col_f = record1;
