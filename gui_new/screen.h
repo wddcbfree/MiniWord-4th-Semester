@@ -3,7 +3,6 @@
 #define SCREEN_
 
 #include <QLabel>
-#include <string>
 #include <QString>
 #include <QVector>
 #include <QMainWindow>
@@ -24,7 +23,7 @@ public:
 private:
     void RefreshScreenPosition(Text text);
     int GetLetterNumber(QString str);
-    struct CursorPosition AdjustHighlishtCursor(struct CursorPosition);
+    struct CursorPosition AdjustHighlishtCursor(const struct CursorPosition);
     bool highlight_mode_ = false;
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;
