@@ -187,6 +187,8 @@ void Text::InsertString(const QString &insert_string) {
       }
     }
   }
+  for(int j = 0; j < insert_string.length(); j++)
+      MoveRight();
   qDebug()<<"Inserted:"<<temp_string;
 }
 
