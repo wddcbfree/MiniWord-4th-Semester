@@ -33,10 +33,10 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void init_file(FileProcess *file_part){
-       filepart = file_part;
+    void init_file(FileProcess *file_part) {
+        filepart = file_part;
     }
-    void init_memory(Text *memory){
+    void init_memory(Text *memory) {
         Memory = memory;
     }
 signals:
@@ -56,20 +56,20 @@ private:
     void save_as();
     void search();
 
-    void block_copy(){
-        col1 = col_;row1 = row_;
-        col2 = Memory->GetCursorCol();row2 = Memory->GetCursorRow();
-        qDebug()<<"Block Copied! "<< row1<< ","<< col1<<"  "<< row2<<","<<col2;
-        Memory->BlockCopy(row1,col1,row2,col2);
+    void block_copy() {
+        col1 = col_; row1 = row_;
+        col2 = Memory->GetCursorCol(); row2 = Memory->GetCursorRow();
+        qDebug() << "Block Copied! " << row1 << "," << col1 << "  " << row2 << "," << col2;
+        Memory->BlockCopy(row1, col1, row2, col2);
         statusBar()->showMessage("块复制成功！");
         screen.CursorMode();
         //取消高亮
         screen.LoadScreen(*Memory);
     }
-    void block_paste(){
+    void block_paste() {
         Memory->BlockPaste();
         screen.LoadScreen(*Memory);
-        qDebug()<<"Block Pasted!";
+        qDebug() << "Block Pasted!";
     }
 
     QAction *createAction;
@@ -82,7 +82,7 @@ private:
     QAction *copyAction;
     QAction *pasteAction;
 
-    int row_ = -1,col_ = -1,row1 = -1,col1 = -1,row2 = -1,col2 = -1;
+    int row_ = -1, col_ = -1, row1 = -1, col1 = -1, row2 = -1, col2 = -1;
 
     bool SelectTriggered = false;
     bool Selected = false;
@@ -93,7 +93,7 @@ private:
     FileProcess *filepart;
     Text *Memory;
     Screen screen;
-private slots:
+    private slots:
     void DisplayScreen();
 };
 

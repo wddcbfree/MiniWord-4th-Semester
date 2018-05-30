@@ -21,23 +21,23 @@
 
 typedef struct Row* Link;
 typedef struct block* link;
-struct block{ 
-	link pre,next;
+struct block {
+    link pre, next;
     QChar s[100];
-	int num;
+    int num;
 };
-struct Row{
-	Link pre,next;
-	int Row_Num;
-	link content;
+struct Row {
+    Link pre, next;
+    int Row_Num;
+    link content;
 };
 
 class Text {
 public:
-    Text(){
+    Text() {
         row = 0;
         col = 0;
-        row_ = (Link )malloc(sizeof(Row));
+        row_ = (Link)malloc(sizeof(Row));
         row_->Row_Num = 0;
         row_->pre = NULL;
         row_->next = NULL;
@@ -66,13 +66,13 @@ public:
     //ScreenInfo GetPosition();
     void RefreshScreenCache();
     QString GetIthCacheString(int i);
-    void BlockCopy(int row1,int col1,int row2,int col2);
+    void BlockCopy(int row1, int col1, int row2, int col2);
     void BlockPaste();
-    void BlockDelete(int row1,int col1,int row2,int col2);
+    void BlockDelete(int row1, int col1, int row2, int col2);
     void Clear();
 private:
-	Link row_;
-	Link cache_;
+    Link row_;
+    Link cache_;
     int col;
     int row;
     //ScreenInfo screen_info_;

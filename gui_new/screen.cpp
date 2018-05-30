@@ -11,9 +11,9 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
         pLabel->setText(QString::number(i + 1));
         pLabel->setStyleSheet("color: black");
         pLabel->setGeometry(TEXT_LEFT_BLANK,
-                            TEXT_UPPER_BLANK + (LINE_HEIGHT + LINE_GAP) * i,
-                            LINE_WIDTH,
-                            LINE_HEIGHT);
+            TEXT_UPPER_BLANK + (LINE_HEIGHT + LINE_GAP) * i,
+            LINE_WIDTH,
+            LINE_HEIGHT);
         pLabel->show();
         screen_display_.append(pLabel);
         screen_data_.push_back(QString::number(i + 1));
@@ -44,7 +44,7 @@ void Screen::DisplayScreen() {
         QString temp_str = screen_data_[iter - screen_display_.begin()];
         if (highlight_mode_) {
             if (highlight_start_.row == highlight_end_.row && highlight_start_.row - screen_position_.row == iter - screen_display_.begin()) {
-                temp_str.insert(highlight_end_.column - screen_position_.column + 1, "</span>");
+                temp_str.insert(highlight_end_.column - screen_position_.column, "</span>");
                 temp_str.insert(highlight_start_.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
             }
         }
@@ -52,10 +52,11 @@ void Screen::DisplayScreen() {
             if (cursor_display_count_ < DISPLAY_COUNT && iter - screen_display_.begin() == relative_position_.row) {
                 temp_str.insert(relative_position_.column + 1, "</span>");
                 temp_str.insert(relative_position_.column, "<span style=\"background-color:#000000\">");
+                qDebug() << temp_str;
             }
         }
         //qDebug() << temp_str;
-        (**iter).setText("<span style=\"background-color:#ffffff\"><pre>" + temp_str + " </pre></span>");
+        (**iter).setText("<span style=\"background-color:#ffffff\"><pre>" + temp_str + "</pre></span>");
         (**iter).show();
     }
     return;

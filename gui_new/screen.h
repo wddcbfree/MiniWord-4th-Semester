@@ -9,12 +9,12 @@
 #include <QMainWindow>
 #include "memory_new.h"
 
-struct CursorPosition{
+struct CursorPosition {
     int column = 0;
     int row = 0;
 };
 
-class Screen{
+class Screen {
 public:
     void InitiateScreen(QMainWindow *qmainwindow);
     void LoadScreen(Text text);
