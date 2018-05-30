@@ -69,6 +69,31 @@ MainWindow::MainWindow(QWidget *parent)
     QMenu *info = menuBar()->addMenu(tr("&Info"));
     //info->addAction(aboutRole);
 
+    SearchInput.setParent(&SearchDialog);
+    ReplaceInput.setParent(&SearchDialog);
+    Replace.setParent(&SearchDialog);
+    Search.setParent(&SearchDialog);
+    SearchNext.setParent(&SearchDialog);
+    SearchTips.setParent(&SearchDialog);
+    SearchDialog.setSizeIncrement(410,6*LINE_HEIGHT);
+    SearchDialog.setWindowTitle("Search");
+    SearchDialog.setModal(0);
+    SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    SearchInput.setPlaceholderText("typing...");
+    ReplaceInput.setGeometry(210+INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    ReplaceInput.setPlaceholderText("to...");
+    Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Search.setText("Search");
+    Search.setStyleSheet("color:black");
+    connect(&Search,&QPushButton::clicked,this,&MainWindow::search);
+    SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    SearchNext.setText("Next");
+    connect(&SearchNext,&QPushButton::clicked,this,&MainWindow::search);
+    Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+    Replace.setText("Replace");
+    SearchTips.setGeometry(210+INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
+
+
     //菜单栏初始化
     saveAction->setDisabled(1);
     saveasAction->setDisabled(1);
@@ -237,39 +262,18 @@ void MainWindow::inputMethodEvent(QInputMethodEvent *e){
 }
 
 void MainWindow::search_init(){
-    SearchInput.setParent(&SearchDialog);
-    ReplaceInput.setParent(&SearchDialog);
-    Replace.setParent(&SearchDialog);
-    Search.setParent(&SearchDialog);
-    SearchNext.setParent(&SearchDialog);
-    SearchTips.setParent(&SearchDialog);
-
-    SearchDialog.setSizeIncrement(410,4*LINE_HEIGHT);
-    SearchDialog.setWindowTitle("Search");
-    SearchDialog.setModal(0);
-    SearchInput.setGeometry(INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    SearchInput.setPlaceholderText("typing...");
-    ReplaceInput.setGeometry(210+INPUT_LEFT_BLANK,LINE_GAP,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    ReplaceInput.setPlaceholderText("to...");
-    Search.setGeometry(INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    Search.setText("Search");
-    Search.setStyleSheet("color:black");
-    connect(&Search,&QPushButton::clicked,this,&MainWindow::search);
-    SearchNext.setGeometry(INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    SearchNext.setText("Next");
-    connect(&SearchNext,&QPushButton::clicked,this,&MainWindow::search);
-    Replace.setGeometry(210+INPUT_LEFT_BLANK,2*LINE_GAP+LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
-    Replace.setText("Replace");
-    SearchTips.setGeometry(210+INPUT_LEFT_BLANK,3*LINE_GAP+2*LINE_HEIGHT,200-2*INPUT_LEFT_BLANK,LINE_HEIGHT);
     SearchDialog.exec();
 }
 
 void MainWindow::search(){
     bool result = Memory->SearchWord(SearchInput.text());
+    qDebug()<<"Seached: "<<SearchInput.text();
     if(result){
         qDebug()<<"Search Success!";
+        SearchTips.setText("Search Success!");
     }else{
         qDebug()<<"Not Found!";
+        SearchTips.setText("Not Found!");
     }
 }
 
