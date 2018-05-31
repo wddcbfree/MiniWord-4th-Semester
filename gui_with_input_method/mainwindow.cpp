@@ -134,7 +134,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             screen.LoadScreen(*Memory);
             break;
         default:
-            if(event->text() != "" && event->text() != "\u007F" && event->text() != "\r" && event->text() != "\b"){
+            if(event->text() != "" && event->text() != "\u007F" && event->text() != "\r" && event->text() != "\b" && event->text()!= "\u001B"){
                 Memory->InsertString(event->text());
                 statusBar()->showMessage("Typing...");
                 qDebug()<<"Input English:"<<event->text();
@@ -328,13 +328,14 @@ void MainWindow::replace(){
         qDebug()<<"Searched: "<<SearchInput.text();
         screen.LoadScreen(*Memory);
         if(result){
-            //Memory->ReplaceString(ReplaceInput.text());
+            Memory->ReplaceString(ReplaceInput.text());
             qDebug()<<"Replace to "<<ReplaceInput.text();
             SearchTips.setText("Replace Success");
         }else{
             qDebug()<<"Not Found!";
             SearchTips.setText("Not Found");
         }
+        screen.LoadScreen(*Memory);
     }
 }
 
