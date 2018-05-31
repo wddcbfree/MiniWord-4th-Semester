@@ -58,7 +58,7 @@ public:
     link Locate(int i);
     int CntElement();
     bool SearchWord(const QString &search_word);
-    //void ReplaceString(const std::string &search_word, const std::string &replace);
+    void ReplaceString(const QString &replace_);
     void ConfirmReplace(bool confirm_replace);
     void RefreshScreenPosition();
     int GetNumOfLines();
