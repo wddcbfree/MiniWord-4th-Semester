@@ -79,6 +79,20 @@ void Text::AddStringEnd(const QString &data, bool is_first) {
 void Text::InsertString(const QString &insert_string) {
     if (insert_string.length() == 0) {
         Link temp = (Link)malloc(sizeof(Row));
+        if(!col && !row){
+            temp->pre = NULL;
+            temp->next = row_;
+            row_->pre = temp;
+            temp->Row_Num = 0;
+            temp->content = NULL;
+            Link ptr = row_;
+            while(ptr){
+                ptr->Row_Num ++;
+                ptr = ptr->next;
+            }
+            row++;
+            return;
+        }
         temp->pre = row_;
         temp->next = row_->next;
         row_->next = temp;
