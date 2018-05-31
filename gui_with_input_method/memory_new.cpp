@@ -23,6 +23,7 @@ link Text::Locate(int i) {
     }
     return dest;
 }
+
 link Text::f_Locate(int i) {
     Link record = row_;
     int cnt = record->Row_Num;
@@ -460,6 +461,7 @@ QString Text::GetIthString(int i) {
     }
     return str;
 }
+
 bool Text::SearchWord(const QString &search_word) {
     col_f = col;
     row_f = row;
