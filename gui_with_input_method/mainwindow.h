@@ -51,7 +51,6 @@ protected:
     void closeEvent(QCloseEvent *event);
     void inputMethodEvent(QInputMethodEvent *);
     void wheelEvent(QWheelEvent *event);
-    //void create();
     void open();
     void save();
     void save_as();
@@ -90,7 +89,6 @@ protected:
     bool SelectTriggered = false;
     bool Selected = false;
 
-    //QLineEdit Input;
     QDialog SearchDialog;
     QLineEdit SearchInput;
     QLineEdit ReplaceInput;

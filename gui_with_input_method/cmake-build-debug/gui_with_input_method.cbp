@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="gui_with_input_method"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gui_with_input_method">
+				<Option output="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/gui_with_input_method" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/wenhe/code/MiniWord/gui_with_input_method/."/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 gui_with_input_method"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gui_with_input_method/fast">
+				<Option output="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/gui_with_input_method" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/wenhe/code/MiniWord/gui_with_input_method/."/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 gui_with_input_method/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/const_define.h">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/file_process.cpp">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/file_process.h">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/main.cpp">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/mainwindow.cpp">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/mainwindow.h">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/memory_new.cpp">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/memory_new.h">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/screen.cpp">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/screen.h">
+			<Option target="gui_with_input_method"/>
+		</Unit>
+		<Unit filename="/Users/wenhe/code/MiniWord/gui_with_input_method/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

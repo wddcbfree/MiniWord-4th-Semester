@@ -52,7 +52,6 @@ private:
     bool OpenSignal = false;
     bool EditedSignal = false;
     QString FilePath;
-    //std::vector<std::string> Data;
     QVector<QString> Data;
     Text *Memory;//数据结构部分
 };
