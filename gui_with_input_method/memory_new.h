@@ -12,13 +12,6 @@
 #include <QChar>
 #include "const_define.h"
 
-/*struct ScreenInfo {
-    int cursor_x = 0;   //cursor position
-    int cursor_y = 0;
-    int screen_x = 0;   //screen left-up position
-    int screen_y = 0;
-};*/
-
 typedef struct Row* Link;
 typedef struct block* link;
 struct block{
