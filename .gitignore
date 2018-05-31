@@ -10,19 +10,18 @@
 /*.xcodeproj
 
 /Debug
-/x64/Debug
+/x64
 /build-gui-Desktop_Qt_5_9_3_MinGW_32bit-Debug
 /build-gui_new-Desktop_Qt_5_9_3_MinGW_32bit-Debug
 /build-gui_new-Desktop_Qt_5_9_3_MinGW_32bit-Release
 /gui_new/.vs
 /gui_new/debug
 /gui_new/release
-/gui_new/x64/Debug
-*.sln
+/gui_new/x64
 /build-gui_new_with_input_method-Desktop_Qt_5_9_3_MinGW_32bit-Debug
 /gui_with_input_method/.vs/gui_new_with_input_method/v15
 /gui_with_input_method/debug
-/gui_with_input_method/GeneratedFiles/Debug
+/gui_with_input_method/GeneratedFiles
 /gui_with_input_method/release
-/gui_with_input_method/x64/Debug
+/gui_with_input_method/x64
 *.pdf
