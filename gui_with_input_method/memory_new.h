@@ -63,7 +63,6 @@ public:
     void RefreshScreenPosition();
     int GetNumOfLines();
     QString GetIthString(int i);
-    //ScreenInfo GetPosition();
     void RefreshScreenCache();
     QString GetIthCacheString(int i);
     void BlockCopy(int row1,int col1,int row2,int col2);
@@ -77,8 +76,6 @@ private:
     Link cache_;
     int col;
     int row;
-    //ScreenInfo screen_info_;
-    std::string replace_;
     int replaced_length;
     Link row1_b;
     Link row2_b;
