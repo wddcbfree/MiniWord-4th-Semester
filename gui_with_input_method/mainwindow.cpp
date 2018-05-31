@@ -58,14 +58,13 @@ MainWindow::MainWindow(QWidget *parent)
     file->addAction(saveasAction);
     file->addSection("");
     file->addAction(quitAction);
+
     QMenu *edit = menuBar()->addMenu(tr("&Edit"));
     edit->addAction(searchAction);
     edit->addAction(replaceAction);
     edit->addSection("");
     edit->addAction(copyAction);
     edit->addAction(pasteAction);
-    QMenu *info = menuBar()->addMenu(tr("&Info"));
-    //info->addAction(aboutRole);
 
     SearchInput.setParent(&SearchDialog);
     ReplaceInput.setParent(&SearchDialog);
