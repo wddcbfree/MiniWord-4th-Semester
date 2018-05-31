@@ -1,5 +1,6 @@
 #include "screen.h"
 #include <algorithm>
+#include <QDebug>
 
 void Screen::InitiateScreen(QMainWindow *qmainwindow) {
     for (int i = 0; i < ROW_NUMBER; ++i) {
@@ -45,17 +46,18 @@ void Screen::DisplayScreen() {
         auto temp_str = screen_data_[iter - screen_display_.begin()];
         const int cur_row_num = iter - screen_display_.begin();
         if (display_mode_ == HIGHLIGHT_MODE) {
-            if (start.row == end.row && start.row - screen_position_.row == cur_row_num) {
-                temp_str.insert(end.column - screen_position_.column, "</span>");
-                temp_str.insert(start.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
+            if (start.row == end.row && start.row == cur_row_num) {
+                temp_str.insert(end.column, "</span>");
+                temp_str.insert(start.column, "<span style=\"background-color:#b1d8fe\">");
+                qDebug() << temp_str;
             }
             else {
                 if (cur_row_num == start.row) {
                     temp_str += " </span>";
-                    temp_str.insert(start.column - screen_position_.column, "<span style=\"background-color:#b1d8fe\">");
+                    temp_str.insert(start.column, "<span style=\"background-color:#b1d8fe\">");
                 }
                 if (cur_row_num == end.row) {
-                    temp_str.insert(end.column - screen_position_.column, "</span>");
+                    temp_str.insert(end.column, "</span>");
                     temp_str = "<span style=\"background-color:#b1d8fe\">" + temp_str;
                 }
                 if (start.row < cur_row_num && cur_row_num < end.row) {
@@ -131,9 +133,9 @@ CursorPosition Screen::AdjustHighlightCursor(const CursorPosition original) {
     if (fixed_cursor.column < screen_position_.column) {
         fixed_cursor.column = screen_position_.column;
     }
-    if (fixed_cursor.row > screen_position_.row + ROW_NUMBER) {
-        fixed_cursor.row = screen_position_.row + ROW_NUMBER;
-        fixed_cursor.column = screen_data_.back().length();
+    if (fixed_cursor.row > screen_position_.row + ROW_NUMBER - 1) {
+        fixed_cursor.row = screen_position_.row + ROW_NUMBER - 1;
+        fixed_cursor.column = screen_position_.column + screen_data_[fixed_cursor.row - screen_position_.row].length();
     }
     if (fixed_cursor.column > screen_position_.column + screen_data_[fixed_cursor.row - screen_position_.row].length()) {
         fixed_cursor.column = screen_position_.column + screen_data_[fixed_cursor.row - screen_position_.row].length();
@@ -152,6 +154,7 @@ void Screen::HighlightMode(int row_start, int col_start, int row_end, int col_en
     if (highlight_start_.row > highlight_end_.row || (highlight_start_.row == highlight_end_.row && highlight_start_.column > highlight_end_.column)) {
         std::swap(highlight_start_, highlight_end_);
     }
+    qDebug() << row_start << ' ' << col_start << ' ' << row_end << ' ' << col_end;
     return;
 }
 void Screen::CursorMode() {
