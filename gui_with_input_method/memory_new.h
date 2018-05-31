@@ -3,7 +3,6 @@
 #define STL_IMPLEMENT_TEXT_CLASS_
 
 #include <cstring>
-#include <vector>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -40,7 +39,6 @@ public:
     void InsertString(const QString &insert_string);
     void Backspace();
     void Delete();
-    void DeleteEntireLine();
     void MoveUp();
     void MoveDown();
     void MoveRight();
@@ -49,15 +47,10 @@ public:
     int GetCursorCol();
     QChar GetithElement(int i);
     link Locate(int i);
-    int CntElement();
     bool SearchWord(const QString &search_word);
     void ReplaceString(const QString &replace_);
-    void ConfirmReplace(bool confirm_replace);
-    void RefreshScreenPosition();
     int GetNumOfLines();
     QString GetIthString(int i);
-    void RefreshScreenCache();
-    QString GetIthCacheString(int i);
     void BlockCopy(int row1,int col1,int row2,int col2);
     void BlockPaste();
     void BlockDelete(int row1,int col1,int row2,int col2);
@@ -66,7 +59,6 @@ public:
     void Clear();
 private:
     Link row_;
-    Link cache_;
     int col;
     int row;
     int replaced_length;

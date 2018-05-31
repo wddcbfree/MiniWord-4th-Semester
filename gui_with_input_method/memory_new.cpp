@@ -40,15 +40,6 @@ link Text::f_Locate(int i) {
     return dest;
 }
 
-int Text::CntElement() {
-    int size = 0;
-    link end = row_->content;
-    while (end) {
-        size++;
-        end = end->next;
-    }
-    return size;
-}
 
 void Text::AddStringEnd(const QString &data, bool is_first) {
     Link temp, end = row_;
@@ -277,59 +268,6 @@ void Text::Delete() {
             col = 0;
             Backspace();
         }
-    }
-}
-
-void Text::DeleteEntireLine() {
-    if (row_->next && row_->pre) {
-        row_->pre = row_->next;
-        row_->next->pre = row_->pre;
-        row_ = row_->next;
-        row++;
-        int size = 0;
-        link end = row_->content;
-        while (end) {
-            end = end->next;
-            size++;
-        }
-        if (col > size)
-            col = size;
-        Link temp = row_;
-        while (temp) {
-            temp->Row_Num--;
-            temp = temp->next;
-        }
-        return;
-    }
-    if (!row_->next && !row_->pre) {
-        col = 0;
-        row_->content = NULL;
-        return;
-    }
-    if (!row_->next && row_->pre) {
-        row_->pre->next = NULL;
-        row_ = row_->pre;
-        row--;
-        int size = 0;
-        link end = row_->content;
-        while (end) {
-            end = end->next;
-            size++;
-        }
-        if (col > size)
-            col = size;
-        return;
-    }
-    if (row_->next && !row_->pre) {
-        row_ = row_->next;
-        row_->pre = NULL;
-        MoveDown();
-        Link temp = row_;
-        while (temp) {
-            temp->Row_Num--;
-            temp = temp->next;
-        }
-        return;
     }
 }
 
@@ -669,8 +607,7 @@ void Text::BlockDelete(int row1, int col1, int row2, int col2) {
         col2 = col1;
         col1 = temp;
     }
-    qDebug() << "Block Deleting: " << row1 << "," << col1 << "  " << row2 << ","
-        << col2;
+    qDebug() << "Block Deleting: " << row1 << "," << col1 << "  " << row2 << "," << col2;
     if (row1 == row2) {
         link temp1 = Locate(col1);
         link temp2 = Locate(col2);
