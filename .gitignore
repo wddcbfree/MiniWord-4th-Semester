@@ -8,6 +8,8 @@
 *.user
 *.stash
 /*.xcodeproj
+*.pdf
+*.sln
 
 /Debug
 /x64
@@ -24,4 +26,3 @@
 /gui_with_input_method/GeneratedFiles
 /gui_with_input_method/release
 /gui_with_input_method/x64
-*.pdf
