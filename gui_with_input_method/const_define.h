@@ -20,8 +20,10 @@
 #define REFLASH_TIME 20
 #define DISPLAY_COUNT 15
 
-#define CURSOR_MODE 0
-#define HIGHLIGHT_MODE 1
-#define SCROLL_MODE 2
+#define CURSOR_MODE 1
+#define HIGHLIGHT_MODE 2
+#define SCROLL_MODE 3
+
+#define SCROLL_LINES 3
 
 #endif // CONST_DEFINE_H

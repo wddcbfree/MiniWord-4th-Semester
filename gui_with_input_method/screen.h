@@ -22,7 +22,7 @@ public:
     void CursorMode();
 private:
     void RefreshScreenPosition(Text text);
-    int GetLetterNumber(QString str);
+    int GetLetterNumber(QString str) const;
     struct CursorPosition AdjustHighlightCursor(const struct CursorPosition);
     QVector<QString> screen_data_;
     QVector<QLabel*> screen_display_;

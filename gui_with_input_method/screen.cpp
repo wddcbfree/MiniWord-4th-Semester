@@ -21,7 +21,7 @@ void Screen::InitiateScreen(QMainWindow *qmainwindow) {
 }
 
 void Screen::LoadScreen(Text text) {
-    RefreshScreenPosition(text);
+        RefreshScreenPosition(text);
     screen_data_.clear();
     const auto lines_number = text.GetNumOfLines();
     for (int i = 0; i < ROW_NUMBER; ++i) {
@@ -103,7 +103,7 @@ void Screen::RefreshScreenPosition(Text text) {
     return;
 }
 
-int Screen::GetLetterNumber(QString str) {
+int Screen::GetLetterNumber(QString str) const {
     int number = 0;
     double length = 0;
     if (str.length() > screen_position_.column) {
