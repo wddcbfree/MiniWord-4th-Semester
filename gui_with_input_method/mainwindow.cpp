@@ -157,6 +157,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 
     switch (event->key()) {
+    case Qt::Key_Home:
+        while(Memory->GetCursorRow() != 0){
+            Memory->MoveUp();
+        }
+        break;
+    case Qt::Key_End:
+        while(Memory->GetCursorRow() != (Memory->GetNumOfLines() - 1)){
+            Memory->MoveDown();
+        }
+        break;
+    case Qt::Key_PageUp:
+        for(int i = 0; i< ROW_NUMBER && Memory->GetCursorRow() != 0;++i){
+            Memory->MoveUp();
+        }
+        break;
+    case Qt::Key_PageDown:
+        for(int i = 0; i< ROW_NUMBER && Memory->GetCursorRow() != (Memory->GetNumOfLines() - 1);++i){
+            Memory->MoveDown();
+        }
+        break;
     case Qt::Key_Up:
         if(SelectTriggered){
             qDebug()<<"Selected Cursor Up!";

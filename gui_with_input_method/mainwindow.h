@@ -21,6 +21,7 @@
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QTimer>
+#include "const_define.h"
 #include "file_process.h"
 #include "memory_new.h"
 #include "screen.h"
