@@ -1,72 +1,111 @@
 #include "file_process.h"
-#include <QDialog>
-#include <QWidget>
-#include <QDebug>
-#include <QFileDialog>
-#include <QFile>
-#include <string>
-#include <QTextStream>
-#include <QDataStream>
-#include <vector>
 
-void FileProcess::create_file(){
-    qDebug()<<"create(): create new file!";
+void FileProcess::create_file() {
+    qDebug() << "create(): create new file!";
+    Memory->Clear();
     OpenSignal = true;
     CreateSignal = true;
+    EditedSignal = false;
 }
 
-void FileProcess::open_file(QString path){
+void FileProcess::open_file(QString path) {
     OpenSignal = true;
+    CreateSignal = false;
+    EditedSignal = false;
     FilePath = path;
+    QString temp;
     QFile file(path);
-    if(!file.open(QFile::ReadOnly|QFile::Text)){
-        qDebug()<<"open(): file open error!";
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "open(): file open error!";
         file.close();
-    }else{
-        qDebug()<<"open(): file open success!";
+    }
+    else {
+        qDebug() << "open(): file open success!";
+        Memory->Clear();
         Data.clear();
-        while(!file.atEnd()){
-            Data.push_back(file.readLine().toStdString());
+        if (!file.atEnd()) {
+            temp = file.readLine();
+            qDebug() << temp.mid(0, temp.length() - 1);
+            if (temp == "\n") {
+                Data.push_back("");
+                Memory->AddStringEnd("", true);
+                //qDebug()<<"Dealt with blank line!";
+            }
+            else {
+                Data.push_back(temp.mid(0, temp.length() - 1));
+                Memory->AddStringEnd(temp.mid(0, temp.length() - 1), true);
+                //qDebug()<<"Dealt with a line!";
+            }
         }
-        //for(int i = 0;i < data.size();++i)
-          //  qDebug()<<QString::fromStdString(data[i]);
+        while (!file.atEnd()) {
+            temp = file.readLine();
+            qDebug() << temp.mid(0, temp.length() - 1);
+            if (temp == "\n") {
+                Data.push_back("");
+                Memory->AddStringEnd("", false);
+            }
+            else {
+                Data.push_back(temp.mid(0, temp.length() - 1));
+                Memory->AddStringEnd(temp.mid(0, temp.length() - 1), false);
+            }
+
+        }
+        qDebug() << "open: " << Memory->GetNumOfLines() << " lines";
+        for (int i = 0; i < Memory->GetNumOfLines(); ++i) {
+            qDebug() << Memory->GetIthString(i);
+        }
         file.close();
     }
 }
 
-void FileProcess::save_file(QString path){
-    if(OpenSignal){
-        if(CreateSignal){
+void FileProcess::save_file(QString path) {
+    if (OpenSignal) {
+        if (CreateSignal) {
             FilePath = path;
         }
         QFile file(FilePath);
-        if(file.open(QIODevice::WriteOnly)){
-            qDebug() <<"save: File save success!";
+        if (file.open(QIODevice::WriteOnly)) {
             QTextStream out(&file);
-            for(int i = 0; i < Data.size(); ++i){
-                out<<QString::fromStdString(Data[i]);
+            QString temp;
+            Data.clear();
+            qDebug() << "save: " << Memory->GetNumOfLines() << " lines";
+            for (int i = 0; i < Memory->GetNumOfLines(); ++i) {
+                temp = Memory->GetIthString(i);
+                temp = temp + "\n";
+                Data.push_back(temp);
+                out << temp;
             }
             file.close();
-        }else{
-            qDebug() <<"save: File save error!";
+            qDebug() << "save: File save success!";
+        }
+        else {
+            qDebug() << "save: File save error!";
         }
     }
     CreateSignal = false;
     EditedSignal = false;
 }
 
-void FileProcess::save_as(QString path){
+void FileProcess::save_as(QString path) {
     FilePath = path;
+    QString temp;
     QFile file(FilePath);
-    if(file.open(QIODevice::WriteOnly)){
-        qDebug() <<"save as: File save success!"<<endl;
+    if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
-        for(int i = 0; i < Data.size(); ++i){
-            out<<QString::fromStdString(Data[i]);
+        QString temp;
+        Data.clear();
+        qDebug() << "save_as: " << Memory->GetNumOfLines() << " lines";
+        for (int i = 0; i < Memory->GetNumOfLines(); ++i) {
+            temp = Memory->GetIthString(i);
+            temp = temp + "\n";
+            Data.push_back(temp);
+            out << temp;
         }
         file.close();
-    }else{
-        qDebug() <<"save as: File save error!"<<endl;
+        qDebug() << "save as: File save success!";
+    }
+    else {
+        qDebug() << "save as: File save error!" << endl;
     }
     CreateSignal = false;
     EditedSignal = false;

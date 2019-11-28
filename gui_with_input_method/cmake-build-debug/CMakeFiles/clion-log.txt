@@ -1,0 +1,4 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/wenhe/code/MiniWord/gui_with_input_method
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/wenhe/code/MiniWord/gui_with_input_method/cmake-build-debug
